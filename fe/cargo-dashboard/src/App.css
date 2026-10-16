@@ -166,3 +166,38 @@
 .alert-airport .airport-marker { transition:stroke .15s ease, stroke-width .15s ease }
 .alert-airport:hover .airport-halo,.alert-airport:focus .airport-halo { stroke:#fff; stroke-width:2px }
 .alert-airport:hover .airport-marker,.alert-airport:focus .airport-marker { stroke:#168257; stroke-width:3px }
+
+/* Cathay-inspired light operations system */
+.workspace-intro,.network-panel { background:#fff;border-color:var(--line);border-radius:5px;box-shadow:0 2px 8px #20242b04 }
+.workspace-intro { border-left:3px solid var(--forest) }
+.lifecycle-banner,.analytics-note { display:none }
+.workspace-intro p:not(.eyebrow),.network-panel p:not(.eyebrow) { color:var(--muted) }
+.network-panel { grid-template-columns:1fr; gap:18px }
+.network-panel h2 { color:var(--ink) }
+.network-steps span { border-color:var(--line);border-radius:4px;color:#59636e }
+.network-steps b { color:var(--forest) }
+.analytics-note { background:#f7edef;border-color:#ecd9df;border-radius:4px;color:#5f4650 }
+.analytics-note strong { color:var(--forest) }
+.analytics-note small { color:#78656c }
+.lifecycle-banner { background:#f7edef;border-color:#ecd9df;color:#654d55;border-radius:4px }
+.lifecycle-banner strong { color:var(--forest) }
+.recovery-recommendation { background:#fff;border-color:var(--line);border-left:4px solid var(--forest);border-radius:5px }
+.recovery-recommendation .eyebrow { color:var(--forest) }
+.route-map-panel { border-radius:5px }
+.route-map-panel .panel-heading { align-items:center }
+.airport-tooltip-card { border-radius:4px;border-color:var(--line);color:#3c4650;box-shadow:0 8px 22px #20242b24 }
+.airport-tooltip-card b { color:var(--ink) }
+.airport-flight-links { border-color:var(--line) }
+.airport-flight-links button { border-color:var(--line);border-radius:4px;background:#fafbfc;color:#424d58 }
+.airport-flight-links button:hover:not(:disabled) { border-color:#d5aebb;background:#fbf5f7 }
+.airport-flight-links button:focus-visible { outline-color:var(--forest) }
+.alert-airport:hover .airport-marker,.alert-airport:focus .airport-marker { stroke:var(--forest);stroke-width:3px }
+.trend-bar.predicted { background:#9c586f }
+.trend-bar.actual { background:#17817d }
+.bar-pair { animation:bar-rise .42s ease-out both }
+@keyframes bar-rise { from { transform:scaleY(.82);transform-origin:bottom;opacity:.65 } to { transform:scaleY(1);opacity:1 } }
+.page-heading,.panel,.kpi-card,.workspace-intro,.network-panel,.recovery-recommendation,.prediction-toolbar,.sort-strip,.scenario-tabs { animation:page-enter .24s ease-out both }
+@keyframes page-enter { from { opacity:.7;transform:translateY(4px) } to { opacity:1;transform:translateY(0) } }
+button,.scenario-tabs button,.report-controls button { transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease }
+@media (max-width:900px) { .sidebar { position:sticky;transform:none;width:72px;height:100vh;padding:20px 8px }.brand { margin:0 8px 36px;font-size:0 }.brand-mark { flex:none }.nav-label,.sidebar nav button span,.sidebar-footer .nav-label,.demo-status,.profile>div:not(.avatar) { display:none }.sidebar nav button { justify-content:center;padding:12px 8px }.sidebar nav button.active { box-shadow:inset 0 -3px var(--forest) }.sidebar-footer .profile { justify-content:center;padding:14px 0 0 }.main-content { padding-left:20px;padding-right:20px } }
+@media (max-width:600px) { .sidebar { width:54px;padding:16px 5px }.brand { margin:0 5px 26px }.sidebar nav button { padding:10px 5px }.main-content { padding-left:12px;padding-right:12px }.route-map-panel .panel-heading { align-items:flex-start;flex-direction:column }.route-map-tools { width:100%;flex-wrap:wrap } }
