@@ -1,0 +1,2802 @@
+[
+  {
+    "waybill_id": "WB-0001",
+    "shipment_id": "SHP-0001",
+    "shipper": {
+      "party_id": "PTY-SH-0001",
+      "name": "Fictional Exporter 001",
+      "address": "10 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0001",
+      "name": "Fictional Importer 001",
+      "address": "20 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000001",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T08:00:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 1,
+    "total_weight_kg": 360.2,
+    "currency": "USD",
+    "declared_value": 15000,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0002",
+    "shipment_id": "SHP-0002",
+    "shipper": {
+      "party_id": "PTY-SH-0002",
+      "name": "Fictional Exporter 002",
+      "address": "11 Harbour Way",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0002",
+      "name": "Fictional Importer 002",
+      "address": "21 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000002",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T08:11:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 570.21,
+    "currency": "USD",
+    "declared_value": 15275,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0003",
+    "shipment_id": "SHP-0003",
+    "shipper": {
+      "party_id": "PTY-SH-0003",
+      "name": "Fictional Exporter 003",
+      "address": "12 Harbour Way",
+      "city": "SIN",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0003",
+      "name": "Fictional Importer 003",
+      "address": "22 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000003",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T08:22:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 3,
+    "total_weight_kg": 1143.75,
+    "currency": "USD",
+    "declared_value": 15550,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0004",
+    "shipment_id": "SHP-0004",
+    "shipper": {
+      "party_id": "PTY-SH-0004",
+      "name": "Fictional Exporter 004",
+      "address": "13 Harbour Way",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0004",
+      "name": "Fictional Importer 004",
+      "address": "23 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000004",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T08:33:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 411.93,
+    "currency": "USD",
+    "declared_value": 15825,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0005",
+    "shipment_id": "SHP-0005",
+    "shipper": {
+      "party_id": "PTY-SH-0005",
+      "name": "Fictional Exporter 005",
+      "address": "14 Harbour Way",
+      "city": "NRT",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0005",
+      "name": "Fictional Importer 005",
+      "address": "24 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000005",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T08:44:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 691.55,
+    "currency": "USD",
+    "declared_value": 16100,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0006",
+    "shipment_id": "SHP-0006",
+    "shipper": {
+      "party_id": "PTY-SH-0006",
+      "name": "Fictional Exporter 006",
+      "address": "15 Harbour Way",
+      "city": "SYD",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0006",
+      "name": "Fictional Importer 006",
+      "address": "25 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000006",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T08:55:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 980.65,
+    "currency": "USD",
+    "declared_value": 16375,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0007",
+    "shipment_id": "SHP-0007",
+    "shipper": {
+      "party_id": "PTY-SH-0007",
+      "name": "Fictional Exporter 007",
+      "address": "16 Harbour Way",
+      "city": "HKG",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0007",
+      "name": "Fictional Importer 007",
+      "address": "26 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000007",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T09:06:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 160.17,
+    "currency": "USD",
+    "declared_value": 16650,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0008",
+    "shipment_id": "SHP-0008",
+    "shipper": {
+      "party_id": "PTY-SH-0008",
+      "name": "Fictional Exporter 008",
+      "address": "17 Harbour Way",
+      "city": "DXB",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0008",
+      "name": "Fictional Importer 008",
+      "address": "27 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000008",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T09:17:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 549.17,
+    "currency": "USD",
+    "declared_value": 16925,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0009",
+    "shipment_id": "SHP-0009",
+    "shipper": {
+      "party_id": "PTY-SH-0009",
+      "name": "Fictional Exporter 009",
+      "address": "18 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0009",
+      "name": "Fictional Importer 009",
+      "address": "28 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000009",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T09:28:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 644.37,
+    "currency": "USD",
+    "declared_value": 17200,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0010",
+    "shipment_id": "SHP-0010",
+    "shipper": {
+      "party_id": "PTY-SH-0010",
+      "name": "Fictional Exporter 010",
+      "address": "19 Harbour Way",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0010",
+      "name": "Fictional Importer 010",
+      "address": "29 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000010",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T09:39:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 325.24,
+    "currency": "USD",
+    "declared_value": 17475,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0011",
+    "shipment_id": "SHP-0011",
+    "shipper": {
+      "party_id": "PTY-SH-0011",
+      "name": "Fictional Exporter 011",
+      "address": "20 Harbour Way",
+      "city": "SIN",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0011",
+      "name": "Fictional Importer 011",
+      "address": "30 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000011",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T09:50:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 732.27,
+    "currency": "USD",
+    "declared_value": 17750,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0012",
+    "shipment_id": "SHP-0012",
+    "shipper": {
+      "party_id": "PTY-SH-0012",
+      "name": "Fictional Exporter 012",
+      "address": "21 Harbour Way",
+      "city": "HKG",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0012",
+      "name": "Fictional Importer 012",
+      "address": "31 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000012",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T10:01:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 469.28,
+    "currency": "USD",
+    "declared_value": 18025,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0013",
+    "shipment_id": "SHP-0013",
+    "shipper": {
+      "party_id": "PTY-SH-0013",
+      "name": "Fictional Exporter 013",
+      "address": "22 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0013",
+      "name": "Fictional Importer 013",
+      "address": "32 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000013",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T10:12:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 422.8,
+    "currency": "USD",
+    "declared_value": 18300,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0014",
+    "shipment_id": "SHP-0014",
+    "shipper": {
+      "party_id": "PTY-SH-0014",
+      "name": "Fictional Exporter 014",
+      "address": "23 Harbour Way",
+      "city": "DOH",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0014",
+      "name": "Fictional Importer 014",
+      "address": "33 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000014",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T10:23:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 521.22,
+    "currency": "USD",
+    "declared_value": 18575,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0015",
+    "shipment_id": "SHP-0015",
+    "shipper": {
+      "party_id": "PTY-SH-0015",
+      "name": "Fictional Exporter 015",
+      "address": "24 Harbour Way",
+      "city": "DXB",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0015",
+      "name": "Fictional Importer 015",
+      "address": "34 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000015",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T10:34:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 718.49,
+    "currency": "USD",
+    "declared_value": 18850,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0016",
+    "shipment_id": "SHP-0016",
+    "shipper": {
+      "party_id": "PTY-SH-0016",
+      "name": "Fictional Exporter 016",
+      "address": "25 Harbour Way",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0016",
+      "name": "Fictional Importer 016",
+      "address": "35 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000016",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T10:45:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 219.9,
+    "currency": "USD",
+    "declared_value": 19125,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0017",
+    "shipment_id": "SHP-0017",
+    "shipper": {
+      "party_id": "PTY-SH-0017",
+      "name": "Fictional Exporter 017",
+      "address": "26 Harbour Way",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0017",
+      "name": "Fictional Importer 017",
+      "address": "36 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000017",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T10:56:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 368.58,
+    "currency": "USD",
+    "declared_value": 19400,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0018",
+    "shipment_id": "SHP-0018",
+    "shipper": {
+      "party_id": "PTY-SH-0018",
+      "name": "Fictional Exporter 018",
+      "address": "27 Harbour Way",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0018",
+      "name": "Fictional Importer 018",
+      "address": "37 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000018",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T11:07:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 763.3,
+    "currency": "USD",
+    "declared_value": 19675,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0019",
+    "shipment_id": "SHP-0019",
+    "shipper": {
+      "party_id": "PTY-SH-0019",
+      "name": "Fictional Exporter 019",
+      "address": "28 Harbour Way",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0019",
+      "name": "Fictional Importer 019",
+      "address": "38 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000019",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T11:18:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 111.61,
+    "currency": "USD",
+    "declared_value": 19950,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0020",
+    "shipment_id": "SHP-0020",
+    "shipper": {
+      "party_id": "PTY-SH-0020",
+      "name": "Fictional Exporter 020",
+      "address": "29 Harbour Way",
+      "city": "DXB",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0020",
+      "name": "Fictional Importer 020",
+      "address": "39 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000020",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T11:29:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 693.23,
+    "currency": "USD",
+    "declared_value": 20225,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0021",
+    "shipment_id": "SHP-0021",
+    "shipper": {
+      "party_id": "PTY-SH-0021",
+      "name": "Fictional Exporter 021",
+      "address": "30 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0021",
+      "name": "Fictional Importer 021",
+      "address": "40 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000021",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T11:40:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 740.63,
+    "currency": "USD",
+    "declared_value": 20500,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0022",
+    "shipment_id": "SHP-0022",
+    "shipper": {
+      "party_id": "PTY-SH-0022",
+      "name": "Fictional Exporter 022",
+      "address": "31 Harbour Way",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0022",
+      "name": "Fictional Importer 022",
+      "address": "41 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000022",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T11:51:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 136.45,
+    "currency": "USD",
+    "declared_value": 20775,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0023",
+    "shipment_id": "SHP-0023",
+    "shipper": {
+      "party_id": "PTY-SH-0023",
+      "name": "Fictional Exporter 023",
+      "address": "32 Harbour Way",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0023",
+      "name": "Fictional Importer 023",
+      "address": "42 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000023",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T12:02:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 474.65,
+    "currency": "USD",
+    "declared_value": 21050,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0024",
+    "shipment_id": "SHP-0024",
+    "shipper": {
+      "party_id": "PTY-SH-0024",
+      "name": "Fictional Exporter 024",
+      "address": "33 Harbour Way",
+      "city": "HKG",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0024",
+      "name": "Fictional Importer 024",
+      "address": "43 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000024",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T12:13:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 928.06,
+    "currency": "USD",
+    "declared_value": 21325,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0025",
+    "shipment_id": "SHP-0025",
+    "shipper": {
+      "party_id": "PTY-SH-0025",
+      "name": "Fictional Exporter 025",
+      "address": "34 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0025",
+      "name": "Fictional Importer 025",
+      "address": "44 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000025",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T12:24:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 143.97,
+    "currency": "USD",
+    "declared_value": 21600,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0026",
+    "shipment_id": "SHP-0026",
+    "shipper": {
+      "party_id": "PTY-SH-0026",
+      "name": "Fictional Exporter 026",
+      "address": "35 Harbour Way",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0026",
+      "name": "Fictional Importer 026",
+      "address": "45 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000026",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T12:35:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 786.22,
+    "currency": "USD",
+    "declared_value": 21875,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0027",
+    "shipment_id": "SHP-0027",
+    "shipper": {
+      "party_id": "PTY-SH-0027",
+      "name": "Fictional Exporter 027",
+      "address": "36 Harbour Way",
+      "city": "DXB",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0027",
+      "name": "Fictional Importer 027",
+      "address": "46 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000027",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T12:46:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 569.68,
+    "currency": "USD",
+    "declared_value": 22150,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0028",
+    "shipment_id": "SHP-0028",
+    "shipper": {
+      "party_id": "PTY-SH-0028",
+      "name": "Fictional Exporter 028",
+      "address": "37 Harbour Way",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0028",
+      "name": "Fictional Importer 028",
+      "address": "47 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000028",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T12:57:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 133.38,
+    "currency": "USD",
+    "declared_value": 22425,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0029",
+    "shipment_id": "SHP-0029",
+    "shipper": {
+      "party_id": "PTY-SH-0029",
+      "name": "Fictional Exporter 029",
+      "address": "38 Harbour Way",
+      "city": "NRT",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0029",
+      "name": "Fictional Importer 029",
+      "address": "48 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000029",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T13:08:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 507.32,
+    "currency": "USD",
+    "declared_value": 22700,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0030",
+    "shipment_id": "SHP-0030",
+    "shipper": {
+      "party_id": "PTY-SH-0030",
+      "name": "Fictional Exporter 030",
+      "address": "39 Harbour Way",
+      "city": "SYD",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0030",
+      "name": "Fictional Importer 030",
+      "address": "49 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000030",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T13:19:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 1100.97,
+    "currency": "USD",
+    "declared_value": 22975,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0031",
+    "shipment_id": "SHP-0031",
+    "shipper": {
+      "party_id": "PTY-SH-0031",
+      "name": "Fictional Exporter 031",
+      "address": "40 Harbour Way",
+      "city": "HKG",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0031",
+      "name": "Fictional Importer 031",
+      "address": "50 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000031",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T13:30:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 492.71,
+    "currency": "USD",
+    "declared_value": 23250,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0032",
+    "shipment_id": "SHP-0032",
+    "shipper": {
+      "party_id": "PTY-SH-0032",
+      "name": "Fictional Exporter 032",
+      "address": "41 Harbour Way",
+      "city": "DXB",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0032",
+      "name": "Fictional Importer 032",
+      "address": "51 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000032",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T13:41:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 803.73,
+    "currency": "USD",
+    "declared_value": 23525,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0033",
+    "shipment_id": "SHP-0033",
+    "shipper": {
+      "party_id": "PTY-SH-0033",
+      "name": "Fictional Exporter 033",
+      "address": "42 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0033",
+      "name": "Fictional Importer 033",
+      "address": "52 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000033",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T13:52:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 808.59,
+    "currency": "USD",
+    "declared_value": 23800,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0034",
+    "shipment_id": "SHP-0034",
+    "shipper": {
+      "party_id": "PTY-SH-0034",
+      "name": "Fictional Exporter 034",
+      "address": "43 Harbour Way",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0034",
+      "name": "Fictional Importer 034",
+      "address": "53 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000034",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T14:03:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 315.38,
+    "currency": "USD",
+    "declared_value": 24075,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0035",
+    "shipment_id": "SHP-0035",
+    "shipper": {
+      "party_id": "PTY-SH-0035",
+      "name": "Fictional Exporter 035",
+      "address": "44 Harbour Way",
+      "city": "SIN",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0035",
+      "name": "Fictional Importer 035",
+      "address": "54 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000035",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T14:14:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 646.72,
+    "currency": "USD",
+    "declared_value": 24350,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0036",
+    "shipment_id": "SHP-0036",
+    "shipper": {
+      "party_id": "PTY-SH-0036",
+      "name": "Fictional Exporter 036",
+      "address": "45 Harbour Way",
+      "city": "HKG",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0036",
+      "name": "Fictional Importer 036",
+      "address": "55 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000036",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T14:25:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 488.09,
+    "currency": "USD",
+    "declared_value": 24625,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0037",
+    "shipment_id": "SHP-0037",
+    "shipper": {
+      "party_id": "PTY-SH-0037",
+      "name": "Fictional Exporter 037",
+      "address": "46 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0037",
+      "name": "Fictional Importer 037",
+      "address": "56 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000037",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T14:36:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 221.98,
+    "currency": "USD",
+    "declared_value": 24900,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0038",
+    "shipment_id": "SHP-0038",
+    "shipper": {
+      "party_id": "PTY-SH-0038",
+      "name": "Fictional Exporter 038",
+      "address": "47 Harbour Way",
+      "city": "DOH",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0038",
+      "name": "Fictional Importer 038",
+      "address": "57 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000038",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T14:47:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 519.62,
+    "currency": "USD",
+    "declared_value": 25175,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0039",
+    "shipment_id": "SHP-0039",
+    "shipper": {
+      "party_id": "PTY-SH-0039",
+      "name": "Fictional Exporter 039",
+      "address": "48 Harbour Way",
+      "city": "DXB",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0039",
+      "name": "Fictional Importer 039",
+      "address": "58 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000039",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T14:58:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 797.6,
+    "currency": "USD",
+    "declared_value": 25450,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0040",
+    "shipment_id": "SHP-0040",
+    "shipper": {
+      "party_id": "PTY-SH-0040",
+      "name": "Fictional Exporter 040",
+      "address": "49 Harbour Way",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0040",
+      "name": "Fictional Importer 040",
+      "address": "59 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000040",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T15:09:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 174.37,
+    "currency": "USD",
+    "declared_value": 25725,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0041",
+    "shipment_id": "SHP-0041",
+    "shipper": {
+      "party_id": "PTY-SH-0041",
+      "name": "Fictional Exporter 041",
+      "address": "50 Harbour Way",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0041",
+      "name": "Fictional Importer 041",
+      "address": "60 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000041",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T15:20:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 579.38,
+    "currency": "USD",
+    "declared_value": 26000,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0042",
+    "shipment_id": "SHP-0042",
+    "shipper": {
+      "party_id": "PTY-SH-0042",
+      "name": "Fictional Exporter 042",
+      "address": "51 Harbour Way",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0042",
+      "name": "Fictional Importer 042",
+      "address": "61 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000042",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T15:31:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 1064.21,
+    "currency": "USD",
+    "declared_value": 26275,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0043",
+    "shipment_id": "SHP-0043",
+    "shipper": {
+      "party_id": "PTY-SH-0043",
+      "name": "Fictional Exporter 043",
+      "address": "52 Harbour Way",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0043",
+      "name": "Fictional Importer 043",
+      "address": "62 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000043",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T15:42:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 422.08,
+    "currency": "USD",
+    "declared_value": 26550,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0044",
+    "shipment_id": "SHP-0044",
+    "shipper": {
+      "party_id": "PTY-SH-0044",
+      "name": "Fictional Exporter 044",
+      "address": "53 Harbour Way",
+      "city": "DXB",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0044",
+      "name": "Fictional Importer 044",
+      "address": "63 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000044",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T15:53:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 514.09,
+    "currency": "USD",
+    "declared_value": 26825,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0045",
+    "shipment_id": "SHP-0045",
+    "shipper": {
+      "party_id": "PTY-SH-0045",
+      "name": "Fictional Exporter 045",
+      "address": "54 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0045",
+      "name": "Fictional Importer 045",
+      "address": "64 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000045",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T16:04:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 668.88,
+    "currency": "USD",
+    "declared_value": 27100,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0046",
+    "shipment_id": "SHP-0046",
+    "shipper": {
+      "party_id": "PTY-SH-0046",
+      "name": "Fictional Exporter 046",
+      "address": "55 Harbour Way",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0046",
+      "name": "Fictional Importer 046",
+      "address": "65 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000046",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T16:15:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 175.85,
+    "currency": "USD",
+    "declared_value": 27375,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0047",
+    "shipment_id": "SHP-0047",
+    "shipper": {
+      "party_id": "PTY-SH-0047",
+      "name": "Fictional Exporter 047",
+      "address": "56 Harbour Way",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0047",
+      "name": "Fictional Importer 047",
+      "address": "66 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000047",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T16:26:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 693.86,
+    "currency": "USD",
+    "declared_value": 27650,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0048",
+    "shipment_id": "SHP-0048",
+    "shipper": {
+      "party_id": "PTY-SH-0048",
+      "name": "Fictional Exporter 048",
+      "address": "57 Harbour Way",
+      "city": "HKG",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0048",
+      "name": "Fictional Importer 048",
+      "address": "67 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000048",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T16:37:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 785.86,
+    "currency": "USD",
+    "declared_value": 27925,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0049",
+    "shipment_id": "SHP-0049",
+    "shipper": {
+      "party_id": "PTY-SH-0049",
+      "name": "Fictional Exporter 049",
+      "address": "58 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0049",
+      "name": "Fictional Importer 049",
+      "address": "68 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000049",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T16:48:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 226.46,
+    "currency": "USD",
+    "declared_value": 28200,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0050",
+    "shipment_id": "SHP-0050",
+    "shipper": {
+      "party_id": "PTY-SH-0050",
+      "name": "Fictional Exporter 050",
+      "address": "59 Harbour Way",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0050",
+      "name": "Fictional Importer 050",
+      "address": "69 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000050",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T16:59:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 566.32,
+    "currency": "USD",
+    "declared_value": 28475,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0051",
+    "shipment_id": "SHP-0051",
+    "shipper": {
+      "party_id": "PTY-SH-0051",
+      "name": "Fictional Exporter 051",
+      "address": "60 Harbour Way",
+      "city": "DXB",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0051",
+      "name": "Fictional Importer 051",
+      "address": "70 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000051",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T17:10:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 779.09,
+    "currency": "USD",
+    "declared_value": 28750,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0052",
+    "shipment_id": "SHP-0052",
+    "shipper": {
+      "party_id": "PTY-SH-0052",
+      "name": "Fictional Exporter 052",
+      "address": "61 Harbour Way",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0052",
+      "name": "Fictional Importer 052",
+      "address": "71 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000052",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T17:21:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 169.35,
+    "currency": "USD",
+    "declared_value": 29025,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0053",
+    "shipment_id": "SHP-0053",
+    "shipper": {
+      "party_id": "PTY-SH-0053",
+      "name": "Fictional Exporter 053",
+      "address": "62 Harbour Way",
+      "city": "NRT",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0053",
+      "name": "Fictional Importer 053",
+      "address": "72 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000053",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T17:32:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 419.57,
+    "currency": "USD",
+    "declared_value": 29300,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0054",
+    "shipment_id": "SHP-0054",
+    "shipper": {
+      "party_id": "PTY-SH-0054",
+      "name": "Fictional Exporter 054",
+      "address": "63 Harbour Way",
+      "city": "SYD",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0054",
+      "name": "Fictional Importer 054",
+      "address": "73 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000054",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T17:43:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 903.77,
+    "currency": "USD",
+    "declared_value": 29575,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0055",
+    "shipment_id": "SHP-0055",
+    "shipper": {
+      "party_id": "PTY-SH-0055",
+      "name": "Fictional Exporter 055",
+      "address": "64 Harbour Way",
+      "city": "HKG",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0055",
+      "name": "Fictional Importer 055",
+      "address": "74 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000055",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T17:54:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 465.29,
+    "currency": "USD",
+    "declared_value": 29850,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0056",
+    "shipment_id": "SHP-0056",
+    "shipper": {
+      "party_id": "PTY-SH-0056",
+      "name": "Fictional Exporter 056",
+      "address": "65 Harbour Way",
+      "city": "DXB",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0056",
+      "name": "Fictional Importer 056",
+      "address": "75 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000056",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T18:05:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 733.04,
+    "currency": "USD",
+    "declared_value": 30125,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0057",
+    "shipment_id": "SHP-0057",
+    "shipper": {
+      "party_id": "PTY-SH-0057",
+      "name": "Fictional Exporter 057",
+      "address": "66 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0057",
+      "name": "Fictional Importer 057",
+      "address": "76 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000057",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T18:16:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 987.36,
+    "currency": "USD",
+    "declared_value": 30400,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0058",
+    "shipment_id": "SHP-0058",
+    "shipper": {
+      "party_id": "PTY-SH-0058",
+      "name": "Fictional Exporter 058",
+      "address": "67 Harbour Way",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0058",
+      "name": "Fictional Importer 058",
+      "address": "77 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000058",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T18:27:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 278.39,
+    "currency": "USD",
+    "declared_value": 30675,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0059",
+    "shipment_id": "SHP-0059",
+    "shipper": {
+      "party_id": "PTY-SH-0059",
+      "name": "Fictional Exporter 059",
+      "address": "68 Harbour Way",
+      "city": "SIN",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0059",
+      "name": "Fictional Importer 059",
+      "address": "78 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000059",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T18:38:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 823.72,
+    "currency": "USD",
+    "declared_value": 30950,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0060",
+    "shipment_id": "SHP-0060",
+    "shipper": {
+      "party_id": "PTY-SH-0060",
+      "name": "Fictional Exporter 060",
+      "address": "69 Harbour Way",
+      "city": "HKG",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0060",
+      "name": "Fictional Importer 060",
+      "address": "79 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000060",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T18:49:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 868.54,
+    "currency": "USD",
+    "declared_value": 31225,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0061",
+    "shipment_id": "SHP-0061",
+    "shipper": {
+      "party_id": "PTY-SH-0061",
+      "name": "Fictional Exporter 061",
+      "address": "70 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0061",
+      "name": "Fictional Importer 061",
+      "address": "80 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000061",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T19:00:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 327.26,
+    "currency": "USD",
+    "declared_value": 31500,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0062",
+    "shipment_id": "SHP-0062",
+    "shipper": {
+      "party_id": "PTY-SH-0062",
+      "name": "Fictional Exporter 062",
+      "address": "71 Harbour Way",
+      "city": "DOH",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0062",
+      "name": "Fictional Importer 062",
+      "address": "81 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000062",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T19:11:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 466.37,
+    "currency": "USD",
+    "declared_value": 31775,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0063",
+    "shipment_id": "SHP-0063",
+    "shipper": {
+      "party_id": "PTY-SH-0063",
+      "name": "Fictional Exporter 063",
+      "address": "72 Harbour Way",
+      "city": "DXB",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0063",
+      "name": "Fictional Importer 063",
+      "address": "82 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000063",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T19:22:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 1063.56,
+    "currency": "USD",
+    "declared_value": 32050,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0064",
+    "shipment_id": "SHP-0064",
+    "shipper": {
+      "party_id": "PTY-SH-0064",
+      "name": "Fictional Exporter 064",
+      "address": "73 Harbour Way",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0064",
+      "name": "Fictional Importer 064",
+      "address": "83 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000064",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T19:33:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 376.94,
+    "currency": "USD",
+    "declared_value": 32325,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0065",
+    "shipment_id": "SHP-0065",
+    "shipper": {
+      "party_id": "PTY-SH-0065",
+      "name": "Fictional Exporter 065",
+      "address": "74 Harbour Way",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0065",
+      "name": "Fictional Importer 065",
+      "address": "84 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000065",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T19:44:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 757.68,
+    "currency": "USD",
+    "declared_value": 32600,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0066",
+    "shipment_id": "SHP-0066",
+    "shipper": {
+      "party_id": "PTY-SH-0066",
+      "name": "Fictional Exporter 066",
+      "address": "75 Harbour Way",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0066",
+      "name": "Fictional Importer 066",
+      "address": "85 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000066",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T19:55:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 268.19,
+    "currency": "USD",
+    "declared_value": 32875,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0067",
+    "shipment_id": "SHP-0067",
+    "shipper": {
+      "party_id": "PTY-SH-0067",
+      "name": "Fictional Exporter 067",
+      "address": "76 Harbour Way",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0067",
+      "name": "Fictional Importer 067",
+      "address": "86 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000067",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T20:06:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 235.5,
+    "currency": "USD",
+    "declared_value": 33150,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0068",
+    "shipment_id": "SHP-0068",
+    "shipper": {
+      "party_id": "PTY-SH-0068",
+      "name": "Fictional Exporter 068",
+      "address": "77 Harbour Way",
+      "city": "DXB",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0068",
+      "name": "Fictional Importer 068",
+      "address": "87 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000068",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T20:17:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 572.93,
+    "currency": "USD",
+    "declared_value": 33425,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0069",
+    "shipment_id": "SHP-0069",
+    "shipper": {
+      "party_id": "PTY-SH-0069",
+      "name": "Fictional Exporter 069",
+      "address": "78 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0069",
+      "name": "Fictional Importer 069",
+      "address": "88 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000069",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T20:28:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 873.78,
+    "currency": "USD",
+    "declared_value": 33700,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0070",
+    "shipment_id": "SHP-0070",
+    "shipper": {
+      "party_id": "PTY-SH-0070",
+      "name": "Fictional Exporter 070",
+      "address": "79 Harbour Way",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0070",
+      "name": "Fictional Importer 070",
+      "address": "89 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000070",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T20:39:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 445.58,
+    "currency": "USD",
+    "declared_value": 33975,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0071",
+    "shipment_id": "SHP-0071",
+    "shipper": {
+      "party_id": "PTY-SH-0071",
+      "name": "Fictional Exporter 071",
+      "address": "80 Harbour Way",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0071",
+      "name": "Fictional Importer 071",
+      "address": "90 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000071",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T20:50:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 344.88,
+    "currency": "USD",
+    "declared_value": 34250,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0072",
+    "shipment_id": "SHP-0072",
+    "shipper": {
+      "party_id": "PTY-SH-0072",
+      "name": "Fictional Exporter 072",
+      "address": "81 Harbour Way",
+      "city": "HKG",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0072",
+      "name": "Fictional Importer 072",
+      "address": "91 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000072",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T21:01:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 370.26,
+    "currency": "USD",
+    "declared_value": 34525,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0073",
+    "shipment_id": "SHP-0073",
+    "shipper": {
+      "party_id": "PTY-SH-0073",
+      "name": "Fictional Exporter 073",
+      "address": "82 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0073",
+      "name": "Fictional Importer 073",
+      "address": "92 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000073",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T21:12:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 324.42,
+    "currency": "USD",
+    "declared_value": 34800,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0074",
+    "shipment_id": "SHP-0074",
+    "shipper": {
+      "party_id": "PTY-SH-0074",
+      "name": "Fictional Exporter 074",
+      "address": "83 Harbour Way",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0074",
+      "name": "Fictional Importer 074",
+      "address": "93 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000074",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T21:23:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 525.14,
+    "currency": "USD",
+    "declared_value": 35075,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0075",
+    "shipment_id": "SHP-0075",
+    "shipper": {
+      "party_id": "PTY-SH-0075",
+      "name": "Fictional Exporter 075",
+      "address": "84 Harbour Way",
+      "city": "DXB",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0075",
+      "name": "Fictional Importer 075",
+      "address": "94 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000075",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T21:34:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 977.54,
+    "currency": "USD",
+    "declared_value": 35350,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0076",
+    "shipment_id": "SHP-0076",
+    "shipper": {
+      "party_id": "PTY-SH-0076",
+      "name": "Fictional Exporter 076",
+      "address": "85 Harbour Way",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0076",
+      "name": "Fictional Importer 076",
+      "address": "95 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000076",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T21:45:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 343.88,
+    "currency": "USD",
+    "declared_value": 35625,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0077",
+    "shipment_id": "SHP-0077",
+    "shipper": {
+      "party_id": "PTY-SH-0077",
+      "name": "Fictional Exporter 077",
+      "address": "86 Harbour Way",
+      "city": "NRT",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0077",
+      "name": "Fictional Importer 077",
+      "address": "96 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000077",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T21:56:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 638.67,
+    "currency": "USD",
+    "declared_value": 35900,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0078",
+    "shipment_id": "SHP-0078",
+    "shipper": {
+      "party_id": "PTY-SH-0078",
+      "name": "Fictional Exporter 078",
+      "address": "87 Harbour Way",
+      "city": "SYD",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0078",
+      "name": "Fictional Importer 078",
+      "address": "97 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000078",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T22:07:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 1016.18,
+    "currency": "USD",
+    "declared_value": 36175,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0079",
+    "shipment_id": "SHP-0079",
+    "shipper": {
+      "party_id": "PTY-SH-0079",
+      "name": "Fictional Exporter 079",
+      "address": "88 Harbour Way",
+      "city": "HKG",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0079",
+      "name": "Fictional Importer 079",
+      "address": "98 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000079",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T22:18:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 106.32,
+    "currency": "USD",
+    "declared_value": 36450,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0080",
+    "shipment_id": "SHP-0080",
+    "shipper": {
+      "party_id": "PTY-SH-0080",
+      "name": "Fictional Exporter 080",
+      "address": "89 Harbour Way",
+      "city": "DXB",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0080",
+      "name": "Fictional Importer 080",
+      "address": "99 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000080",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T22:29:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 647.86,
+    "currency": "USD",
+    "declared_value": 36725,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0081",
+    "shipment_id": "SHP-0081",
+    "shipper": {
+      "party_id": "PTY-SH-0081",
+      "name": "Fictional Exporter 081",
+      "address": "90 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0081",
+      "name": "Fictional Importer 081",
+      "address": "100 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000081",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T22:40:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 541.67,
+    "currency": "USD",
+    "declared_value": 37000,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0082",
+    "shipment_id": "SHP-0082",
+    "shipper": {
+      "party_id": "PTY-SH-0082",
+      "name": "Fictional Exporter 082",
+      "address": "91 Harbour Way",
+      "city": "FRA",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0082",
+      "name": "Fictional Importer 082",
+      "address": "101 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000082",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T22:51:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 100.42,
+    "currency": "USD",
+    "declared_value": 37275,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0083",
+    "shipment_id": "SHP-0083",
+    "shipper": {
+      "party_id": "PTY-SH-0083",
+      "name": "Fictional Exporter 083",
+      "address": "92 Harbour Way",
+      "city": "SIN",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0083",
+      "name": "Fictional Importer 083",
+      "address": "102 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000083",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T23:02:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 702.86,
+    "currency": "USD",
+    "declared_value": 37550,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0084",
+    "shipment_id": "SHP-0084",
+    "shipper": {
+      "party_id": "PTY-SH-0084",
+      "name": "Fictional Exporter 084",
+      "address": "93 Harbour Way",
+      "city": "HKG",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0084",
+      "name": "Fictional Importer 084",
+      "address": "103 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000084",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T23:13:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 905.79,
+    "currency": "USD",
+    "declared_value": 37825,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0085",
+    "shipment_id": "SHP-0085",
+    "shipper": {
+      "party_id": "PTY-SH-0085",
+      "name": "Fictional Exporter 085",
+      "address": "94 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0085",
+      "name": "Fictional Importer 085",
+      "address": "104 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000085",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T23:24:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 334.41,
+    "currency": "USD",
+    "declared_value": 38100,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0086",
+    "shipment_id": "SHP-0086",
+    "shipper": {
+      "party_id": "PTY-SH-0086",
+      "name": "Fictional Exporter 086",
+      "address": "95 Harbour Way",
+      "city": "DOH",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0086",
+      "name": "Fictional Importer 086",
+      "address": "105 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000086",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T23:35:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 614.75,
+    "currency": "USD",
+    "declared_value": 38375,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0087",
+    "shipment_id": "SHP-0087",
+    "shipper": {
+      "party_id": "PTY-SH-0087",
+      "name": "Fictional Exporter 087",
+      "address": "96 Harbour Way",
+      "city": "DXB",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0087",
+      "name": "Fictional Importer 087",
+      "address": "106 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000087",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T23:46:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 734.08,
+    "currency": "USD",
+    "declared_value": 38650,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0088",
+    "shipment_id": "SHP-0088",
+    "shipper": {
+      "party_id": "PTY-SH-0088",
+      "name": "Fictional Exporter 088",
+      "address": "97 Harbour Way",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0088",
+      "name": "Fictional Importer 088",
+      "address": "107 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000088",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-13T23:57:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 185.38,
+    "currency": "USD",
+    "declared_value": 38925,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0089",
+    "shipment_id": "SHP-0089",
+    "shipper": {
+      "party_id": "PTY-SH-0089",
+      "name": "Fictional Exporter 089",
+      "address": "98 Harbour Way",
+      "city": "NRT",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0089",
+      "name": "Fictional Importer 089",
+      "address": "108 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000089",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T00:08:00Z",
+    "origin": "NRT",
+    "destination": "SYD",
+    "total_pieces": 2,
+    "total_weight_kg": 651.53,
+    "currency": "USD",
+    "declared_value": 39200,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0090",
+    "shipment_id": "SHP-0090",
+    "shipper": {
+      "party_id": "PTY-SH-0090",
+      "name": "Fictional Exporter 090",
+      "address": "99 Harbour Way",
+      "city": "SYD",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0090",
+      "name": "Fictional Importer 090",
+      "address": "109 Cargo Avenue",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000090",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T00:19:00Z",
+    "origin": "SYD",
+    "destination": "SIN",
+    "total_pieces": 3,
+    "total_weight_kg": 900.14,
+    "currency": "USD",
+    "declared_value": 39475,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0091",
+    "shipment_id": "SHP-0091",
+    "shipper": {
+      "party_id": "PTY-SH-0091",
+      "name": "Fictional Exporter 091",
+      "address": "100 Harbour Way",
+      "city": "HKG",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0091",
+      "name": "Fictional Importer 091",
+      "address": "110 Cargo Avenue",
+      "city": "NRT",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000091",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T00:30:00Z",
+    "origin": "HKG",
+    "destination": "NRT",
+    "total_pieces": 1,
+    "total_weight_kg": 215.08,
+    "currency": "USD",
+    "declared_value": 39750,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0092",
+    "shipment_id": "SHP-0092",
+    "shipper": {
+      "party_id": "PTY-SH-0092",
+      "name": "Fictional Exporter 092",
+      "address": "101 Harbour Way",
+      "city": "DXB",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0092",
+      "name": "Fictional Importer 092",
+      "address": "111 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000092",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T00:41:00Z",
+    "origin": "DXB",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 695.94,
+    "currency": "USD",
+    "declared_value": 40025,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0093",
+    "shipment_id": "SHP-0093",
+    "shipper": {
+      "party_id": "PTY-SH-0093",
+      "name": "Fictional Exporter 093",
+      "address": "102 Harbour Way",
+      "city": "SIN",
+      "country_code": "DE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0093",
+      "name": "Fictional Importer 093",
+      "address": "112 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "air_waybill_number": "160-00000093",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T00:52:00Z",
+    "origin": "SIN",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 841.21,
+    "currency": "USD",
+    "declared_value": 40300,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0094",
+    "shipment_id": "SHP-0094",
+    "shipper": {
+      "party_id": "PTY-SH-0094",
+      "name": "Fictional Exporter 094",
+      "address": "103 Harbour Way",
+      "city": "FRA",
+      "country_code": "GB"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0094",
+      "name": "Fictional Importer 094",
+      "address": "113 Cargo Avenue",
+      "city": "SYD",
+      "country_code": "AU"
+    },
+    "air_waybill_number": "160-00000094",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T01:03:00Z",
+    "origin": "FRA",
+    "destination": "SYD",
+    "total_pieces": 1,
+    "total_weight_kg": 240.91,
+    "currency": "USD",
+    "declared_value": 40575,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0095",
+    "shipment_id": "SHP-0095",
+    "shipper": {
+      "party_id": "PTY-SH-0095",
+      "name": "Fictional Exporter 095",
+      "address": "104 Harbour Way",
+      "city": "SIN",
+      "country_code": "AU"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0095",
+      "name": "Fictional Importer 095",
+      "address": "114 Cargo Avenue",
+      "city": "HKG",
+      "country_code": "SG"
+    },
+    "air_waybill_number": "160-00000095",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T01:14:00Z",
+    "origin": "SIN",
+    "destination": "HKG",
+    "total_pieces": 2,
+    "total_weight_kg": 614.94,
+    "currency": "USD",
+    "declared_value": 40850,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0096",
+    "shipment_id": "SHP-0096",
+    "shipper": {
+      "party_id": "PTY-SH-0096",
+      "name": "Fictional Exporter 096",
+      "address": "105 Harbour Way",
+      "city": "HKG",
+      "country_code": "JP"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0096",
+      "name": "Fictional Importer 096",
+      "address": "115 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "JP"
+    },
+    "air_waybill_number": "160-00000096",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T01:25:00Z",
+    "origin": "HKG",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 813.14,
+    "currency": "USD",
+    "declared_value": 41125,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0097",
+    "shipment_id": "SHP-0097",
+    "shipper": {
+      "party_id": "PTY-SH-0097",
+      "name": "Fictional Exporter 097",
+      "address": "106 Harbour Way",
+      "city": "SIN",
+      "country_code": "SG"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0097",
+      "name": "Fictional Importer 097",
+      "address": "116 Cargo Avenue",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "air_waybill_number": "160-00000097",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T01:36:00Z",
+    "origin": "SIN",
+    "destination": "DOH",
+    "total_pieces": 1,
+    "total_weight_kg": 427.43,
+    "currency": "USD",
+    "declared_value": 41400,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0098",
+    "shipment_id": "SHP-0098",
+    "shipper": {
+      "party_id": "PTY-SH-0098",
+      "name": "Fictional Exporter 098",
+      "address": "107 Harbour Way",
+      "city": "DOH",
+      "country_code": "HK"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0098",
+      "name": "Fictional Importer 098",
+      "address": "117 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "DE"
+    },
+    "air_waybill_number": "160-00000098",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T01:47:00Z",
+    "origin": "DOH",
+    "destination": "LHR",
+    "total_pieces": 2,
+    "total_weight_kg": 570.67,
+    "currency": "USD",
+    "declared_value": 41675,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0099",
+    "shipment_id": "SHP-0099",
+    "shipper": {
+      "party_id": "PTY-SH-0099",
+      "name": "Fictional Exporter 099",
+      "address": "108 Harbour Way",
+      "city": "DXB",
+      "country_code": "QA"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0099",
+      "name": "Fictional Importer 099",
+      "address": "118 Cargo Avenue",
+      "city": "FRA",
+      "country_code": "QA"
+    },
+    "air_waybill_number": "160-00000099",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T01:58:00Z",
+    "origin": "DXB",
+    "destination": "FRA",
+    "total_pieces": 3,
+    "total_weight_kg": 909.31,
+    "currency": "USD",
+    "declared_value": 41950,
+    "waybill_status": "issued"
+  },
+  {
+    "waybill_id": "WB-0100",
+    "shipment_id": "SHP-0100",
+    "shipper": {
+      "party_id": "PTY-SH-0100",
+      "name": "Fictional Exporter 100",
+      "address": "109 Harbour Way",
+      "city": "FRA",
+      "country_code": "AE"
+    },
+    "consignee": {
+      "party_id": "PTY-CO-0100",
+      "name": "Fictional Importer 100",
+      "address": "119 Cargo Avenue",
+      "city": "LHR",
+      "country_code": "GB"
+    },
+    "air_waybill_number": "160-00000100",
+    "issuing_carrier": "Cathay Cargo (fictional)",
+    "issue_date": "2026-09-14T02:09:00Z",
+    "origin": "FRA",
+    "destination": "LHR",
+    "total_pieces": 1,
+    "total_weight_kg": 329.49,
+    "currency": "USD",
+    "declared_value": 42225,
+    "waybill_status": "issued"
+  }
+]

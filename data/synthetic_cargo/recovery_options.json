@@ -1,0 +1,2068 @@
+[
+  {
+    "option_id": "REC-0001-01",
+    "shipment_id": "SHP-0001",
+    "alternative": "Use synthetic flight CX705 via FRA",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-16T20:00:00Z",
+    "feasible": false,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0001-01",
+    "alternative_booking_id": "BKG-0001-02",
+    "movement_ids": [
+      "TM-0006"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 1200,
+    "risk_score": 22,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 20,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0001-02",
+    "shipment_id": "SHP-0001",
+    "alternative": "Use synthetic flight CX706 via NRT",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-17T03:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0001-01",
+    "alternative_booking_id": "BKG-0001-02",
+    "movement_ids": [
+      "TM-0007"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 1620,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0001-03",
+    "shipment_id": "SHP-0001",
+    "alternative": "Use synthetic flight CX707 via SYD",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-17T10:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0001-01",
+    "alternative_booking_id": "BKG-0001-02",
+    "movement_ids": [
+      "TM-0008"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 2040,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0002-01",
+    "shipment_id": "SHP-0002",
+    "alternative": "Use synthetic flight CX706 via NRT",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-17T03:00:00Z",
+    "feasible": false,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0002-01",
+    "alternative_booking_id": "BKG-0002-02",
+    "movement_ids": [
+      "TM-0007"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 1140,
+    "risk_score": 22,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 20,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0002-02",
+    "shipment_id": "SHP-0002",
+    "alternative": "Use synthetic flight CX707 via SYD",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-17T10:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0002-01",
+    "alternative_booking_id": "BKG-0002-02",
+    "movement_ids": [
+      "TM-0008"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 1560,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0002-03",
+    "shipment_id": "SHP-0002",
+    "alternative": "Use synthetic flight CX708 via HKG",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-17T17:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0002-01",
+    "alternative_booking_id": "BKG-0002-02",
+    "movement_ids": [
+      "TM-0009"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 1980,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0003-01",
+    "shipment_id": "SHP-0003",
+    "alternative": "Use synthetic flight CX707 via SYD",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-17T10:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0003-01",
+    "alternative_booking_id": "BKG-0003-02",
+    "movement_ids": [
+      "TM-0008"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0003-02",
+    "shipment_id": "SHP-0003",
+    "alternative": "Use synthetic flight CX708 via HKG",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-17T17:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0003-01",
+    "alternative_booking_id": "BKG-0003-02",
+    "movement_ids": [
+      "TM-0009"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0003-03",
+    "shipment_id": "SHP-0003",
+    "alternative": "Use synthetic flight CX709 via DXB",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-18T00:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0003-01",
+    "alternative_booking_id": "BKG-0003-02",
+    "movement_ids": [
+      "TM-0010"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0004-01",
+    "shipment_id": "SHP-0004",
+    "alternative": "Use synthetic flight CX708 via HKG",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-17T17:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0004-01",
+    "alternative_booking_id": "BKG-0004-02",
+    "movement_ids": [
+      "TM-0009"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0004-02",
+    "shipment_id": "SHP-0004",
+    "alternative": "Use synthetic flight CX709 via DXB",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-18T00:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0004-01",
+    "alternative_booking_id": "BKG-0004-02",
+    "movement_ids": [
+      "TM-0010"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0004-03",
+    "shipment_id": "SHP-0004",
+    "alternative": "Use synthetic flight CX710 via SIN",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-17T21:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0004-01",
+    "alternative_booking_id": "BKG-0004-02",
+    "movement_ids": [
+      "TM-0011"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0005-01",
+    "shipment_id": "SHP-0005",
+    "alternative": "Use synthetic flight CX709 via DXB",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-18T00:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0005-01",
+    "alternative_booking_id": "BKG-0005-02",
+    "movement_ids": [
+      "TM-0010"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0005-02",
+    "shipment_id": "SHP-0005",
+    "alternative": "Use synthetic flight CX710 via SIN",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-17T21:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0005-01",
+    "alternative_booking_id": "BKG-0005-02",
+    "movement_ids": [
+      "TM-0011"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0005-03",
+    "shipment_id": "SHP-0005",
+    "alternative": "Use synthetic flight CX711 via FRA",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-18T04:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0005-01",
+    "alternative_booking_id": "BKG-0005-02",
+    "movement_ids": [
+      "TM-0012"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0006-01",
+    "shipment_id": "SHP-0006",
+    "alternative": "Use synthetic flight CX710 via SIN",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-17T21:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0006-01",
+    "alternative_booking_id": "BKG-0006-02",
+    "movement_ids": [
+      "TM-0011"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0006-02",
+    "shipment_id": "SHP-0006",
+    "alternative": "Use synthetic flight CX711 via FRA",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-18T04:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0006-01",
+    "alternative_booking_id": "BKG-0006-02",
+    "movement_ids": [
+      "TM-0012"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0006-03",
+    "shipment_id": "SHP-0006",
+    "alternative": "Use synthetic flight CX712 via SIN",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-18T11:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0006-01",
+    "alternative_booking_id": "BKG-0006-02",
+    "movement_ids": [
+      "TM-0013"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0007-01",
+    "shipment_id": "SHP-0007",
+    "alternative": "Use synthetic flight CX711 via FRA",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-18T04:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0007-01",
+    "alternative_booking_id": "BKG-0007-02",
+    "movement_ids": [
+      "TM-0012"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0007-02",
+    "shipment_id": "SHP-0007",
+    "alternative": "Use synthetic flight CX712 via SIN",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-18T11:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0007-01",
+    "alternative_booking_id": "BKG-0007-02",
+    "movement_ids": [
+      "TM-0013"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0007-03",
+    "shipment_id": "SHP-0007",
+    "alternative": "Use synthetic flight CX713 via HKG",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-18T18:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0007-01",
+    "alternative_booking_id": "BKG-0007-02",
+    "movement_ids": [
+      "TM-0014"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0008-01",
+    "shipment_id": "SHP-0008",
+    "alternative": "Use synthetic flight CX712 via SIN",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-18T11:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0008-01",
+    "alternative_booking_id": "BKG-0008-02",
+    "movement_ids": [
+      "TM-0013"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0008-02",
+    "shipment_id": "SHP-0008",
+    "alternative": "Use synthetic flight CX713 via HKG",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-18T18:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0008-01",
+    "alternative_booking_id": "BKG-0008-02",
+    "movement_ids": [
+      "TM-0014"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0008-03",
+    "shipment_id": "SHP-0008",
+    "alternative": "Use synthetic flight CX714 via SIN",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-19T01:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0008-01",
+    "alternative_booking_id": "BKG-0008-02",
+    "movement_ids": [
+      "TM-0015"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0009-01",
+    "shipment_id": "SHP-0009",
+    "alternative": "Use synthetic flight CX713 via HKG",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-18T18:00:00Z",
+    "feasible": false,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0009-01",
+    "alternative_booking_id": "BKG-0009-02",
+    "movement_ids": [
+      "TM-0014"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 660,
+    "risk_score": 22,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Estimated arrival misses hard delivery deadline"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 20,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0009-02",
+    "shipment_id": "SHP-0009",
+    "alternative": "Use synthetic flight CX714 via SIN",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-19T01:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0009-01",
+    "alternative_booking_id": "BKG-0009-02",
+    "movement_ids": [
+      "TM-0015"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 1080,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Estimated arrival misses hard delivery deadline"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0009-03",
+    "shipment_id": "SHP-0009",
+    "alternative": "Use synthetic flight CX715 via DOH",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-18T22:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0009-01",
+    "alternative_booking_id": "BKG-0009-02",
+    "movement_ids": [
+      "TM-0016"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 900,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Estimated arrival misses hard delivery deadline"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": false,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0011-01",
+    "shipment_id": "SHP-0011",
+    "alternative": "Use synthetic flight CX715 via DOH",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-18T22:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0011-01",
+    "alternative_booking_id": "BKG-0011-02",
+    "movement_ids": [
+      "TM-0016"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0011-02",
+    "shipment_id": "SHP-0011",
+    "alternative": "Use synthetic flight CX716 via DXB",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-19T05:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0011-01",
+    "alternative_booking_id": "BKG-0011-02",
+    "movement_ids": [
+      "TM-0017"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0011-03",
+    "shipment_id": "SHP-0011",
+    "alternative": "Use synthetic flight CX717 via FRA",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-19T12:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0011-01",
+    "alternative_booking_id": "BKG-0011-02",
+    "movement_ids": [
+      "TM-0018"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0012-01",
+    "shipment_id": "SHP-0012",
+    "alternative": "Use synthetic flight CX716 via DXB",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-19T05:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0012-01",
+    "alternative_booking_id": "BKG-0012-02",
+    "movement_ids": [
+      "TM-0017"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0012-02",
+    "shipment_id": "SHP-0012",
+    "alternative": "Use synthetic flight CX717 via FRA",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-19T12:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0012-01",
+    "alternative_booking_id": "BKG-0012-02",
+    "movement_ids": [
+      "TM-0018"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0012-03",
+    "shipment_id": "SHP-0012",
+    "alternative": "Use synthetic flight CX718 via NRT",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-19T19:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0012-01",
+    "alternative_booking_id": "BKG-0012-02",
+    "movement_ids": [
+      "TM-0019"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0013-01",
+    "shipment_id": "SHP-0013",
+    "alternative": "Use synthetic flight CX717 via FRA",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-19T12:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0013-01",
+    "alternative_booking_id": "BKG-0013-02",
+    "movement_ids": [
+      "TM-0018"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0013-02",
+    "shipment_id": "SHP-0013",
+    "alternative": "Use synthetic flight CX718 via NRT",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-19T19:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0013-01",
+    "alternative_booking_id": "BKG-0013-02",
+    "movement_ids": [
+      "TM-0019"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0013-03",
+    "shipment_id": "SHP-0013",
+    "alternative": "Use synthetic flight CX719 via SYD",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-20T02:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0013-01",
+    "alternative_booking_id": "BKG-0013-02",
+    "movement_ids": [
+      "TM-0020"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0014-01",
+    "shipment_id": "SHP-0014",
+    "alternative": "Use synthetic flight CX718 via NRT",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-19T19:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0014-01",
+    "alternative_booking_id": "BKG-0014-02",
+    "movement_ids": [
+      "TM-0019"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0014-02",
+    "shipment_id": "SHP-0014",
+    "alternative": "Use synthetic flight CX719 via SYD",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-20T02:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0014-01",
+    "alternative_booking_id": "BKG-0014-02",
+    "movement_ids": [
+      "TM-0020"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0014-03",
+    "shipment_id": "SHP-0014",
+    "alternative": "Use synthetic flight CX720 via HKG",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-19T23:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0014-01",
+    "alternative_booking_id": "BKG-0014-02",
+    "movement_ids": [
+      "TM-0021"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0015-01",
+    "shipment_id": "SHP-0015",
+    "alternative": "Use synthetic flight CX719 via SYD",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-20T02:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0015-01",
+    "alternative_booking_id": "BKG-0015-02",
+    "movement_ids": [
+      "TM-0020"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0015-02",
+    "shipment_id": "SHP-0015",
+    "alternative": "Use synthetic flight CX720 via HKG",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-19T23:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0015-01",
+    "alternative_booking_id": "BKG-0015-02",
+    "movement_ids": [
+      "TM-0021"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0015-03",
+    "shipment_id": "SHP-0015",
+    "alternative": "Use synthetic flight CX721 via DXB",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-20T06:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0015-01",
+    "alternative_booking_id": "BKG-0015-02",
+    "movement_ids": [
+      "TM-0022"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0016-01",
+    "shipment_id": "SHP-0016",
+    "alternative": "Use synthetic flight CX720 via HKG",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-19T23:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0016-01",
+    "alternative_booking_id": "BKG-0016-02",
+    "movement_ids": [
+      "TM-0021"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0016-02",
+    "shipment_id": "SHP-0016",
+    "alternative": "Use synthetic flight CX721 via DXB",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-20T06:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0016-01",
+    "alternative_booking_id": "BKG-0016-02",
+    "movement_ids": [
+      "TM-0022"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0016-03",
+    "shipment_id": "SHP-0016",
+    "alternative": "Use synthetic flight CX722 via SIN",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-20T13:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0016-01",
+    "alternative_booking_id": "BKG-0016-02",
+    "movement_ids": [
+      "TM-0023"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0017-01",
+    "shipment_id": "SHP-0017",
+    "alternative": "Use synthetic flight CX721 via DXB",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-20T06:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0017-01",
+    "alternative_booking_id": "BKG-0017-02",
+    "movement_ids": [
+      "TM-0022"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0017-02",
+    "shipment_id": "SHP-0017",
+    "alternative": "Use synthetic flight CX722 via SIN",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-20T13:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0017-01",
+    "alternative_booking_id": "BKG-0017-02",
+    "movement_ids": [
+      "TM-0023"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0017-03",
+    "shipment_id": "SHP-0017",
+    "alternative": "Use synthetic flight CX723 via FRA",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-20T20:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0017-01",
+    "alternative_booking_id": "BKG-0017-02",
+    "movement_ids": [
+      "TM-0024"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0018-01",
+    "shipment_id": "SHP-0018",
+    "alternative": "Use synthetic flight CX722 via SIN",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-20T13:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0018-01",
+    "alternative_booking_id": "BKG-0018-02",
+    "movement_ids": [
+      "TM-0023"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0018-02",
+    "shipment_id": "SHP-0018",
+    "alternative": "Use synthetic flight CX723 via FRA",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-20T20:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0018-01",
+    "alternative_booking_id": "BKG-0018-02",
+    "movement_ids": [
+      "TM-0024"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0018-03",
+    "shipment_id": "SHP-0018",
+    "alternative": "Use synthetic flight CX724 via SIN",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-21T03:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0018-01",
+    "alternative_booking_id": "BKG-0018-02",
+    "movement_ids": [
+      "TM-0025"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0019-01",
+    "shipment_id": "SHP-0019",
+    "alternative": "Use synthetic flight CX723 via FRA",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-20T20:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0019-01",
+    "alternative_booking_id": "BKG-0019-02",
+    "movement_ids": [
+      "TM-0024"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0019-02",
+    "shipment_id": "SHP-0019",
+    "alternative": "Use synthetic flight CX724 via SIN",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-21T03:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0019-01",
+    "alternative_booking_id": "BKG-0019-02",
+    "movement_ids": [
+      "TM-0025"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0019-03",
+    "shipment_id": "SHP-0019",
+    "alternative": "Use synthetic flight CX725 via HKG",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-21T00:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0019-01",
+    "alternative_booking_id": "BKG-0019-02",
+    "movement_ids": [
+      "TM-0026"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0020-01",
+    "shipment_id": "SHP-0020",
+    "alternative": "Use synthetic flight CX724 via SIN",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-21T03:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0020-01",
+    "alternative_booking_id": "BKG-0020-02",
+    "movement_ids": [
+      "TM-0025"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0020-02",
+    "shipment_id": "SHP-0020",
+    "alternative": "Use synthetic flight CX725 via HKG",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-21T00:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0020-01",
+    "alternative_booking_id": "BKG-0020-02",
+    "movement_ids": [
+      "TM-0026"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0020-03",
+    "shipment_id": "SHP-0020",
+    "alternative": "Use synthetic flight CX726 via SIN",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-21T07:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0020-01",
+    "alternative_booking_id": "BKG-0020-02",
+    "movement_ids": [
+      "TM-0027"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0021-01",
+    "shipment_id": "SHP-0021",
+    "alternative": "Use synthetic flight CX725 via HKG",
+    "extra_cost": 900,
+    "estimated_arrival": "2026-09-21T00:00:00Z",
+    "feasible": true,
+    "option_type": "rebook",
+    "original_booking_id": "BKG-0021-01",
+    "alternative_booking_id": "BKG-0021-02",
+    "movement_ids": [
+      "TM-0026"
+    ],
+    "additional_transit_minutes": 90,
+    "delivery_delay_minutes": 0,
+    "risk_score": 22,
+    "risk_factors": [
+      "synthetic capacity check"
+    ],
+    "infeasibility_reasons": [],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 700,
+      "handling": 200
+    },
+    "score": 92,
+    "recommendation_rank": 1,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Highest-scoring feasible synthetic recovery"
+  },
+  {
+    "option_id": "REC-0021-02",
+    "shipment_id": "SHP-0021",
+    "alternative": "Use synthetic flight CX726 via SIN",
+    "extra_cost": 1350,
+    "estimated_arrival": "2026-09-21T07:00:00Z",
+    "feasible": false,
+    "option_type": "reroute",
+    "original_booking_id": "BKG-0021-01",
+    "alternative_booking_id": "BKG-0021-02",
+    "movement_ids": [
+      "TM-0027"
+    ],
+    "additional_transit_minutes": 210,
+    "delivery_delay_minutes": 0,
+    "risk_score": 39,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1000,
+      "handling": 350
+    },
+    "score": 19,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  },
+  {
+    "option_id": "REC-0021-03",
+    "shipment_id": "SHP-0021",
+    "alternative": "Use synthetic flight CX727 via DOH",
+    "extra_cost": 1800,
+    "estimated_arrival": "2026-09-21T14:00:00Z",
+    "feasible": false,
+    "option_type": "wait_for_next_flight",
+    "original_booking_id": "BKG-0021-01",
+    "alternative_booking_id": "BKG-0021-02",
+    "movement_ids": [
+      "TM-0028"
+    ],
+    "additional_transit_minutes": 330,
+    "delivery_delay_minutes": 0,
+    "risk_score": 56,
+    "risk_factors": [
+      "deadline or operational constraint"
+    ],
+    "infeasibility_reasons": [
+      "Candidate movement does not satisfy the preferred recovery ranking"
+    ],
+    "currency": "USD",
+    "cost_breakdown": {
+      "transport": 1300,
+      "handling": 500
+    },
+    "score": 18,
+    "recommendation_rank": null,
+    "deadline_met": true,
+    "capacity_available": true,
+    "handling_requirements_met": true,
+    "generated_at": "2026-09-15T08:00:00Z",
+    "recommendation_reason": "Rejected by hard or operational constraints"
+  }
+]

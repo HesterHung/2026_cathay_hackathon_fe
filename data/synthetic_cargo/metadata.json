@@ -1,0 +1,41 @@
+{
+  "dataset_name": "Synthetic Cargo Shipment Recovery Optimisation Dataset",
+  "dataset_version": "1.0.0",
+  "description": "Fictional demonstration records for a cargo recovery hackathon.",
+  "generated_at": "2026-09-15T08:00:00Z",
+  "synthetic_data": true,
+  "currency_default": "USD",
+  "timezone_convention": "UTC timestamps with Z suffix",
+  "schema_version": "hackathon-cargo-v1",
+  "entity_counts": {
+    "shipments": 100,
+    "pieces": 199,
+    "waybills": 100,
+    "bookings": 120,
+    "transport_movements": 50,
+    "loadings": 199,
+    "logistics_events": 509,
+    "recovery_options": 60,
+    "disruption_scenarios": 10,
+    "metadata": 1
+  },
+  "disruption_scenario_counts": {
+    "missed_loading_cutoff": 1,
+    "flight_delay": 1,
+    "flight_cancellation": 1,
+    "customs_clearance_delay": 1,
+    "capacity_shortage": 1,
+    "temperature_excursion": 1,
+    "missing_tracking_update": 1,
+    "multiple_disruptions": 1,
+    "no_feasible_recovery": 1,
+    "normal_operation": 1
+  },
+  "generation_seed": 20261009,
+  "limitations": [
+    "Fictional records only",
+    "Schedules, carriers, parties, and identifiers are synthetic",
+    "Not officially IATA ONE Record compliant"
+  ],
+  "data_model_reference": "https://www.iata.org/en/programs/cargo/one-record/"
+}
