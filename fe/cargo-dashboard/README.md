@@ -1,78 +1,43 @@
-# React + TypeScript + Vite
+# Cathay Cargo Offload Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a **frontend-only hackathon demo**. It uses fictional, in-memory fixtures and deterministic rules to illustrate a cargo offload review workflow. It does not connect to airline systems, run a trained ML model, or make bookings or cargo moves.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Requirements: Node.js 20.19+ or 22.12+, and npm.
 
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```powershell
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Use the URL shown by Vite. Other available checks:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```powershell
+npm test
+npm run lint
+npm run build
 ```
+
+## What the demo contains
+
+- **Overview:** separates predicted cargo risk from simulated confirmed offload and recovery records.
+- **Predictions:** applies a deterministic capacity and weather heuristic to a small set of hard-coded flights. Percent values are illustrative risk scores, not calibrated probabilities.
+- **Prevention Plan:** compares sample alternatives for unconfirmed risk.
+- **Recovery Plans:** compares sample options for confirmed cases and records a human review decision in local browser storage.
+- **Shipments and Analytics:** show illustrative customer impact estimates and a four-flight evaluation sample. The analytics screen flags that the sample is too small for performance claims.
+
+Navigation and scenario controls are local UI state. A saved review decision stays in the current browser only; it is not sent to an operations system.
+
+## Data boundaries
+
+The dashboard fixtures and formulas live in `src/domain.ts`. The generated dataset in the repository's `data/synthetic_cargo` and `data/synthetic_cargo_csv` directories is a **separate artifact** used by the Python generator and validator; the dashboard does not load or join those files. Both are fictional, and their identifier schemes are not interchangeable.
+
+The Python dataset is documented in [`../../data/synthetic_cargo/README.md`](../../data/synthetic_cargo/README.md) from the repository root. Its validator can be run with `python scripts/validate_synthetic_cargo.py` from the repository root.
+
+## Demo limitations
+
+- No backend, authentication, live data feed, model training, or production deployment configuration is included.
+- Risk, confidence, cost, feasibility, and recovery estimates are synthetic inputs or transparent demo heuristics. They are not operational commitments or measured savings.
+- Recovery comparisons do not prove global optimality and cannot verify live capacity, cargo compatibility, connection acceptance, handling, or delivery commitments.
+- The demo should not be used to make real dispatch, loading, customer, or recovery decisions.

@@ -127,7 +127,7 @@ export function OverviewControlTower({ onNavigate, onSelectFlight, onSelectPreve
 
   return <div className="app-shell"><WorkspaceSidebar active="Overview" onNavigate={onNavigate} /><main className="main-content overview-page">
     <header className="topbar"><div className="crumb">CATHAY ROUTER <span>/</span> OVERVIEW</div><div className="top-actions"><span className="data-freshness"><span className="live-dot" />Demo snapshot · 16 Oct 2026 09:12 UTC</span><span className="demo-label">SIMULATED</span></div></header>
-    <div className="page-heading"><div><p className="eyebrow">NETWORK CONTROL TOWER · DEMO DATA</p><h1>Operations Overview</h1><p className="subtitle">Track schedule, forecast risk, and confirmed offloads.</p></div><span className="demo-label">SIMULATED</span></div>
+    <div className="page-heading"><div><h1>Operations Overview</h1><p className="subtitle">Track schedule, forecast risk, and confirmed offloads.</p></div><span className="demo-label">SIMULATED</span></div>
     <section className="kpi-grid overview-kpis" aria-label="Operational metrics">{metricsCards.map((card) => <button className={`kpi-card ${card.tone} overview-metric`} key={card.label} onClick={card.action}><div className="kpi-top"><span>{card.label}</span><span aria-hidden="true">↗</span></div><strong>{card.value}</strong><small>{card.note}</small></button>)}</section>
     <section className="lifecycle-banner"><strong>Forecast risk is not a confirmed offload</strong><span>Use Predictions for risk; Recovery Plans for confirmed offloads.</span><small>Demo data. Forecasts and confirmed events are kept separate.</small></section>
 
