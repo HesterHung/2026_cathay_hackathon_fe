@@ -15,14 +15,13 @@ interface PreventionPlanPageProps {
 export function PreventionPlanPage({ onNavigate, onReview, onSelectShipment, initialFlightId }: PreventionPlanPageProps) {
   const preventiveCases = useMemo(() => getOverviewQueues().preventive.flatMap((item) => {
     const recoveryCase = recoveryCases.find((candidate) => candidate.originalFlight === item.lifecycle.flightId)
-    return recoveryCase ? [{ flightId: item.lifecycle.flightId, shipmentIds: item.lifecycle.shipmentIds, recoveryCase }] : []
+    return recoveryCase ? [{ flightId: item.lifecycle.flightId, shipmentIds: item.lifecycle.shipmentIds, lifecycle: item.lifecycle, forecast: item.forecast, recoveryCase }] : []
   }), [])
   const [flightId, setFlightId] = useState(initialFlightId && preventiveCases.some((item) => item.flightId === initialFlightId) ? initialFlightId : '')
   const selectedCase = preventiveCases.find((item) => item.flightId === flightId)
   const caseOptions = recoveryOptions.filter((option) => option.caseId === selectedCase?.recoveryCase.id)
   const evaluations = useMemo(() => evaluateRecoveryScenario('preventive', caseOptions), [caseOptions])
   const recommended = evaluations.filter((item) => item.isFeasible).sort((a, b) => a.costBreakdown.totalExpectedLoss - b.costBreakdown.totalExpectedLoss)[0]
-  const nextBest = recommended ? evaluations.filter((item) => item.isFeasible && item.option.id !== recommended.option.id).sort((a, b) => a.costBreakdown.totalExpectedLoss - b.costBreakdown.totalExpectedLoss)[0] : undefined
 
   return <div className="app-shell"><WorkspaceSidebar active="Prevention Plan" onNavigate={onNavigate} /><main className="main-content shipment-page"><header className="topbar"><div className="crumb">CATHAY ROUTER <span>/</span> PREVENTION PLAN</div><span className="demo-label">SIMULATED</span></header><div className="page-heading"><div><h1>Prevention Plan</h1><p className="subtitle">Review flights at risk before offload.</p></div><span className="demo-label">SIMULATED</span></div>
     <section className="lifecycle-banner"><strong>Prevention only</strong><span>Forecast risk only. Confirmed offloads are handled in Recovery Plans.</span><small>Demo estimates only. No allocation is made.</small></section>
