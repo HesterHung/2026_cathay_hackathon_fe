@@ -7,7 +7,7 @@ This contract defines the flight-level prevention workflow. It covers forecast-r
 - Monetary values are numeric amounts with a separate `currency`, defaulting to `HKD`.
 - Weights use numeric kilograms with fields ending in `Kg`.
 - Volumes use numeric cubic meters with fields ending in `M3`.
-- Delays use numeric hours with fields ending in `Hours`.
+- Delays use numeric minutes with fields ending in `Minutes`.
 - Probabilities are decimals from `0` to `1`.
 - Feasibility percentages are numeric values from `0` to `100`.
 - Timestamps use ISO-8601 UTC strings.
@@ -17,17 +17,18 @@ This contract defines the flight-level prevention workflow. It covers forecast-r
 
 ## 1. List Flights Requiring Preventive Review
 
-`GET /api/v1/prevention-plans?status=AT_RISK,PREVENTIVE_ACTION_REQUIRED&page=1&limit=20`
+`GET /api/v1/prevention-plans?page=1&limit=20`
 
 Lists forecast-risk flights that need operator review before an offload is confirmed.
 
 The response totals summarize the queue: `totalCases` counts flights requiring review, while `totalShipmentsAtRisk` counts unique affected shipments across those flights.
 
+`workflowStage` is intentionally not returned because `/prevention-plans` already scopes this response to the prevention workflow; the backend may retain it internally for lifecycle management.
+
 ### Request query parameters
 
 | Parameter | Type | Default | Validation | Note |
 |---|---|---:|---|---|
-| `status` | string | `AT_RISK,PREVENTIVE_ACTION_REQUIRED` | Comma-separated enum values | Filters the preventive queue |
 | `page` | integer | `1` | Must be `>= 1` | One-based page number |
 | `limit` | integer | `20` | Must be between `1` and `100` | Cases returned per page; request-only and not echoed in the response |
 
@@ -38,6 +39,7 @@ The response totals summarize the queue: `totalCases` counts flights requiring r
 | `flightId` | string | Flight number | |
 | `status` | enum | `AT_RISK`, `PREVENTIVE_ACTION_REQUIRED`, `REVIEWED` | |
 | `riskLevel` | enum | `Low`, `Moderate`, `High`, `Critical` | |
+| `riskTypes` | enum[] | `CAPACITY_SHORTFALL`, `WEATHER`, `GROUND_HANDLING_DELAY`, `FLIGHT_DELAY`, `MISSED_CONNECTION`, `OFFLOAD_CONFIRMED` | One flight can have multiple risk types |
 | `offloadProbability` | number | Decimal from `0` to `1` | |
 | `predictedOffloadRate` | number | Decimal from `0` to `1` | |
 | `affectedShipmentCount` | integer | Count | |
@@ -79,6 +81,7 @@ The response totals summarize the queue: `totalCases` counts flights requiring r
       "flightId": "CX289",
       "status": "PREVENTIVE_ACTION_REQUIRED",
       "riskLevel": "Moderate",
+      "riskTypes": ["WEATHER", "GROUND_HANDLING_DELAY"],
       "offloadProbability": 0.54,
       "predictedOffloadRate": 0.04,
       "affectedShipmentCount": 1,
@@ -94,6 +97,7 @@ The response totals summarize the queue: `totalCases` counts flights requiring r
       "flightId": "CX880",
       "status": "AT_RISK",
       "riskLevel": "Moderate",
+      "riskTypes": ["WEATHER", "MISSED_CONNECTION"],
       "offloadProbability": 0.08,
       "predictedOffloadRate": 0,
       "affectedShipmentCount": 1,
@@ -230,87 +234,85 @@ Returns the selected flight, forecast evidence, affected shipment IDs, and revie
 
 ## 3. Get Preventive Options
 
-`GET /api/v1/prevention-plans/{flightId}/options?scenario=preventive`
+`GET /api/v1/prevention-plans/{flightId}/options`
 
 Generates and compares preventive alternatives for the selected flight.
 
-| Field | Type | Unit / format |
-|---|---|---|
-| `optionId` | string | Unique option identifier |
-| `optionType` | enum | `rebook`, `reroute`, `wait_for_next_flight`, `split` |
-| `alternative` | string | Human-readable routing |
-| `alternativeFlight` | string | Flight or movement |
-| `feasibilityStatus` | enum | `Feasible`, `Infeasible`, `Pending` |
-| `feasibilityPercentage` | number | `0` to `100` |
-| `usableCapacityKg` | number | Kilograms |
-| `capacityStatus` | enum | `Confirmed`, `Nominal / weather constrained`, `Capacity confirmation pending` |
-| `expectedArrival` | string | ISO-8601 datetime |
-| `expectedDelayHours` | number | Hours |
-| `recoveryHandlingCost` | number | Currency amount |
-| `totalModeledExpectedLoss` | number | Currency amount |
-| `currency` | string | ISO currency code |
-| `isRecommended` | boolean | Recommendation flag |
-| `recommendationReason` | string | Explanation |
-| `networkImpact` | string | Network impact description |
+### Response fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `bestOptions` | string[] | Option IDs | IDs with the lowest modeled expected loss among feasible options; can contain multiple tied options |
+| `options` | object[] | Preventive option records | Each item follows the option fields table below |
+
+### Option fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `optionId` | string | Unique option identifier | Unique within the selected prevention review |
+| `optionType` | enum | `rebook`, `reroute`, `wait_for_next_flight`, `split` | Action proposed for the shipment |
+| `recoveryLegs` | object[] | Structured route legs | Each leg contains `from`, `to`, and `operatingFlightId` |
+| `feasibilityStatus` | enum | `Feasible`, `Infeasible`, `Pending` | Whether the option can currently be used |
+| `feasibilityPercentage` | number | `0` to `100` | Estimated feasibility percentage |
+| `usableCapacityKg` | number | Kilograms | Capacity available to protect the affected shipment |
+| `capacityStatus` | enum | `Confirmed`, `Nominal / weather constrained`, `Capacity confirmation pending` | Confidence in the capacity value |
+| `expectedArrival` | string | ISO-8601 datetime | Expected arrival time in UTC |
+| `expectedDelayMinutes` | number | Minutes | Delay relative to the original plan |
+| `recoveryHandlingCost` | number | Currency amount | Direct recovery and handling cost in `currency` |
+| `totalModeledExpectedLoss` | number | Currency amount | Combined modeled business impact in `currency` |
+| `currency` | string | ISO currency code | Defaults to `HKD` for monetary fields |
+| `networkImpact` | string | Text | Summary of downstream network effects |
+
+### `recoveryLegs` fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `from` | string | IATA airport code | Leg departure airport |
+| `to` | string | IATA airport code | Leg arrival airport |
+| `operatingFlightId` | string | Flight or movement identifier | Actual movement used for this leg |
 
 ### Example response
 
 ```json
 {
-  "planId": "PP-CX289-20261016",
-  "scenario": "preventive",
-  "recommendation": {
-    "optionId": "R-289-01",
-    "optimizationStatus": "BEST_FEASIBLE_FOUND",
-    "reason": "Lowest modeled expected loss among feasible options while protecting the delivery commitment."
-  },
+  "bestOptions": ["R-289-01"],
   "options": [
     {
       "optionId": "R-289-01",
       "optionType": "reroute",
-      "alternative": "SIN → DOH → FRA",
-      "alternativeFlight": "CX660 + partner connection",
+      "recoveryLegs": [
+        { "from": "SIN", "to": "DOH", "operatingFlightId": "CX660" },
+        { "from": "DOH", "to": "FRA", "operatingFlightId": "PARTNER-DOH-FRA" }
+      ],
       "feasibilityStatus": "Feasible",
       "feasibilityPercentage": 97,
       "usableCapacityKg": 1200,
       "capacityStatus": "Confirmed",
       "expectedArrival": "2026-10-17T08:00:00Z",
-      "expectedDelayHours": 3,
-      "recoveryHandlingCost": 610,
-      "totalModeledExpectedLoss": 4510,
+      "expectedDelayMinutes": 180,
+      "recoveryHandlingCost": 4760,
+      "totalModeledExpectedLoss": 50780,
       "currency": "HKD",
-      "isRecommended": true,
-      "recommendationReason": "Protects the service window with confirmed capacity and moderate handling cost.",
       "networkImpact": "Confirmed capacity; no displaced cargo identified."
     },
     {
       "optionId": "R-289-02",
       "optionType": "wait_for_next_flight",
-      "alternative": "Later SIN → FRA departure",
-      "alternativeFlight": "CX291 later departure",
+      "recoveryLegs": [
+        { "from": "SIN", "to": "FRA", "operatingFlightId": "CX291" }
+      ],
       "feasibilityStatus": "Feasible",
       "feasibilityPercentage": 100,
       "usableCapacityKg": 1400,
       "capacityStatus": "Confirmed",
       "expectedArrival": "2026-10-17T15:00:00Z",
-      "expectedDelayHours": 10,
-      "recoveryHandlingCost": 220,
-      "totalModeledExpectedLoss": 6920,
+      "expectedDelayMinutes": 600,
+      "recoveryHandlingCost": 1720,
+      "totalModeledExpectedLoss": 53980,
       "currency": "HKD",
-      "isRecommended": false,
-      "recommendationReason": "Lower handling cost, but higher delay impact.",
       "networkImpact": "No downstream displacement identified."
     }
-  ],
-  "optimization": {
-    "status": "BEST_FEASIBLE_FOUND",
-    "totalModeledExpectedLoss": 4510,
-    "feasibilityPercentage": 97,
-    "capacityStatus": "Sufficient",
-    "downstreamShortfallKg": 0,
-    "optimalityGap": null,
-    "solverProofAvailable": false
-  }
+  ]
 }
 ```
 
@@ -320,68 +322,49 @@ Generates and compares preventive alternatives for the selected flight.
 
 Returns the detailed evaluation used to explain the recommendation.
 
+Only fields rendered by the human-review drawer are returned here. The `capacity` object is limited to the option values shown in that drawer.
+
 ### Example response
 
 ```json
 {
   "optionId": "R-289-01",
-  "flightId": "CX289",
-  "feasibility": {
-    "status": "Feasible",
-    "percentage": 97,
-    "deliveryCommitmentFeasible": true,
-    "reasons": [
-      "Usable capacity covers the affected shipment weight.",
-      "Alternative capacity is confirmed.",
-      "Expected arrival is within the delivery commitment."
-    ],
-    "rejectedReasons": []
-  },
+  "shipmentId": "CX-483117",
+  "isFeasible": true,
+  "feasibilityPercentage": 97,
+  "capacityStatus": "Confirmed",
+  "networkShortfallKg": 0,
+  "currency": "HKD",
   "capacity": {
-    "usableCapacityKg": 1200,
-    "shipmentWeightKg": 980,
-    "capacityStatus": "Confirmed",
-    "downstreamShortfallKg": 0,
-    "alternativeFlightCapacityConsumedKg": 980
-  },
-  "arrival": {
-    "expectedArrival": "2026-10-17T08:00:00Z",
-    "expectedDelayHours": 3,
-    "deliveryCommitmentFeasible": true
+    "usableCapacityKg": 1200
   },
   "costBreakdown": {
-    "cargoAndCustomerImpact": 2450,
-    "cathayContributionImpact": 2400,
-    "recoveryAndHandlingCost": 610,
-    "delayAndServiceImpact": 1050,
-    "networkImpact": 0,
-    "totalModeledExpectedLoss": 6510,
+    "cargoAndCustomerImpact": 19110,
+    "cathayContributionImpact": 18720,
+    "recoveryAndHandlingCost": 4760,
+    "delayAndServiceImpact": 8190,
+    "downstreamNetworkImpact": 0,
+    "totalModeledExpectedLoss": 50780,
     "currency": "HKD"
   },
+  "explanation": [
+    "R-289-01 is the best feasible option in the current candidate set.",
+    "It provides 1,200 kg usable capacity and is estimated at 97% feasible.",
+    "The trade-off is HKD 4,760 recovery cost and 180 minutes of delay.",
+    "No displaced cargo identified.",
+    "Optimality has not been proved; a validated optimization solver and confirmed downstream capacity are still required."
+  ],
   "networkDominoEffect": {
-    "alternativeFlight": "CX660 + partner connection",
-    "alternativeFlightCapacityConsumedKg": 980,
     "additionalAffectedShipmentIds": [],
     "additionalAffectedShipmentCount": 0,
     "networkShortfallKg": 0
   },
-  "recommendation": {
-    "isRecommended": true,
-    "optimizationStatus": "BEST_FEASIBLE_FOUND",
-    "reasons": [
-      "Best feasible option in the current candidate set.",
-      "Confirmed capacity is available.",
-      "Expected arrival protects the delivery commitment.",
-      "No additional downstream shipments are affected."
-    ]
-  },
-  "metadata": {
-    "recommendationVersion": "recovery-heuristic-v3",
-    "predictionTimestamp": "2026-10-16T09:10:00Z",
-    "optimizationTimestamp": "2026-10-16T09:12:00Z",
-    "optimalityGap": null,
-    "simulated": true
-  }
+  "scenarioSensitivity": [
+    { "label": "Current inputs", "totalModeledExpectedLoss": 50780 },
+    { "label": "Fuel estimate +600 kg", "totalModeledExpectedLoss": 47600 },
+    { "label": "Weather capacity -600 kg", "totalModeledExpectedLoss": 47600 },
+    { "label": "Alternative unavailable", "totalModeledExpectedLoss": 45500 }
+  ]
 }
 ```
 
@@ -392,7 +375,7 @@ cargoAndCustomerImpact
 + cathayContributionImpact
 + recoveryAndHandlingCost
 + delayAndServiceImpact
-+ networkImpact
++ downstreamNetworkImpact
 ```
 
 The values above are illustrative. Production values should always be calculated by the optimization service.
