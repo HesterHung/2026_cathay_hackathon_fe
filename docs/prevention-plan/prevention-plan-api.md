@@ -122,11 +122,69 @@ The response totals summarize the queue: `totalCases` counts flights requiring r
 
 Returns the selected flight, forecast evidence, affected shipment IDs, and review context.
 
+### Response fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `planId` | string | Review-instance ID | Identifies this selected-flight review instance |
+| `currency` | string | ISO currency code | Currency used by all monetary fields in the response; default `HKD` |
+| `flight` | object | Flight details | Described in the flight fields table below |
+| `review` | object | Review context | Described in the review fields table below |
+| `capacity` | object | Payload and booking metrics | Described in the capacity fields table below |
+| `affectedShipments` | object[] | Shipment details | Each item follows the affected shipment fields table below |
+| `assumptions` | string[] | Text list | Assumptions used for the forecast and review |
+
+### Flight fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `flightId` | string | Flight number | |
+| `origin` | string | IATA airport code | Departure airport |
+| `destination` | string | IATA airport code | Arrival airport |
+| `middleStop` | string[] | IATA airport codes | Intermediate airport stops |
+| `scheduledDeparture` | string | ISO-8601 datetime | Scheduled departure time in UTC |
+| `aircraftType` | string | Aircraft model | |
+
+### Review fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `status` | enum | `AT_RISK`, `PREVENTIVE_ACTION_REQUIRED`, `REVIEWED` | Current review status |
+| `riskLevel` | enum | `Low`, `Moderate`, `High`, `Critical` | Overall forecast risk level |
+| `reason` | string | Text | Primary reason for the review |
+| `forecastTimestamp` | string | ISO-8601 datetime | Time the forecast was generated |
+| `forecastConfidence` | number | Decimal from `0` to `1` | Confidence in the forecast |
+
+### Capacity fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `usableCapacityKg` | number | Kilograms | Forecast usable cargo capacity after known operational constraints |
+| `bookedWeightKg` | number | Kilograms | Total booked cargo weight |
+| `remainingCapacityKg` | number | Kilograms | Usable capacity remaining after booked cargo; can be positive even when the flight is operationally at risk |
+| `bookedVolumeM3` | number | Cubic meters | Total booked cargo volume |
+
+### Affected shipment fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `shipmentId` | string | Shipment identifier | |
+| `customer` | string | Text | Customer name |
+| `origin` | string | IATA airport code | Shipment origin |
+| `destination` | string | IATA airport code | Shipment destination |
+| `weightKg` | number | Kilograms | Shipment weight |
+| `volumeM3` | number | Cubic meters | Shipment volume |
+| `priority` | enum | `Critical`, `High`, `Standard` | Shipment handling priority |
+| `deliveryDeadline` | string | ISO-8601 datetime | Required delivery deadline |
+| `offloadProbability` | number | Decimal from `0` to `1` | Shipment-level offload probability |
+| `valueAtRisk` | number | Currency amount | Estimated shipment value at risk; use the response currency |
+
 ### Example response
 
 ```json
 {
   "planId": "PP-CX289-20261016",
+  "currency": "HKD",
   "flight": {
     "flightId": "CX289",
     "origin": "SIN",
@@ -140,16 +198,13 @@ Returns the selected flight, forecast evidence, affected shipment IDs, and revie
     "riskLevel": "Moderate",
     "reason": "Ramp weather and updated fuel requirement",
     "forecastTimestamp": "2026-10-16T09:10:00Z",
-    "forecastConfidence": 0.71,
-    "simulated": true
+    "forecastConfidence": 0.71
   },
   "capacity": {
-    "originalCargoCapacityKg": 14500,
-    "approvedAvailablePayloadKg": 14500,
-    "forecastCargoCapacityKg": 14500,
-    "forecastBookedWeightKg": 13900,
-    "capacityShortfallKg": 0,
-    "forecastBookedVolumeM3": 76
+    "usableCapacityKg": 14500,
+    "bookedWeightKg": 13900,
+    "remainingCapacityKg": 600,
+    "bookedVolumeM3": 76
   },
   "affectedShipments": [
     {
@@ -166,7 +221,7 @@ Returns the selected flight, forecast evidence, affected shipment IDs, and revie
     }
   ],
   "assumptions": [
-    "Approved payload is based on simulated operational capacity.",
+    "Approved payload is based on operational capacity.",
     "Weather impact remains forecast evidence.",
     "Partner capacity requires operational confirmation."
   ]
