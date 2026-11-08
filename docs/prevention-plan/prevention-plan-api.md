@@ -12,7 +12,7 @@ This contract defines the flight-level prevention workflow. It covers forecast-r
 - Feasibility percentages are numeric values from `0` to `100`.
 - Timestamps use ISO-8601 UTC strings.
 - Preventive review must not create an allocation or confirm an offload.
-- `BEST_FEASIBLE_FOUND` does not mean globally optimal when `optimalityGap` is `null` and no solver proof exists.
+- `bestOptions` identifies the feasible options with the lowest `totalModeledExpectedLoss`; this comparison is not a solver optimality proof.
 - The current frontend uses camelCase fields, while the synthetic JSON uses snake_case such as `option_id` and `estimated_arrival`. An API adapter should normalize these before returning responses.
 
 ## 1. List Flights Requiring Preventive Review
@@ -324,6 +324,56 @@ Returns the detailed evaluation used to explain the recommendation.
 
 Only fields rendered by the human-review drawer are returned here. The `capacity` object is limited to the option values shown in that drawer.
 
+### Response fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `optionId` | string | Option identifier | Identifies the evaluated option |
+| `shipmentId` | string | Shipment identifier | Shipment the option protects |
+| `isFeasible` | boolean | `true` or `false` | Whether the option is currently considered feasible |
+| `feasibilityPercentage` | number | `0` to `100` | Estimated feasibility percentage |
+| `capacityStatus` | enum | `Confirmed`, `Nominal / weather constrained`, `Capacity confirmation pending` | Confidence in the capacity value |
+| `networkShortfallKg` | number | Kilograms | Forecast network capacity shortfall associated with this option |
+| `currency` | string | ISO currency code | Currency used by monetary fields; defaults to `HKD` |
+| `capacity` | object | Capacity details | Described in the capacity fields table below |
+| `costBreakdown` | object | Currency amounts | Described in the cost breakdown fields table below |
+| `explanation` | string[] | Text list | Human-readable factors supporting the evaluation |
+| `networkDominoEffect` | object | Network impact details | Described in the network domino effect fields table below |
+| `scenarioSensitivity` | object[] | Scenario comparison | Described in the scenario sensitivity fields table below |
+
+### Capacity fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `usableCapacityKg` | number | Kilograms | Capacity available to protect the affected shipment |
+
+### Cost breakdown fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `cargoAndCustomerImpact` | number | Currency amount | Modeled cargo and customer impact |
+| `cathayContributionImpact` | number | Currency amount | Modeled impact to Cathay contribution |
+| `recoveryAndHandlingCost` | number | Currency amount | Direct recovery and handling cost |
+| `delayAndServiceImpact` | number | Currency amount | Modeled cost of delay and service impact |
+| `downstreamNetworkImpact` | number | Currency amount | Modeled impact to downstream network operations |
+| `totalModeledExpectedLoss` | number | Currency amount | Sum of the five cost components; uses the response `currency` |
+| `currency` | string | ISO currency code | Currency for all amounts in this object |
+
+### Network domino effect fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `additionalAffectedShipmentIds` | string[] | Shipment identifiers | Additional shipments affected beyond the shipment under review |
+| `additionalAffectedShipmentCount` | integer | Count | Number of additional affected shipments |
+| `networkShortfallKg` | number | Kilograms | Capacity shortfall caused or exposed across the downstream network |
+
+### Scenario sensitivity fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `label` | string | Text | Scenario assumption or input change being evaluated |
+| `totalModeledExpectedLoss` | number | Currency amount | Modeled expected loss under the scenario, in the response `currency` |
+
 ### Example response
 
 ```json
@@ -408,19 +458,11 @@ Records an operational review decision for a preventive option.
 }
 ```
 
-### Example response
+### Success response
 
-```json
-{
-  "decisionId": "DEC-20261016-00042",
-  "planId": "PP-CX289-20261016",
-  "flightId": "CX289",
-  "optionId": "R-289-01",
-  "decision": "approved-for-review",
-  "reason": "Confirmed capacity protects the shipment deadline and has no modeled downstream displacement.",
-  "recordedAt": "2026-10-16T09:20:04Z",
-  "nextLifecycleState": "REVIEW_REQUIRED",
-  "allocationMade": false,
-  "simulated": true
-}
+```http
+201 Created
+Location: /api/v1/prevention-plans/CX289/decisions/DEC-20261016-00042
 ```
+
+The response body is empty. The `201` status confirms that the decision record was created, while the `Location` header identifies the new decision record. Validation or persistence failures should return an appropriate `4xx` or `5xx` error response.
