@@ -41,3 +41,15 @@ The Python dataset is documented in [`../../data/synthetic_cargo/README.md`](../
 - Risk, confidence, cost, feasibility, and recovery estimates are synthetic inputs or transparent demo heuristics. They are not operational commitments or measured savings.
 - Recovery comparisons do not prove global optimality and cannot verify live capacity, cargo compatibility, connection acceptance, handling, or delivery commitments.
 - The demo should not be used to make real dispatch, loading, customer, or recovery decisions.
+
+## Backend API connection
+
+The Settings workspace includes an optional read-only integration panel for `GET /api/v1/prevention-plans`. Configure the API origin with `VITE_API_BASE_URL` in a local `.env` file (for example, `VITE_API_BASE_URL=http://localhost:8000`). If omitted, the frontend requests the endpoint from the same origin. Restart Vite after changing the variable. Do not place credentials or secrets in frontend environment variables.
+
+The adapter validates the backend's camelCase response fields and translates them into UI view models. The panel shows request, empty, error, and stale-data states; it displays the last successful response if a later refresh fails. The endpoint currently provides no source-data timestamp, so the panel labels only its own fetch time. The integration is read-only and remains separate from synthetic dashboard data.
+
+## Recovery-solutions API foundation
+
+The three operational queue screens request their queue from the shared `GET /api/v1/recovery-solutions` contract using `VITE_API_BASE_URL`. Disruption Alerts, Predicted Offload, and Pending Pool use API records for their operational queues and review flows, without substituting fixture records. Pending Pool evaluates replacement candidates against active priority targets and records audited pool decisions; candidate evaluation and review do not allocate or reserve cargo. The typed client in `src/recoveryApi.ts` covers list, detail, route options, option detail, replacement candidates, and review decisions. Queue-list responses share pagination normalization and consume `workflowControl`; the screens expose request, empty, stale, authorization, gate, validation, conflict, network, and server states.
+
+The decision client validates required client-side fields and maps server errors into typed categories, including `401/403` authorization, `409` conflict, `422` validation, and `423` workflow gating. The server remains authoritative: do not use these client checks as authorization or as proof that a review passed current priority constraints. No cargo assignment, route booking, or offload confirmation is performed by this client.
