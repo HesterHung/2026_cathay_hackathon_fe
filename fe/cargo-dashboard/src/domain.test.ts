@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { aggregateForecastOffloadRate, assessShipmentValue, buildForecasts, calculateOffloadMetrics, calculatePotentialLossAvoidable, demoOffloadMetrics, demoOffloadTrend, evaluateRecoveryPlans, evaluateRecoveryScenario, evaluateRecoverySensitivity, filterOffloadTrend, getLifecycleDestination, getOffloadLifecycleState, getOverviewMetrics, getOverviewQueues, getShipmentScenarioLoss, offloadLifecycleRecords, predictionConfig, recoveryCases, recoveryOptions, shipments, summarizeAnalytics } from './domain'
+import { aggregateForecastOffloadRate, assessShipmentValue, buildForecasts, calculateOffloadMetrics, calculatePotentialLossAvoidable, demoOffloadMetrics, demoOffloadTrend, evaluateRecoveryPlans, evaluateRecoveryScenario, evaluateRecoverySensitivity, filterOffloadTrend, getLifecycleDestination, getOffloadLifecycleState, getOverviewMetrics, getOverviewQueues, getShipmentScenarioLoss, isConfirmedOffload, offloadLifecycleRecords, pendingPoolUnits, predictionConfig, recoveryCases, recoveryOptions, shipments, summarizeAnalytics } from './domain'
 
 describe('offload metrics', () => {
   it('keeps actual rate, predicted rate, and flight probability distinct', () => {
@@ -167,20 +167,34 @@ describe('recovery optimization evidence', () => {
 })
 
 describe('offload lifecycle routing', () => {
-  it('keeps predicted risk in prevention and confirmed cases in recovery', () => {
+  it('keeps predicted risk in its queue and confirmed cases in disruption alerts', () => {
     const queues = getOverviewQueues()
     expect(queues.preventive.map((item) => item.lifecycle.flightId)).toEqual(expect.arrayContaining(['CX289', 'CX880']))
     expect(queues.recovery.map((item) => item.lifecycle.flightId)).toEqual(expect.arrayContaining(['CX257', 'CX288']))
     expect(queues.preventive.some((item) => item.lifecycle.recoveryCaseId)).toBe(false)
+    expect(queues.recovery.every((item) => isConfirmedOffload(item.lifecycle))).toBe(true)
+    expect(queues.preventive.every((item) => item.lifecycle.authoritativeSource === 'forecast')).toBe(true)
   })
 
-  it('routes authoritative states without inferring confirmation from forecast risk', () => {
+  it('routes lifecycle states to the corresponding priority pages', () => {
     const risk = offloadLifecycleRecords.find((record) => record.flightId === 'CX289')!
     const confirmed = offloadLifecycleRecords.find((record) => record.flightId === 'CX257')!
     expect(getOffloadLifecycleState(risk)).toBe('PREVENTIVE_ACTION_REQUIRED')
-    expect(getLifecycleDestination(risk.state)).toBe('Predictions')
+    expect(getLifecycleDestination(risk)).toBe('Predicted Offload')
     expect(getOffloadLifecycleState(confirmed)).toBe('OFFLOAD_CONFIRMED')
-    expect(getLifecycleDestination(confirmed.state)).toBe('Recovery Plans')
+    expect(getLifecycleDestination(confirmed)).toBe('Disruption Alerts')
+  })
+
+  it('does not treat a forecast-only record as confirmed even if its state is inconsistent', () => {
+    const forecastRecord = offloadLifecycleRecords.find((record) => record.flightId === 'CX880')!
+    expect(isConfirmedOffload({ ...forecastRecord, state: 'OFFLOAD_CONFIRMED' })).toBe(false)
+    expect(getLifecycleDestination({ ...forecastRecord, state: 'OFFLOAD_CONFIRMED' })).toBe('Overview')
+  })
+
+  it('keeps the pending pool limited to unique simulated domino-offload ULDs', () => {
+    expect(new Set(pendingPoolUnits.map((unit) => unit.id)).size).toBe(pendingPoolUnits.length)
+    expect(pendingPoolUnits.every((unit) => unit.source === 'Domino offload' && unit.simulated)).toBe(true)
+    expect(pendingPoolUnits.some((unit) => unit.eligibleForNoShowReplacement)).toBe(true)
   })
 
   it('does not count the recovery queue as historical actual offloads', () => {

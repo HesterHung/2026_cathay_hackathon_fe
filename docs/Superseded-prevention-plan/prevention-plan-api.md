@@ -1,29 +1,31 @@
-# Recovery Plan API
+# Prevention Plan API
 
-This contract defines the flight-level recovery workflow. It covers operator review after an offload is confirmed.
+> **Superseded for the shared routing workflow.** Predicted, confirmed, and pending-pool ULDs now use the shared [Recovery Solution API](../recovery-solution/recovery-solution-api.md). This document is retained as a legacy, forecast-only contract reference; do not treat its prevention-only routes as the canonical routing or review API.
+
+This contract defines the flight-level prevention workflow. It covers forecast-risk review before an offload is confirmed.
 
 ## Conventions
 
-- Monetary values are numeric amounts in HKD. Responses include `currency: "HKD"` wherever monetary values are returned.
+- Monetary values are numeric amounts with a separate `currency`, defaulting to `HKD`.
 - Weights use numeric kilograms with fields ending in `Kg`.
 - Volumes use numeric cubic meters with fields ending in `M3`.
 - Delays use numeric minutes with fields ending in `Minutes`.
 - Probabilities are decimals from `0` to `1`.
 - Feasibility percentages are numeric values from `0` to `100`.
 - Timestamps use ISO-8601 UTC strings.
-- A recovery review decision must not itself book a route, reserve capacity, or reassign cargo.
+- Preventive review must not create an allocation or confirm an offload.
 - `bestOptions` identifies the feasible options with the lowest `totalModeledExpectedLoss`; this comparison is not a solver optimality proof.
-- Recovery decisions are recorded for confirmed offloads. They do not themselves execute a booking or cargo reassignment.
+- The current frontend uses camelCase fields, while the synthetic JSON uses snake_case such as `option_id` and `estimated_arrival`. An API adapter should normalize these before returning responses.
 
-## 1. List Recovery Cases
+## 1. List Flights Requiring Preventive Review
 
-`GET /api/v1/recovery-plans?page=1&limit=20`
+`GET /api/v1/prevention-plans?page=1&limit=20`
 
-Lists confirmed offload cases that need operator review and recovery planning.
+Lists forecast-risk flights that need operator review before an offload is confirmed.
 
-The response totals summarize the queue: `totalCases` counts recovery cases, while `totalAffectedShipments` counts unique affected shipments across those cases.
+The response totals summarize the queue: `totalCases` counts flights requiring review, while `totalShipmentsAtRisk` counts unique affected shipments across those flights.
 
-`workflowStage` is intentionally not returned because `/recovery-plans` already scopes this response to the recovery workflow; the backend may retain it internally for lifecycle management.
+`workflowStage` is intentionally not returned because `/prevention-plans` already scopes this response to the prevention workflow; the backend may retain it internally for lifecycle management.
 
 ### Request query parameters
 
@@ -37,18 +39,23 @@ The response totals summarize the queue: `totalCases` counts recovery cases, whi
 | Field | Type | Unit / format | Note |
 |---|---|---|---|
 | `flightId` | string | Flight number | |
-| `status` | enum | `RECOVERY_REQUIRED`, `REVIEWED` | Recovery cases exist only after an offload is confirmed |
+| `status` | enum | `AT_RISK`, `PREVENTIVE_ACTION_REQUIRED`, `REVIEWED` | |
+| `riskLevel` | enum | `Low`, `Moderate`, `High`, `Critical` | |
+| `riskTypes` | enum[] | `CAPACITY_SHORTFALL`, `WEATHER`, `GROUND_HANDLING_DELAY`, `FLIGHT_DELAY`, `MISSED_CONNECTION`, `OFFLOAD_CONFIRMED` | One flight can have multiple risk types |
+| `offloadProbability` | number | Decimal from `0` to `1` | |
+| `predictedOffloadRate` | number | Decimal from `0` to `1` | |
 | `affectedShipmentCount` | integer | Count | |
-| `estimatedShipmentValue` | number | Currency amount | |
+| `forecastRisk` | object | Combined forecast risk | Includes offload probability, capacity shortfall, and risk reasons; the overall status is provided at item level. |
+| `valueAtRisk` | number | Currency amount | |
 | `currency` | string | ISO currency code | |
 
 ### Response envelope fields
 
 | Field | Type | Unit / format | Note |
 |---|---|---|---|
-| `items` | object[] | Array of recovery review items | Each item follows the response item fields table above |
-| `totalCases` | integer | Count | Total recovery cases across all pages |
-| `totalAffectedShipments` | integer | Unique count | Total unique affected shipments across all pages |
+| `items` | object[] | Array of prevention review items | Each item follows the response item fields table above |
+| `totalCases` | integer | Count | Total flights requiring preventive review across all pages |
+| `totalShipmentsAtRisk` | integer | Unique count | Total unique affected shipments across all pages |
 | `pagination` | object | Pagination metadata | Described in the pagination fields table below |
 
 ### Pagination fields
@@ -59,6 +66,14 @@ The response totals summarize the queue: `totalCases` counts recovery cases, whi
 | `totalPages` | integer | Count | Total number of available pages |
 | `hasNextPage` | boolean | `true` or `false` | Whether another page is available |
 
+### `forecastRisk` fields
+
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `offloadProbability` | number | Decimal from `0` to `1` | Estimated probability of an offload |
+| `capacityShortfallKg` | number | Kilograms | Forecast cargo weight that cannot be accommodated; non-zero when capacity shortfall contributes to the risk |
+| `reasons` | string[] | Text list | Factors contributing to the forecast risk |
+
 ### Example response
 
 ```json
@@ -66,21 +81,39 @@ The response totals summarize the queue: `totalCases` counts recovery cases, whi
   "items": [
     {
       "flightId": "CX289",
-      "status": "RECOVERY_REQUIRED",
+      "status": "PREVENTIVE_ACTION_REQUIRED",
+      "riskLevel": "Moderate",
+      "riskTypes": ["WEATHER", "GROUND_HANDLING_DELAY"],
+      "offloadProbability": 0.54,
+      "predictedOffloadRate": 0.04,
       "affectedShipmentCount": 1,
-      "estimatedShipmentValue": 4968,
+      "forecastRisk": {
+        "offloadProbability": 0.14,
+        "capacityShortfallKg": 600,
+        "reasons": ["Ground-handling delay risk from ramp thunderstorms"]
+      },
+      "valueAtRisk": 4968,
       "currency": "HKD"
     },
     {
       "flightId": "CX880",
-      "status": "REVIEWED",
+      "status": "AT_RISK",
+      "riskLevel": "Moderate",
+      "riskTypes": ["WEATHER", "MISSED_CONNECTION"],
+      "offloadProbability": 0.08,
+      "predictedOffloadRate": 0,
       "affectedShipmentCount": 1,
-      "estimatedShipmentValue": 616,
+      "forecastRisk": {
+        "offloadProbability": 0.08,
+        "capacityShortfallKg": 500,
+        "reasons": ["Route uncertainty and possible connection delay"]
+      },
+      "valueAtRisk": 616,
       "currency": "HKD"
     }
   ],
   "totalCases": 2,
-  "totalAffectedShipments": 2,
+  "totalShipmentsAtRisk": 2,
   "pagination": {
     "page": 1,
     "totalPages": 1,
@@ -89,22 +122,23 @@ The response totals summarize the queue: `totalCases` counts recovery cases, whi
 }
 ```
 
-## 2. View an Offloaded Flight and Affected Shipments
+## 2. View a Selected Flight and Affected Shipments
 
-`GET /api/v1/recovery-plans/{flightId}`
+`GET /api/v1/prevention-plans/{flightId}`
 
-Returns the offloaded flight, confirmed offload context, affected shipment details, and recovery review context.
+Returns the selected flight, forecast evidence, affected shipment IDs, and review context.
 
 ### Response fields
 
-| Field | Type | Description |
-|---|---|---|
-| `recoveryPlanId` | string | Identifies this recovery plan |
-| `currency` | string | Currency for monetary values; `HKD` |
-| `flight` | object | Offloaded flight details; see Flight fields |
-| `review` | object | Confirmed offload details; see Review fields |
-| `capacity` | object | Payload and booking metrics; see Capacity fields |
-| `affectedShipments` | object[] | Affected shipment details; see Affected shipment fields |
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `planId` | string | Review-instance ID | Identifies this selected-flight review instance |
+| `currency` | string | ISO currency code | Currency used by all monetary fields in the response; default `HKD` |
+| `flight` | object | Flight details | Described in the flight fields table below |
+| `review` | object | Review context | Described in the review fields table below |
+| `capacity` | object | Payload and booking metrics | Described in the capacity fields table below |
+| `affectedShipments` | object[] | Shipment details | Each item follows the affected shipment fields table below |
+| `assumptions` | string[] | Text list | Assumptions used for the forecast and review |
 
 ### Flight fields
 
@@ -121,9 +155,11 @@ Returns the offloaded flight, confirmed offload context, affected shipment detai
 
 | Field | Type | Unit / format | Note |
 |---|---|---|---|
-| `status` | enum | `RECOVERY_REQUIRED`, `REVIEWED` | Current recovery case status; the confirmed offload is recorded in `offloadConfirmedAt` |
-| `offloadReason` | string | Text | Recorded reason for the confirmed offload |
-| `offloadConfirmedAt` | string | ISO-8601 datetime | Time the offload was confirmed |
+| `status` | enum | `AT_RISK`, `PREVENTIVE_ACTION_REQUIRED`, `REVIEWED` | Current review status |
+| `riskLevel` | enum | `Low`, `Moderate`, `High`, `Critical` | Overall forecast risk level |
+| `reason` | string | Text | Primary reason for the review |
+| `forecastTimestamp` | string | ISO-8601 datetime | Time the forecast was generated |
+| `forecastConfidence` | number | Decimal from `0` to `1` | Confidence in the forecast |
 
 ### Capacity fields
 
@@ -146,13 +182,14 @@ Returns the offloaded flight, confirmed offload context, affected shipment detai
 | `volumeM3` | number | Cubic meters | Shipment volume |
 | `priority` | enum | `Critical`, `High`, `Standard` | Shipment handling priority |
 | `deliveryDeadline` | string | ISO-8601 datetime | Required delivery deadline |
-| `estimatedShipmentValue` | number | Currency amount | Estimated value of the affected shipment; use the response currency |
+| `offloadProbability` | number | Decimal from `0` to `1` | Shipment-level offload probability |
+| `valueAtRisk` | number | Currency amount | Estimated shipment value at risk; use the response currency |
 
 ### Example response
 
 ```json
 {
-  "recoveryPlanId": "RP-CX289-20261016",
+  "planId": "PP-CX289-20261016",
   "currency": "HKD",
   "flight": {
     "flightId": "CX289",
@@ -163,9 +200,11 @@ Returns the offloaded flight, confirmed offload context, affected shipment detai
     "aircraftType": "A350-1000"
   },
   "review": {
-    "status": "RECOVERY_REQUIRED",
-    "offloadReason": "Ramp weather and updated fuel requirement",
-    "offloadConfirmedAt": "2026-10-16T09:10:00Z"
+    "status": "PREVENTIVE_ACTION_REQUIRED",
+    "riskLevel": "Moderate",
+    "reason": "Ramp weather and updated fuel requirement",
+    "forecastTimestamp": "2026-10-16T09:10:00Z",
+    "forecastConfidence": 0.71
   },
   "capacity": {
     "usableCapacityKg": 14500,
@@ -183,65 +222,48 @@ Returns the offloaded flight, confirmed offload context, affected shipment detai
       "volumeM3": 5.8,
       "priority": "High",
       "deliveryDeadline": "2026-10-17T12:00:00Z",
-      "estimatedShipmentValue": 4968
+      "offloadProbability": 0.54,
+      "valueAtRisk": 4968
     }
+  ],
+  "assumptions": [
+    "Approved payload is based on operational capacity.",
+    "Weather impact remains forecast evidence.",
+    "Partner capacity requires operational confirmation."
   ]
 }
 ```
 
-## 3. Get Recovery Options
+## 3. Get Preventive Options
 
-`GET /api/v1/recovery-plans/{flightId}/options`
+`GET /api/v1/prevention-plans/{flightId}/options`
 
-Generates and compares recovery alternatives for the selected flight.
+Generates and compares preventive alternatives for the selected flight.
 
 ### Response fields
 
 | Field | Type | Unit / format | Note |
 |---|---|---|---|
 | `bestOptions` | string[] | Option IDs | IDs with the lowest modeled expected loss among feasible options; can contain multiple tied options |
-| `options` | object[] | Recovery option records | Each item follows the option fields table below |
+| `options` | object[] | Preventive option records | Each item follows the option fields table below |
 
 ### Option fields
 
-| Field | Type | Description |
-|---|---|---|
-| `optionId` | string | Unique within the selected recovery review |
-| `optionType` | enum | `rebook`, `reroute`, `wait_for_next_flight`, `split` |
-| `recoveryLegs` | object[] | Ordered route legs; see recoveryLegs fields below |
-| `feasibilityStatus` | enum | `Feasible`, `Infeasible`, `Feasibility Unknown` |
-| `feasibilityPercentage` | number | Estimated feasibility from `0` to `100` |
-| `usableCapacityKg` | number | Capacity available for the affected shipment |
-| `capacityStatus` | enum | `Confirmed`, `Nominal / Weather Constrained`, `Capacity Confirmation Pending` |
-| `fuelStatus` | enum | `Fuel OK`, `Fuel Pending`, `Buffer Reduced`, `Fuel Review Needed` |
-| `fuelConstraint` | string | Fuel or payload constraint details |
-| `weatherExposure` | enum | `Clear`, `Weather Exposure`, `Weather Constrained`, `Weather Confirmation Pending` |
-| `expectedArrival` | string | Expected arrival time in ISO-8601 UTC format |
-| `expectedDelayMinutes` | number | Delay relative to the original plan, in minutes |
-| `recoveryHandlingCost` | number | Direct recovery and handling cost in `currency` |
-| `totalModeledExpectedLoss` | number | Combined modeled business impact in `currency` |
-| `missingData` | string[] | Missing confirmations; a non-empty list displays as `Check data` |
-| `currency` | string | ISO currency code; `HKD` |
-| `networkImpact` | string | Summary of downstream network effects |
-
-#### Comparison table mapping
-
-| Column | API fields |
-|---|---|
-| **Option** | `optionId` |
-| **Route** | Ordered `recoveryLegs` |
-| **Capacity** | `usableCapacityKg`, `capacityStatus` |
-| **Fuel / WX** | `fuelStatus`, `fuelConstraint`, `weatherExposure` |
-| **Arrival** | `expectedArrival`, `expectedDelayMinutes` |
-| **Costs** | `recoveryHandlingCost`; detailed breakdown is in section 4 |
-| **Total Loss** | `totalModeledExpectedLoss` |
-| **Status** | `bestOptions`, `missingData`, `feasibilityStatus` |
-
-`fuelStatus` is determined from the fuel constraint: use `Fuel OK` when no additional constraint is identified, `Fuel Pending` when confirmation is outstanding, `Buffer Reduced` when a fuel requirement reduces payload, and `Fuel Review Needed` when the fuel plan needs review.
-
-Derive the comparison status without a separate status field: show `Best` when the option ID is in `bestOptions`, `Check data` when `missingData` is non-empty, `Suggested` when `feasibilityStatus` is `Feasible`, and `Not feasible` otherwise.
-
-Use `Clear` when no material weather exposure is identified, `Weather Exposure` when weather may affect the route or handling, `Weather Constrained` when weather limits capacity or operations, and `Weather Confirmation Pending` when conditions or their operational impact still need confirmation.
+| Field | Type | Unit / format | Note |
+|---|---|---|---|
+| `optionId` | string | Unique option identifier | Unique within the selected prevention review |
+| `optionType` | enum | `rebook`, `reroute`, `wait_for_next_flight`, `split` | Action proposed for the shipment |
+| `recoveryLegs` | object[] | Structured route legs | Each leg contains `from`, `to`, and `operatingFlightId` |
+| `feasibilityStatus` | enum | `Feasible`, `Infeasible`, `Pending` | Whether the option can currently be used |
+| `feasibilityPercentage` | number | `0` to `100` | Estimated feasibility percentage |
+| `usableCapacityKg` | number | Kilograms | Capacity available to protect the affected shipment |
+| `capacityStatus` | enum | `Confirmed`, `Nominal / weather constrained`, `Capacity confirmation pending` | Confidence in the capacity value |
+| `expectedArrival` | string | ISO-8601 datetime | Expected arrival time in UTC |
+| `expectedDelayMinutes` | number | Minutes | Delay relative to the original plan |
+| `recoveryHandlingCost` | number | Currency amount | Direct recovery and handling cost in `currency` |
+| `totalModeledExpectedLoss` | number | Currency amount | Combined modeled business impact in `currency` |
+| `currency` | string | ISO currency code | Defaults to `HKD` for monetary fields |
+| `networkImpact` | string | Text | Summary of downstream network effects |
 
 ### `recoveryLegs` fields
 
@@ -250,8 +272,6 @@ Use `Clear` when no material weather exposure is identified, `Weather Exposure` 
 | `from` | string | IATA airport code | Leg departure airport |
 | `to` | string | IATA airport code | Leg arrival airport |
 | `operatingFlightId` | string | Flight or movement identifier | Actual movement used for this leg |
-
-Every option must return `recoveryLegs` as an array of leg objects, including direct itineraries (one leg). Each leg must include all three fields above; do not return a route as a single display string.
 
 ### Example response
 
@@ -270,14 +290,10 @@ Every option must return `recoveryLegs` as an array of leg objects, including di
       "feasibilityPercentage": 97,
       "usableCapacityKg": 1200,
       "capacityStatus": "Confirmed",
-      "fuelStatus": "Fuel OK",
-      "fuelConstraint": "No additional fuel constraint identified",
-      "weatherExposure": "Weather Exposure",
       "expectedArrival": "2026-10-17T08:00:00Z",
       "expectedDelayMinutes": 180,
       "recoveryHandlingCost": 4760,
       "totalModeledExpectedLoss": 50780,
-      "missingData": [],
       "currency": "HKD",
       "networkImpact": "Confirmed capacity; no displaced cargo identified."
     },
@@ -291,14 +307,10 @@ Every option must return `recoveryLegs` as an array of leg objects, including di
       "feasibilityPercentage": 100,
       "usableCapacityKg": 1400,
       "capacityStatus": "Confirmed",
-      "fuelStatus": "Fuel OK",
-      "fuelConstraint": "Later departure fuel plan confirmed",
-      "weatherExposure": "Weather Exposure",
       "expectedArrival": "2026-10-17T15:00:00Z",
       "expectedDelayMinutes": 600,
       "recoveryHandlingCost": 1720,
       "totalModeledExpectedLoss": 53980,
-      "missingData": [],
       "currency": "HKD",
       "networkImpact": "No downstream displacement identified."
     }
@@ -308,7 +320,7 @@ Every option must return `recoveryLegs` as an array of leg objects, including di
 
 ## 4. View Detailed Evaluation for One Option
 
-`GET /api/v1/recovery-plans/{flightId}/options/{optionId}`
+`GET /api/v1/prevention-plans/{flightId}/options/{optionId}`
 
 Returns the detailed evaluation used to explain the recommendation.
 
@@ -322,7 +334,7 @@ Only fields rendered by the human-review drawer are returned here. The `capacity
 | `shipmentId` | string | Shipment identifier | Shipment the option protects |
 | `isFeasible` | boolean | `true` or `false` | Whether the option is currently considered feasible |
 | `feasibilityPercentage` | number | `0` to `100` | Estimated feasibility percentage |
-| `capacityStatus` | enum | `Confirmed`, `Nominal / Weather Constrained`, `Capacity Confirmation Pending` | Confidence in the capacity value |
+| `capacityStatus` | enum | `Confirmed`, `Nominal / weather constrained`, `Capacity confirmation pending` | Confidence in the capacity value |
 | `networkShortfallKg` | number | Kilograms | Forecast network capacity shortfall associated with this option |
 | `currency` | string | ISO currency code | Currency used by monetary fields; defaults to `HKD` |
 | `capacity` | object | Capacity details | Described in the capacity fields table below |
@@ -341,7 +353,7 @@ Only fields rendered by the human-review drawer are returned here. The `capacity
 
 | Field | Type | Unit / format | Note |
 |---|---|---|---|
-| `cargoCustomerImpact` | number | Currency amount | Modeled cargo and customer impact |
+| `cargoAndCustomerImpact` | number | Currency amount | Modeled cargo and customer impact |
 | `cathayContributionImpact` | number | Currency amount | Modeled impact to Cathay contribution |
 | `recoveryAndHandlingCost` | number | Currency amount | Direct recovery and handling cost |
 | `delayAndServiceImpact` | number | Currency amount | Modeled cost of delay and service impact |
@@ -379,7 +391,7 @@ Only fields rendered by the human-review drawer are returned here. The `capacity
     "usableCapacityKg": 1200
   },
   "costBreakdown": {
-    "cargoCustomerImpact": 19110,
+    "cargoAndCustomerImpact": 19110,
     "cathayContributionImpact": 18720,
     "recoveryAndHandlingCost": 4760,
     "delayAndServiceImpact": 8190,
@@ -411,22 +423,20 @@ Only fields rendered by the human-review drawer are returned here. The `capacity
 `totalModeledExpectedLoss` should equal:
 
 ```text
-cargoCustomerImpact
+cargoAndCustomerImpact
 + cathayContributionImpact
 + recoveryAndHandlingCost
 + delayAndServiceImpact
 + downstreamNetworkImpact
 ```
 
-Validate the equality when producing detailed evaluations, using numeric amounts in HKD and a tolerance of at most HKD 0.01 for decimal rounding. The `costBreakdown.currency` must equal the response-level `currency`. Scenario sensitivity totals must use the same component definition and currency.
-
 The values above are illustrative. Production values should always be calculated by the optimization service.
 
 ## 5. Submit Human Review Decision
 
-`POST /api/v1/recovery-plans/{flightId}/decisions`
+`POST /api/v1/prevention-plans/{flightId}/decisions`
 
-Records an operational review decision for a recovery option.
+Records an operational review decision for a preventive option.
 
 ### Request fields
 
@@ -454,7 +464,7 @@ Records an operational review decision for a recovery option.
 
 ```http
 201 Created
-Location: /api/v1/recovery-plans/CX289/decisions/DEC-20261016-00042
+Location: /api/v1/prevention-plans/CX289/decisions/DEC-20261016-00042
 ```
 
-The response body is empty (no JSON envelope). The `201` status confirms that the decision record was created. A `Location` header may identify the new decision record. Validation or persistence failures should return an appropriate `4xx` or `5xx` error response.
+The response body is empty. The `201` status confirms that the decision record was created, while the `Location` header identifies the new decision record. Validation or persistence failures should return an appropriate `4xx` or `5xx` error response.

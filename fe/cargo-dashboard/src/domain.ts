@@ -48,6 +48,27 @@ export interface OffloadLifecycleRecord {
   transitionHistory: string[]
 }
 
+export interface PendingPoolUnit {
+  id: string
+  origin: string
+  destination: string
+  sourceFlightId: string
+  weightKg: number
+  volumeM3: number
+  commodity: string
+  source: 'Domino offload'
+  eligibleForNoShowReplacement: boolean
+  simulated: true
+}
+
+export type PendingPoolDisposition = 'Available' | 'Priority hold' | 'No-show review'
+
+export const pendingPoolUnits: PendingPoolUnit[] = [
+  { id: 'D-ULD-257-01', origin: 'HKG', destination: 'LHR', sourceFlightId: 'CX257', weightKg: 920, volumeM3: 4.6, commodity: 'General cargo', source: 'Domino offload', eligibleForNoShowReplacement: true, simulated: true },
+  { id: 'D-ULD-289-02', origin: 'SIN', destination: 'FRA', sourceFlightId: 'CX289', weightKg: 760, volumeM3: 3.9, commodity: 'General cargo', source: 'Domino offload', eligibleForNoShowReplacement: true, simulated: true },
+  { id: 'D-ULD-880-01', origin: 'HKG', destination: 'LAX', sourceFlightId: 'CX880', weightKg: 680, volumeM3: 3.2, commodity: 'Temperature-sensitive', source: 'Domino offload', eligibleForNoShowReplacement: false, simulated: true },
+]
+
 export interface OverviewQueueItem {
   lifecycle: OffloadLifecycleRecord
   forecast?: FlightCapacityForecast
@@ -439,6 +460,11 @@ export function getOffloadLifecycleState(record: OffloadLifecycleRecord): Offloa
   return record.state === 'OFFLOAD_CONFIRMED' || record.state === 'RECOVERY_IN_PROGRESS' || record.state === 'RECOVERED' || record.state === 'CLOSED' ? 'REVIEW_REQUIRED' : record.state
 }
 
+export function isConfirmedOffload(record: OffloadLifecycleRecord): boolean {
+  return (record.authoritativeSource === 'operational-event' || record.authoritativeSource === 'authorized-decision')
+    && (record.state === 'OFFLOAD_CONFIRMED' || record.state === 'RECOVERY_IN_PROGRESS')
+}
+
 export function getOverviewQueues(forecasts: FlightCapacityForecast[] = buildForecasts()): OverviewQueues {
   const queueItems = offloadLifecycleRecords.map((lifecycle) => {
     const forecast = forecasts.find((item) => item.flightId === lifecycle.flightId)
@@ -447,8 +473,8 @@ export function getOverviewQueues(forecasts: FlightCapacityForecast[] = buildFor
     return { lifecycle, forecast, recoveryCase, estimatedImpact }
   })
   return {
-    preventive: queueItems.filter((item) => item.lifecycle.state === 'AT_RISK' || item.lifecycle.state === 'PREVENTIVE_ACTION_REQUIRED'),
-    recovery: queueItems.filter((item) => item.lifecycle.state === 'OFFLOAD_CONFIRMED' || item.lifecycle.state === 'RECOVERY_IN_PROGRESS'),
+    preventive: queueItems.filter((item) => item.lifecycle.authoritativeSource === 'forecast' && (item.lifecycle.state === 'AT_RISK' || item.lifecycle.state === 'PREVENTIVE_ACTION_REQUIRED')),
+    recovery: queueItems.filter((item) => isConfirmedOffload(item.lifecycle)),
     onTrack: queueItems.filter((item) => item.lifecycle.state === 'ON_TRACK' || item.lifecycle.state === 'RECOVERED' || item.lifecycle.state === 'CLOSED'),
     review: queueItems.filter((item) => getOffloadLifecycleState(item.lifecycle) === 'REVIEW_REQUIRED'),
   }
@@ -468,9 +494,9 @@ export function getOverviewMetrics(queues: OverviewQueues, forecasts: FlightCapa
   }
 }
 
-export function getLifecycleDestination(state: OffloadLifecycleState): 'Predictions' | 'Recovery Plans' | 'Overview' {
-  if (state === 'OFFLOAD_CONFIRMED' || state === 'RECOVERY_IN_PROGRESS') return 'Recovery Plans'
-  if (state === 'AT_RISK' || state === 'PREVENTIVE_ACTION_REQUIRED') return 'Predictions'
+export function getLifecycleDestination(record: OffloadLifecycleRecord): 'Predicted Offload' | 'Disruption Alerts' | 'Overview' {
+  if (isConfirmedOffload(record)) return 'Disruption Alerts'
+  if (record.authoritativeSource === 'forecast' && (record.state === 'AT_RISK' || record.state === 'PREVENTIVE_ACTION_REQUIRED')) return 'Predicted Offload'
   return 'Overview'
 }
 

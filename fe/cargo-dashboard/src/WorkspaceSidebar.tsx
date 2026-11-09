@@ -1,13 +1,15 @@
-type WorkspaceNavItem = 'Overview' | 'Predictions' | 'Prevention Plan' | 'Shipments' | 'Recovery Plans' | 'Analytics' | 'Settings' | 'Unknown'
+export type WorkspaceNavItem = 'Overview' | 'Disruption Alerts' | 'Predicted Offload' | 'Pending Pool' | 'Predictive Analytics' | 'Recovery Solution' | 'Shipments' | 'Analytics' | 'Settings' | 'Unknown'
 
-const navigation: [Exclude<WorkspaceNavItem, 'Unknown'>, string][] = [
-  ['Overview', 'grid'],
-  ['Predictions', 'chart'],
-  ['Shipments', 'box'],
-  ['Prevention Plan', 'route'],
-  ['Recovery Plans', 'route'],
-  ['Analytics', 'chart'],
-  ['Settings', 'settings'],
+const navigation: { item: Exclude<WorkspaceNavItem, 'Unknown'>; label: string; icon?: string; priority?: number }[] = [
+  { item: 'Overview', label: 'Overview', icon: 'grid' },
+  { item: 'Predictive Analytics', label: 'Predictive Analytics', icon: 'chart' },
+  { item: 'Disruption Alerts', label: 'Disruption Alerts', priority: 1 },
+  { item: 'Predicted Offload', label: 'Predicted Offload', priority: 2 },
+  { item: 'Pending Pool', label: 'Pending Pool', priority: 3 },
+  { item: 'Recovery Solution', label: 'Recovery Solution', icon: 'route' },
+  { item: 'Shipments', label: 'Cargo Value & Profiles', icon: 'box' },
+  { item: 'Analytics', label: 'Analytics', icon: 'chart' },
+  { item: 'Settings', label: 'Setting', icon: 'settings' },
 ]
 
 const iconPaths: Record<string, string> = {
@@ -24,5 +26,5 @@ function Icon({ name, size = 18 }: { name: string; size?: number }) {
 }
 
 export function WorkspaceSidebar({ active, onNavigate }: { active: WorkspaceNavItem; onNavigate: (item: WorkspaceNavItem) => void }) {
-  return <aside className="sidebar workspace-sidebar"><div className="brand"><span className="brand-mark"><Icon name="plane" size={20} /></span><span>CATHAY <b>ROUTER</b></span></div><div className="nav-label">WORKSPACE</div><nav>{navigation.map(([label, icon]) => <button key={label} className={active === label ? 'active' : ''} onClick={() => onNavigate(label)}><Icon name={icon} /><span>{label}</span></button>)}</nav><div className="sidebar-footer"><div className="nav-label">OPERATIONS CONTROL</div><div className="demo-status"><span />Development environment</div><div className="profile"><div className="avatar">AL</div><div><strong>Alex Lee</strong><small>Network operator</small></div></div></div></aside>
+  return <aside className="sidebar workspace-sidebar"><div className="brand"><span className="brand-mark"><Icon name="plane" size={20} /></span><span>CATHAY <b>ROUTER</b></span></div><div className="nav-label">WORKSPACE</div><nav>{navigation.map(({ item, label, icon, priority }) => <button key={item} className={active === item ? 'active' : ''} onClick={() => onNavigate(item)}>{priority ? <span className="queue-number" aria-hidden="true">{priority}</span> : icon ? <Icon name={icon} /> : null}<span>{label}</span></button>)}</nav><div className="sidebar-footer"><div className="nav-label">OPERATIONS CONTROL</div><div className="demo-status"><span />Development environment</div><div className="profile"><div className="avatar">AL</div><div><strong>Alex Lee</strong><small>Network operator</small></div></div></div></aside>
 }
