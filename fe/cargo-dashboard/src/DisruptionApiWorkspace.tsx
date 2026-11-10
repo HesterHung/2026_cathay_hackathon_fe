@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   getRecoveryOption,
   getRecoveryOptions,
@@ -10,8 +10,9 @@ import {
   type RecoveryListResponse,
   type RecoveryOptionDetail,
   type RecoveryOptionsResponse,
-  type RecoveryWorkItem,
 } from './recoveryApi'
+import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkflowPanel, RecoveryWorkItemTable } from './RecoveryQueueShared'
+import { emptyRecoveryQueueFilters, isQueueDecisionAllowed, recoveryFilterQuery, type RecoveryQueueFilters } from './recoveryQueueUi'
 
 function messageFor(error: RecoveryApiError): string {
   const heading: Record<RecoveryApiError['kind'], string> = {
@@ -44,22 +45,14 @@ function AdditionalOptionEvidence({ detail }: { detail: RecoveryOptionDetail }) 
   </section>
 }
 
-function mAWBGroups(items: RecoveryWorkItem[]): Array<[string, RecoveryWorkItem[]]> {
-  const groups = new Map<string, RecoveryWorkItem[]>()
-  items.forEach((item) => {
-    const group = groups.get(item.masterAirwayBill.number) ?? []
-    group.push(item)
-    groups.set(item.masterAirwayBill.number, group)
-  })
-  return [...groups.entries()]
-}
-
 export function DisruptionApiWorkspace() {
   const [list, setList] = useState<RecoveryListResponse | null>(null)
   const [listError, setListError] = useState<RecoveryApiError | null>(null)
   const [listLoading, setListLoading] = useState(true)
   const [listFetchedAt, setListFetchedAt] = useState<string | null>(null)
   const [page, setPage] = useState(1)
+  const [filterDraft, setFilterDraft] = useState<RecoveryQueueFilters>(emptyRecoveryQueueFilters)
+  const [filters, setFilters] = useState<RecoveryQueueFilters>(emptyRecoveryQueueFilters)
   const [refreshId, setRefreshId] = useState(0)
   const [selectedWorkItemId, setSelectedWorkItemId] = useState('')
   const [detail, setDetail] = useState<RecoveryDetail | null>(null)
@@ -92,7 +85,7 @@ export function DisruptionApiWorkspace() {
 
   useEffect(() => {
     const controller = new AbortController()
-    void listRecoverySolutions({ type: 'DISRUPTION', page, limit: 100 }, controller.signal).then((result) => {
+    void listRecoverySolutions({ type: 'DISRUPTION', page, limit: 100, ...recoveryFilterQuery(filters) }, controller.signal).then((result) => {
       setList(result)
       setListFetchedAt(new Date().toISOString())
       clearSelectedRecord()
@@ -102,7 +95,7 @@ export function DisruptionApiWorkspace() {
       setListError(asApiError(error))
     }).finally(() => { if (!controller.signal.aborted) setListLoading(false) })
     return () => controller.abort()
-  }, [page, refreshId])
+  }, [page, refreshId, filters])
 
   useEffect(() => {
     if (!selectedWorkItemId) {
@@ -145,15 +138,13 @@ export function DisruptionApiWorkspace() {
     return () => window.clearInterval(timer)
   }, [])
 
-  const selectedSummary = list?.items.find((item) => item.workItemId === selectedWorkItemId)
-  const groups = useMemo(() => mAWBGroups(list?.items ?? []), [list])
-  const selectedGroupItems = selectedSummary ? groups.find(([number]) => number === selectedSummary.masterAirwayBill.number)?.[1] ?? [] : []
-  const canApprove = Boolean(detail && detail.workflowControl.allowedActionsByType.DISRUPTION.includes('APPROVE_FOR_REVIEW'))
-  const canReject = Boolean(detail && detail.workflowControl.allowedActionsByType.DISRUPTION.includes('REJECT_OVERRIDE'))
+  const canApprove = isQueueDecisionAllowed(list?.workflowControl, detail?.workflowControl, 'DISRUPTION', 'APPROVE_FOR_REVIEW')
+  const canReject = isQueueDecisionAllowed(list?.workflowControl, detail?.workflowControl, 'DISRUPTION', 'REJECT_OVERRIDE')
   const isStale = Boolean(listFetchedAt && now - Date.parse(listFetchedAt) > 5 * 60 * 1000)
 
   const saveReview = async () => {
     if (!detail || !reason.trim() || !reviewerId.trim()) return
+    if ((decision === 'APPROVE_FOR_REVIEW' && !canApprove) || (decision === 'REJECT_OVERRIDE' && !canReject)) return
     setSaving(true); setSaveError(null)
     try {
       await saveRecoveryDecision(detail.workItemId, {
@@ -174,31 +165,26 @@ export function DisruptionApiWorkspace() {
     <div className="panel-heading"><div><h2>Disruption Alerts · live recovery work</h2><p>Authoritative API work items grouped by MAWB. ULD evidence and decisions remain independent inside each group.</p></div><button className="outline-button" type="button" disabled={listLoading} onClick={refreshList}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
     {listLoading && !list && <div className="empty-state" role="status"><strong>Loading confirmed disruptions</strong><span>Fetching the DISRUPTION queue from the recovery-solutions API.</span></div>}
     {listError && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not load disruption queue'}</strong><span>{messageFor(listError)}</span>{list && <small>Showing the last successful queue response from {formatTimestamp(listFetchedAt)}.</small>}</div>}
+    {listError && !list && <RecoveryApiUnavailablePreview type="DISRUPTION" />}
     {isStale && <div className="api-state stale" role="status"><strong>Queue data may be stale</strong><span>Last successful response was over five minutes ago. Refresh before recording a review.</span></div>}
     {savedMessage && <div className="api-state success" role="status"><strong>{savedMessage}</strong><span>The latest ULD document version and review history are being reloaded.</span></div>}
     {list && <>
-      {!listError && <div className="api-state success" role="status"><strong>{list.totalItems ? `${list.totalItems} disruption work item(s)` : 'No disruption work items'}</strong><span>Active priority {list.workflowControl.activePriority ?? 'none'} · checked {formatTimestamp(listFetchedAt)}{list.workflowControl.message ? ` · ${list.workflowControl.message}` : ''}</span></div>}
+      {!listError && <div className="api-state success" role="status"><strong>{list.totalItems ? `${list.totalItems} matching disruption work item(s)` : 'No matching disruption work items'}</strong><span>Checked {formatTimestamp(listFetchedAt)} · page {list.pagination.page} of {list.pagination.totalPages}</span></div>}
+      <RecoveryWorkflowPanel type="DISRUPTION" queueControl={list.workflowControl} itemControl={detail?.workItemId === selectedWorkItemId ? detail.workflowControl : undefined} />
+      <RecoveryQueueFilterBar value={filterDraft} disabled={listLoading} onChange={setFilterDraft} onApply={() => { setPage(1); setFilters({ flightId: filterDraft.flightId.trim(), masterAirwayBillNumber: filterDraft.masterAirwayBillNumber.trim(), status: filterDraft.status.trim() }) }} onClear={() => { setFilterDraft(emptyRecoveryQueueFilters); setFilters(emptyRecoveryQueueFilters); setPage(1) }} />
       {list.items.length === 0 ? <div className="empty-state"><strong>No confirmed disruption work on this page</strong><span>The live API returned an empty DISRUPTION page. No fixture records are substituted into this queue.</span></div> : <>
-        <div className="disruption-api-picker">
-          <label>MAWB group<select value={selectedSummary?.masterAirwayBill.number ?? ''} onChange={(event) => {
-            setSavedMessage(null)
-            clearSelectedRecord()
-            const group = groups.find(([number]) => number === event.target.value)?.[1]
-            if (group?.[0]) setSelectedWorkItemId(group[0].workItemId)
-          }}>{groups.map(([number, items]) => <option key={number} value={number}>{items[0].masterAirwayBill.displayLabel} · {items.length} ULD(s)</option>)}</select></label>
-          <label>ULD work item<select value={selectedWorkItemId} onChange={(event) => { setSavedMessage(null); clearSelectedRecord(); setSelectedWorkItemId(event.target.value) }}>{selectedGroupItems.map((item) => <option key={item.workItemId} value={item.workItemId}>{item.uld.uldId} · {item.status}</option>)}</select></label>
-        </div>
-        {selectedSummary && <div className="disruption-uld-group-note"><strong>MAWB grouping preserves ULD-level work</strong><span>{groups.find(([number]) => number === selectedSummary.masterAirwayBill.number)?.[1].length ?? 1} ULD record(s) share this MAWB. Selecting one ULD changes only its details and decision context.</span></div>}
+        <RecoveryWorkItemTable type="DISRUPTION" items={list.items} selectedWorkItemId={selectedWorkItemId} onSelect={(item) => { setSavedMessage(null); clearSelectedRecord(); setSelectedWorkItemId(item.workItemId) }} />
         {detailLoading && <div className="empty-state" role="status"><strong>Loading ULD evidence</strong><span>Reading confirmation and document version for the selected work item.</span></div>}
         {detailError && <div className="api-state error" role="alert"><strong>Could not load disruption details</strong><span>{messageFor(detailError)}</span></div>}
         {detail && <>
-          <div className="disruption-api-detail-head"><div><p className="eyebrow">{detail.status} · ULD-LEVEL CASE</p><h3>{detail.uld.uldId} <span>· {detail.masterAirwayBill.displayLabel}</span></h3><p>{detail.flight.flightId} · {detail.flight.origin} → {detail.flight.destination} · {detail.flight.aircraftType ?? 'Aircraft unavailable'}</p></div><span className={`status-pill ${detail.confirmedOffload ? 'status-bad' : 'status-caution'}`}>{detail.confirmedOffload ? 'CONFIRMED DISRUPTION' : 'CONFIRMATION EVIDENCE MISSING'}</span></div>
+          <div className="disruption-api-detail-head"><div><p className="eyebrow">{detail.status} · ULD-LEVEL CASE</p><h3>{detail.uld.uldId} <span>· {detail.masterAirwayBill.displayLabel}</span></h3><p>{detail.flight.flightId} · {detail.flight.origin} → {detail.flight.destination} · {detail.flight.aircraftType ?? 'Aircraft unavailable'}</p></div><RecoveryStatusBadge type="DISRUPTION" status={detail.status}>{detail.confirmedOffload ? 'CONFIRMED DISRUPTION' : 'CONFIRMATION EVIDENCE MISSING'}</RecoveryStatusBadge></div>
           <div className="disruption-api-facts">
             <article><small>FLIGHT / DEPARTURE</small><strong>{detail.flight.flightId}</strong><span>{formatTimestamp(detail.flight.scheduledDeparture)}</span></article>
             <article><small>ULD / CARGO</small><strong>{detail.uld.uldType} · {detail.cargo.weightKg.toLocaleString()} kg</strong><span>{detail.cargo.volumeM3.toLocaleString()} m³ · {detail.cargo.handlingRequirements.join(', ') || 'Handling requirements unavailable'}</span></article>
             <article><small>DELIVERY COMMITMENT</small><strong>{detail.caseSummary?.deliveryCommitment ?? 'Unavailable'}</strong><span>{detail.caseSummary?.capacityConstraint ?? 'Capacity evidence unavailable'}</span></article>
             <article><small>BASELINE EXPECTED LOSS</small><strong>{formatMoney(detail.caseSummary?.baselineExpectedLoss, detail.caseSummary?.currency)}</strong><span>{detail.caseSummary?.disruption ?? 'Disruption summary unavailable'}</span></article>
           </div>
+          <RecoveryDeadlineNotice commitment={detail.caseSummary?.deliveryCommitment} />
           <section className="disruption-api-evidence"><h4>Authoritative offload confirmation</h4>{detail.confirmedOffload ? <dl><div><dt>Confirmed at</dt><dd>{formatTimestamp(detail.confirmedOffload.confirmedAt)}</dd></div><div><dt>Source</dt><dd>{detail.confirmedOffload.source}</dd></div><div><dt>Source event</dt><dd>{detail.confirmedOffload.sourceEventId}</dd></div><div><dt>Reason</dt><dd>{detail.confirmedOffload.reason}</dd></div></dl> : <div className="api-state error" role="alert"><strong>Confirmation evidence missing</strong><span>The API item is typed as a disruption but did not return its required authoritative confirmation evidence. Review submission is disabled.</span></div>}</section>
           <section className="disruption-api-options"><div className="panel-heading"><div><h4>Routing options</h4><p>Feasibility and expected loss are evidence for review; no route is booked here.</p></div></div>
             {optionsLoading && <p role="status">Loading routing options…</p>}{optionsError && <div className="api-state error" role="alert"><strong>Could not load route options</strong><span>{messageFor(optionsError)}</span></div>}
@@ -218,7 +204,7 @@ export function DisruptionApiWorkspace() {
             </div>
             {saveError && <div className="api-state error" role="alert"><strong>Review was not saved</strong><span>{messageFor(saveError)}</span>{saveError.kind === 'conflict' && <button className="text-button" type="button" onClick={refreshList}>Refresh the latest document version</button>}</div>}
           </section>
-          <section className="disruption-review-history"><h4>Saved review history</h4>{detail.reviewHistory.length ? <div className="table-wrap"><table><thead><tr><th>DECISION</th><th>OPTION</th><th>REVIEWER</th><th>REASON</th><th>REVIEWED</th><th>VERSION</th></tr></thead><tbody>{detail.reviewHistory.map((review) => <tr key={review.decisionId}><td>{review.decision}</td><td>{review.optionId ?? '—'}</td><td>{review.reviewerId}</td><td>{review.reason}</td><td>{formatTimestamp(review.reviewedAt)}</td><td>{review.documentVersion}</td></tr>)}</tbody></table></div> : <div className="empty-state"><strong>No saved reviews</strong><span>Confirmation evidence and review decisions are separate records.</span></div>}</section>
+          <RecoveryReviewHistory reviews={detail.reviewHistory} title="Saved review history" />
         </>}
       </>}
       <div className="recovery-api-pagination"><span>Page {list.pagination.page} of {list.pagination.totalPages} · {list.totalItems} disruption records</span><div><button className="outline-button" type="button" disabled={listLoading || page <= 1} onClick={() => { setListLoading(true); setListError(null); setPage((value) => Math.max(1, value - 1)) }}>Previous</button><button className="outline-button" type="button" disabled={listLoading || !list.pagination.hasNextPage} onClick={() => { setListLoading(true); setListError(null); setPage((value) => value + 1) }}>Next</button></div></div>
