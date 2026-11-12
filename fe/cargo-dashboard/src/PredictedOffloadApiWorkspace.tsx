@@ -45,6 +45,22 @@ function uldsForFlight(items: RecoveryWorkItem[], flightId: string): RecoveryWor
   return items.filter((item) => item.flight.flightId === flightId && item.type === 'PREDICTED_OFFLOAD')
 }
 
+function FlightCapacityEvidence({ summary }: { summary: FlightSummary }) {
+  const booked = Math.max(0, summary.bookedWeightKg)
+  const forecastCapacity = Math.max(0, summary.forecastCargoCapacityKg)
+  const scale = Math.max(booked, forecastCapacity, 1)
+  const bookedWidth = `${Math.min(100, booked / scale * 100)}%`
+  const capacityWidth = `${Math.min(100, forecastCapacity / scale * 100)}%`
+  const shortfall = Math.max(0, summary.capacityShortfallKg)
+  return <section className="predicted-capacity-evidence" aria-label={`Flight-level capacity evidence for ${summary.flightId}`}>
+    <div className="predicted-capacity-heading"><div><small>FLIGHT-LEVEL CAPACITY EVIDENCE</small><strong>{shortfall > 0 ? `${shortfall.toLocaleString()} kg shortfall` : 'No shortfall reported'}</strong></div><span>Forecast service</span></div>
+    <div className="predicted-capacity-bars">
+      <div className="predicted-capacity-row"><div><span>Booked load</span><strong>{booked.toLocaleString()} kg</strong></div><div className="predicted-capacity-track" aria-hidden="true"><i className="booked-load" style={{ width: bookedWidth }} /></div></div>
+      <div className="predicted-capacity-row"><div><span>Forecast cargo capacity</span><strong>{forecastCapacity.toLocaleString()} kg</strong></div><div className="predicted-capacity-track" aria-hidden="true"><i className="forecast-capacity" style={{ width: capacityWidth }} /></div></div>
+    </div>
+  </section>
+}
+
 export function PredictedOffloadApiWorkspace({ initialFlightId }: { initialFlightId?: string }) {
   const [list, setList] = useState<RecoveryListResponse | null>(null)
   const [listError, setListError] = useState<RecoveryApiError | null>(null)
@@ -221,11 +237,10 @@ export function PredictedOffloadApiWorkspace({ initialFlightId }: { initialFligh
             <span><strong>{summary.flightId}</strong><small>{summary.origin} â†’ {summary.destination} Â· {summary.aircraftType ?? 'Aircraft unavailable'}</small><small>Scheduled departure Â· {timeLabel(summary.scheduledDeparture)}</small></span>
             <RecoveryStatusBadge type="PREDICTED_OFFLOAD" status="AT_RISK">FLIGHT FORECAST</RecoveryStatusBadge>
           </button>
+          <FlightCapacityEvidence summary={summary} />
           <div className="predicted-flight-metrics">
             <span><small>FLIGHT OFFLOAD PROBABILITY</small><b>{Math.round(summary.offloadProbability * 100)}%</b></span>
             <span><small>CONFIDENCE</small><b>{summary.confidence}%</b></span>
-            <span><small>CAPACITY SHORTFALL</small><b>{kgLabel(summary.capacityShortfallKg)}</b></span>
-            <span><small>BOOKED / FORECAST CAPACITY</small><b>{summary.bookedWeightKg.toLocaleString()} / {summary.forecastCargoCapacityKg.toLocaleString()} kg</b></span>
             <span><small>VALUE AT RISK</small><b>{amountLabel(summary.valueAtRisk, summary.currency)}</b></span>
             <span><small>AFFECTED CARGO</small><b>{summary.affectedUldCount} ULD(s) Â· {summary.shipmentIds.length} shipment(s)</b></span>
           </div>

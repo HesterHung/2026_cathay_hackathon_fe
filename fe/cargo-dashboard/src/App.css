@@ -478,3 +478,190 @@ button,.scenario-tabs button,.report-controls button { transition:background-col
 .recovery-work-item-select:focus-visible { outline:2px solid #247957; outline-offset:3px; border-radius:2px; }
 .pending-api-layout-detail { grid-template-columns:minmax(0,1fr); }
 @media (max-width:520px) { .recovery-work-item-table-heading { align-items:flex-start; flex-direction:column; }.recovery-work-item-table .table-wrap { overscroll-behavior-inline:contain; } }
+
+/* Unslop pass 1 — spacing */
+.sidebar { padding:24px 16px 16px; }
+.brand { gap:8px; margin:0 8px 40px; }
+.brand-mark { width:32px; height:32px; }
+.nav-label { padding:0 12px 8px; }
+.sidebar nav { gap:4px; }
+.sidebar nav button { min-height:36px; gap:10px; padding:8px 12px; }
+.sidebar-footer .profile { padding:16px 8px 0; }
+.main-content { padding:0 32px 32px; }
+.topbar { height:60px; }
+.page-heading,.page-heading:has(> div > h1:first-child) { padding:24px 0 20px; }
+.overview-kpis { gap:16px; margin-bottom:24px; }
+.kpi-card { min-height:112px; padding:16px; }
+.panel { border-radius:8px; }
+.panel-heading { gap:16px; padding:16px; }
+.overview-queues { gap:16px; }
+.queue-list { padding:0 16px 12px; }
+.queue-item { padding:12px 0; }
+.lifecycle-banner { gap:8px 16px; padding:16px; margin-bottom:16px; }
+.recovery-queue-filters { gap:12px; padding:16px; margin:16px 0; }
+.recovery-workflow-panel { gap:12px 16px; padding:16px; margin:16px 0; }
+.recovery-work-item-table { margin:16px 0 20px; }
+.recovery-work-item-table-heading { padding:12px 16px; }
+.recovery-work-item-table thead th { padding:12px; }
+.recovery-work-item-table tbody td { padding:12px; }
+.disruption-api-facts,.pending-api-facts { gap:12px; }
+.predicted-flight-summary { padding:16px; }
+.predicted-flight-summary-grid { gap:16px; }
+.pending-api-layout { gap:16px; }
+.pending-api-detail { padding:16px; }
+.recovery-api-unavailable-preview { gap:16px; padding:16px; margin:16px 0 20px; }
+.recovery-api-preview-boundary { padding-top:12px; }
+.recovery-api-pagination { margin:16px 0; }
+@media (max-width:1200px) { .main-content { padding:0 24px 28px; } }
+@media (max-width:760px) { .main-content { padding:0 16px 24px; }.page-heading,.page-heading:has(> div > h1:first-child) { padding:20px 0 16px; }.panel-heading { padding:16px; }.recovery-work-item-table tbody td { padding:10px; } }
+
+/* Unslop pass 2 — color */
+:root { --ink:#202a25; --muted:#536159; --line:#dce1dd; --paper:#f4f5f3; --white:#fff; --green:#176b50; --amber:#805a17; --red:#a33e38; --blue:#365e73; }
+.app-shell,.main-content { background:var(--paper); color:var(--ink); }
+.sidebar { background:#073c35; }
+.sidebar nav button { color:#d0ddd7; }
+.sidebar nav button:hover,.sidebar nav button.active { background:#15594e; }
+.sidebar nav button.active { box-shadow:inset 3px 0 #b4d6c7; }
+.brand-mark { background:#14564c; color:#d6e9df; }
+.nav-label,.crumb { color:#617067; }
+.sidebar .nav-label { color:#a9c4bb; }
+.topbar { border-color:var(--line); }
+.page-heading h1,.panel-heading h2,.pending-api-detail-head h3,.disruption-api-detail-head h3 { color:#1d2923; }
+.subtitle,.panel-heading p,.topbar .crumb,.profile small { color:#58665e; }
+.panel,.kpi-card,.predicted-flight-summary,.pending-api-evaluation,.pending-api-decision,.disruption-api-evidence,.disruption-api-options,.disruption-review-history { background:#fff; border-color:var(--line); }
+.overview-queues .panel,.recovery-work-item-table { background:#fff; }
+.lifecycle-banner,.recovery-workflow-panel,.recovery-queue-filters,.predicted-flight-forecast,.predicted-flight-metrics span,.pending-api-candidate-result { background:#f0f2ef; border-color:#dce1dd; color:#46544c; }
+.lifecycle-banner strong,.recovery-workflow-priority strong,.recovery-api-preview-heading h3 { color:#174d3e; }
+.lifecycle-banner small,.recovery-workflow-explanation,.recovery-work-item-table tbody td > span { color:#536159; }
+.recovery-work-item-table thead th,.recovery-work-item-table .recovery-mawb-group th { background:#eef0ed; color:#47544c; }
+.recovery-work-item-table .recovery-mawb-group th { border-left:3px solid #0b5147; }
+.recovery-work-item-table tbody tr.selected { background:#f1f4f1; box-shadow:inset 3px 0 #0b5147; }
+.recovery-work-item-select strong { color:#07553f; }
+.recovery-work-item-select:focus-visible,.recovery-queue-filters :is(input,button):focus-visible,.pending-api-eval-controls :is(select,input,button):focus-visible,.pending-api-decision-form :is(select,input,textarea,button):focus-visible,.disruption-review-form :is(select,input,textarea,button):focus-visible,.disruption-api-options button:focus-visible,.predicted-flight-select:focus-visible { outline-color:#174d3e; }
+.status-good { color:#176b50!important; background:#eaf3ed; border-color:#cbded1; }
+.status-pending,.status-caution { color:#795516!important; background:#f7f0df; border-color:#e6d7b4; }
+.status-bad { color:#963b35!important; background:#f7eae8; border-color:#e8cbc8; }
+.api-state.success { color:#245b43; background:#eef4ef; border-color:#d5e0d7; }
+.api-state.stale { color:#765817; background:#f7f1e3; border-color:#e6d8b9; }
+.api-state.error { color:#813a35; background:#f7ecea; border-color:#e8cfcc; }
+.recovery-deadline-notice { background:#f8f3e8; border-color:#e6d8b7; color:#65521f; }
+.recovery-api-unavailable-preview { background:#f0f2ef; border-color:#dce1dd; }
+.recovery-api-preview-record,.recovery-api-preview-record dl div { background:#fff; border-color:#dce1dd; }
+.recovery-data-source { color:#20573f; background:#edf3ee; border-color:#cddbd0; }
+.predicted-flight-summary.selected { border-color:#8aab96; box-shadow:inset 3px 0 #0b5147; }
+.pending-api-candidate-result.eligible { background:#eef4ef; border-color:#cadbce; }
+.pending-api-candidate-result.ineligible { background:#f7ecea; border-color:#e4cecb; }
+.pending-api-candidate-result.unknown { background:#f7f2e7; border-color:#e5d9bd; }
+
+/* Unslop pass 3 — icons */
+.icon { width:18px!important; height:18px!important; stroke-width:1.5; }
+
+/* Unslop pass 4 — copy */
+.workspace-sidebar .nav-label { text-transform:none; }
+.workspace-sidebar .brand { letter-spacing:0; }
+.shipment-page .crumb { letter-spacing:0; text-transform:none; }
+.shipment-page .page-heading .eyebrow { text-transform:lowercase; }
+.recovery-workflow-priority > small,.recovery-workflow-actions > small { text-transform:none; }
+.recovery-api-preview-heading .eyebrow { text-transform:none; }
+.recovery-data-source { text-transform:none; letter-spacing:0; }
+
+/* Unslop pass 5 — type */
+.main-content { font-family:'DM Sans',sans-serif; font-size:14px; }
+.page-heading h1 { font:500 28px/1.2 'DM Sans',sans-serif; letter-spacing:0; margin:0 0 4px; }
+.panel-heading h2,.recovery-api-preview-heading h3 { font:500 16px/1.35 'DM Sans',sans-serif; }
+.eyebrow,.nav-label,.crumb { font-size:11px; font-weight:500; letter-spacing:0; }
+.subtitle,.panel-heading p { font-size:13px; line-height:1.5; }
+.workspace-sidebar .nav-label { font-size:11px; font-weight:500; }
+.sidebar nav button { font-size:13px; font-weight:500; }
+.kpi-card strong { font:500 24px/1.1 'DM Sans',sans-serif; font-variant-numeric:tabular-nums; margin:12px 0 6px; }
+.kpi-card .kpi-top { font-size:12px; font-weight:500; }
+.kpi-card small,.overview-queues small,.recovery-queue-filters label,.recovery-workflow-panel small,.recovery-api-unavailable-preview small { font-size:11px; letter-spacing:0; }
+.lifecycle-banner { font-size:12px; line-height:1.5; }
+.lifecycle-banner strong { font-size:13px; font-weight:600; }
+.lifecycle-banner small { font-size:11px; }
+.recovery-work-item-table thead th { font-size:10px; font-weight:600; letter-spacing:0; }
+.recovery-work-item-table tbody td,.recovery-work-item-table tbody td > strong { font-size:11px; font-variant-numeric:tabular-nums; }
+.recovery-work-item-table .recovery-mawb-group th,.recovery-work-item-table .recovery-mawb-group th small { font-size:11px; letter-spacing:0; }
+.recovery-work-item-select strong { font-size:11px; }
+.recovery-work-item-select span { font-size:11px; }
+.status-pill { font-size:10px!important; font-weight:600; letter-spacing:0; }
+.recovery-workflow-priority strong { font-size:13px; font-weight:500; }
+.recovery-action-chip,.recovery-action-none { font-size:11px; font-weight:500; }
+.disruption-api-workspace,.predicted-api-workspace,.pending-api-workspace { font-variant-numeric:tabular-nums; }
+.disruption-api-workspace small,.predicted-api-workspace small,.pending-api-workspace small { font-size:11px; letter-spacing:0; }
+.disruption-api-detail-head h3,.predicted-uld-detail h3,.pending-api-detail-head h3 { font-family:'DM Sans',sans-serif; font-weight:500; letter-spacing:0; }
+.predicted-flight-select strong { font:500 16px/1.3 'DM Sans',sans-serif; }
+.predicted-flight-metrics small,.predicted-flight-forecast,.pending-api-facts small,.disruption-api-facts small { font-size:11px; letter-spacing:0; }
+
+/* Unslop pass 6 — layout */
+.main-content { width:min(100%,1600px); }
+.overview-kpis { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.overview-queues { grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; }
+.predicted-flight-summary-grid { grid-template-columns:minmax(0,1fr); }
+.predicted-flight-summary { display:grid; gap:12px; }
+.predicted-flight-select { align-items:center; padding-bottom:12px; }
+.predicted-flight-metrics { grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; padding:0; }
+.predicted-flight-forecast { grid-template-columns:140px minmax(0,1fr); }
+.predicted-capacity-evidence { display:grid; gap:12px; padding:16px; border:1px solid #dce1dd; border-left:3px solid #0b5147; border-radius:6px; background:#f7f8f6; }
+.predicted-capacity-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; }
+.predicted-capacity-heading > div { display:grid; gap:4px; }
+.predicted-capacity-heading small { color:#536159; font-size:11px; font-weight:500; letter-spacing:0; }
+.predicted-capacity-heading strong { color:#202a25; font-size:16px; font-weight:500; font-variant-numeric:tabular-nums; }
+.predicted-capacity-heading > span { color:#536159; font-size:11px; }
+.predicted-capacity-bars { display:grid; gap:8px; }
+.predicted-capacity-row { display:grid; grid-template-columns:minmax(175px,.7fr) minmax(0,1.3fr); align-items:center; gap:12px; }
+.predicted-capacity-row > div:first-child { display:flex; justify-content:space-between; gap:10px; color:#46544c; font-size:11px; }
+.predicted-capacity-row strong { color:#202a25; font-weight:500; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.predicted-capacity-track { height:8px; overflow:hidden; border-radius:4px; background:#e1e5e1; }
+.predicted-capacity-track i { display:block; height:100%; border-radius:4px; }
+.predicted-capacity-track .booked-load { background:#0b5147; }
+.predicted-capacity-track .forecast-capacity { background:#89958e; }
+.pending-api-layout-detail { grid-template-columns:minmax(0,1fr); }
+.recovery-work-item-table table { min-width:1050px; }
+@media (max-width:1000px) { .overview-queues { grid-template-columns:1fr; }.predicted-flight-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:700px) { .overview-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); }.predicted-capacity-row { grid-template-columns:1fr; gap:6px; }.predicted-flight-forecast { grid-template-columns:1fr; } }
+
+/* Unslop pass 7 — details */
+.panel,.kpi-card,.predicted-flight-summary,.recovery-api-unavailable-preview { border-radius:8px; box-shadow:none; }
+.predicted-capacity-evidence { border-radius:6px; }
+.sidebar nav button,.outline-button,.primary-button,.text-button,.recovery-queue-filters input,.pending-api-eval-controls :is(select,input),.pending-api-decision-form :is(select,input,textarea),.disruption-review-form :is(select,input,textarea) { border-radius:6px; }
+.status-pill { border-radius:5px; padding:5px 8px; }
+.recovery-action-chip,.recovery-action-none { border-radius:5px; }
+.recovery-work-item-table tbody tr.selected { outline:1px solid #cbd6ce; outline-offset:-1px; }
+.recovery-work-item-select:focus-visible { outline:2px solid #174d3e; outline-offset:3px; }
+.recovery-work-item-table .table-wrap { overscroll-behavior-inline:contain; scrollbar-color:#aab6ae #eef0ed; scrollbar-width:thin; }
+.recovery-work-item-table .table-wrap:focus-visible { outline:2px solid #174d3e; outline-offset:2px; }
+
+/* Unslop pass 8 — visuals */
+.recovery-work-item-table .recovery-mawb-group th { border-left-width:4px; }
+.recovery-work-item-table tbody tr.selected td:first-child { box-shadow:inset 2px 0 #0b5147; }
+.recovery-data-source { background:#edf3ee; color:#20573f; }
+.recovery-api-unavailable-preview { background:#f7f8f6; }
+
+/* Unslop pass 9 — motion */
+.page-heading,.panel,.kpi-card,.workspace-intro,.network-panel,.recovery-recommendation,.prediction-toolbar,.sort-strip,.scenario-tabs,.plan-entry-summary { animation:none; }
+.main-content { animation:page-enter .28s cubic-bezier(.22,1,.36,1) both; }
+.sidebar nav button,.outline-button,.primary-button,.text-button,.recovery-work-item-select,.predicted-flight-select,.recovery-queue-filters :is(input,button),.pending-api-eval-controls :is(select,input,button),.pending-api-decision-form :is(select,input,textarea,button) { transition:color .16s cubic-bezier(.22,1,.36,1),background-color .16s cubic-bezier(.22,1,.36,1),border-color .16s cubic-bezier(.22,1,.36,1); }
+@media (prefers-reduced-motion:reduce) { .main-content,.sidebar nav button,.outline-button,.primary-button,.text-button,.recovery-work-item-select,.predicted-flight-select { animation:none!important; transition:none!important; } }
+@media (max-width:700px) { .predicted-flight-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }.recovery-work-item-table .table-wrap { overflow-x:auto; } }
+.route-map-canvas { margin:0 16px; border:1px solid #dce1dd; border-radius:6px; background:#f7f8f6; box-shadow:none; }
+.route-map-canvas svg { border-radius:6px; background:#f7f8f6; }
+.route-map-canvas svg image { display:none; }
+.route-network-field { fill:#f7f8f6; }
+.route-network-grid { stroke:#dce1dd; stroke-width:1; stroke-dasharray:2 8; }
+.route-network-line { fill:none; stroke-width:2.5; stroke-dasharray:7 6; stroke-linecap:round; opacity:.82; }
+.route-network-line.preventive { stroke:#9a6b1e; }
+.route-network-line.recovery { stroke:#a33e38; }
+.alert-airport .airport-marker.preventive { fill:#9a6b1e; stroke:#fff; stroke-width:2px; }
+.alert-airport .airport-marker.recovery { fill:#a33e38; stroke:#fff; stroke-width:2px; }
+.alert-airport .airport-halo { fill:#fff; stroke:#dce1dd; stroke-width:1px; opacity:.9; }
+.map-attribution { padding:8px 16px 12px; color:#536159; font-size:11px; text-align:left; }
+.route-map-legend { color:#536159; font-size:11px; }
+.map-zoom-controls button { border-color:#dce1dd; border-radius:6px; color:#28352e; }
+.map-zoom-controls span { color:#46544c; font-size:11px; font-variant-numeric:tabular-nums; }
+.route-map-panel .map-hint { color:#536159; font-size:11px; }
+.route-map-panel .airport-tooltip-card { border-color:#dce1dd; border-radius:6px; box-shadow:0 1px 2px #18242112; }
+.route-map-panel .airport-flight-links button:focus-visible,.route-map-panel .map-zoom-controls button:focus-visible { outline:2px solid #174d3e; outline-offset:2px; }
+.main-content .eyebrow,.main-content .queue-metrics small,.main-content .queue-item .eyebrow,.main-content .disruption-api-facts small,.main-content .pending-api-facts small,.main-content .predicted-flight-metrics small,.main-content .predicted-flight-forecast strong { text-transform:lowercase; }
+.main-content .eyebrow::first-letter,.main-content .queue-metrics small::first-letter,.main-content .queue-item .eyebrow::first-letter,.main-content .disruption-api-facts small::first-letter,.main-content .pending-api-facts small::first-letter,.main-content .predicted-flight-metrics small::first-letter,.main-content .predicted-flight-forecast strong::first-letter { text-transform:uppercase; }
+.shipment-page .page-heading .eyebrow::first-letter { text-transform:uppercase; }

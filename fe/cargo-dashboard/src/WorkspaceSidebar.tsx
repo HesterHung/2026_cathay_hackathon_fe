@@ -9,7 +9,7 @@ const navigation: { item: Exclude<WorkspaceNavItem, 'Unknown'>; label: string; i
   { item: 'Recovery Solution', label: 'Recovery Solution', icon: 'route' },
   { item: 'Shipments', label: 'Cargo Value & Profiles', icon: 'box' },
   { item: 'Analytics', label: 'Analytics', icon: 'chart' },
-  { item: 'Settings', label: 'Setting', icon: 'settings' },
+  { item: 'Settings', label: 'Settings', icon: 'settings' },
 ]
 
 const iconPaths: Record<string, string> = {
@@ -26,5 +26,5 @@ function Icon({ name, size = 18 }: { name: string; size?: number }) {
 }
 
 export function WorkspaceSidebar({ active, onNavigate }: { active: WorkspaceNavItem; onNavigate: (item: WorkspaceNavItem) => void }) {
-  return <aside className="sidebar workspace-sidebar"><div className="brand"><span className="brand-mark"><Icon name="plane" size={20} /></span><span>CATHAY <b>ROUTER</b></span></div><div className="nav-label">WORKSPACE</div><nav>{navigation.map(({ item, label, icon, priority }) => <button key={item} className={active === item ? 'active' : ''} onClick={() => onNavigate(item)}>{priority ? <span className="queue-number" aria-hidden="true">{priority}</span> : icon ? <Icon name={icon} /> : null}<span>{label}</span></button>)}</nav><div className="sidebar-footer"><div className="nav-label">OPERATIONS CONTROL</div><div className="demo-status"><span />Development environment</div><div className="profile"><div className="avatar">AL</div><div><strong>Alex Lee</strong><small>Network operator</small></div></div></div></aside>
+  return <aside className="sidebar workspace-sidebar"><div className="brand"><span className="brand-mark"><Icon name="plane" size={18} /></span><span>CATHAY <b>ROUTER</b></span></div><div className="nav-label">Workspace</div><nav>{navigation.map(({ item, label, icon, priority }) => <button key={item} className={active === item ? 'active' : ''} onClick={() => onNavigate(item)}>{priority ? <span className="queue-number" aria-hidden="true">{priority}</span> : icon ? <Icon name={icon} /> : null}<span>{label}</span></button>)}</nav><div className="sidebar-footer"><div className="nav-label">Operations control</div><div className="demo-status"><span />Development environment</div><div className="profile"><div className="avatar">AL</div><div><strong>Alex Lee</strong><small>Network operator</small></div></div></div></aside>
 }

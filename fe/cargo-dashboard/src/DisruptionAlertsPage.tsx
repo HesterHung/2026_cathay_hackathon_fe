@@ -9,9 +9,9 @@ export function DisruptionAlertsPage({ onNavigate }: DisruptionAlertsPageProps) 
   return <div className="app-shell">
     <WorkspaceSidebar active="Disruption Alerts" onNavigate={onNavigate} />
     <main className="main-content shipment-page">
-      <header className="topbar"><div className="crumb">CATHAY ROUTER <span>/</span> DISRUPTION ALERTS</div><span className="demo-label">RECOVERY API</span></header>
+      <header className="topbar"><div className="crumb">Cathay Router <span>/</span> Disruption Alerts</div><span className="demo-label">Recovery API</span></header>
       <div className="page-heading">
-        <div><p className="eyebrow">PRIORITY 1 · CONFIRMED OFFLOADS</p><h1>Disruption Alerts</h1><p className="subtitle">Review authoritative offload evidence and recovery options at ULD level, grouped under the MAWB document.</p></div>
+        <div><p className="eyebrow">Priority 1 · Confirmed offloads</p><h1>Disruption Alerts</h1><p className="subtitle">Review confirmed offload evidence and route options for each ULD under its MAWB.</p></div>
       </div>
       <section className="lifecycle-banner"><strong>Confirmed events only</strong><span>Only API work items classified as DISRUPTION appear here. A saved route review does not confirm an offload or execute the route.</span><small>Resolve disruption work before advancing lower-priority queues, as directed by the API workflow control.</small></section>
       <DisruptionApiWorkspace />

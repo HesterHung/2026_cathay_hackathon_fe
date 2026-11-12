@@ -23,13 +23,12 @@ function QueueAction({ item, onSelectPreventiveFlight, onSelectRecoveryCase }: {
 }
 
 const airportLocations: Record<string, { lat: number; lon: number }> = { HKG: { lat: 22.308, lon: 113.918 }, SIN: { lat: 1.364, lon: 103.991 }, FRA: { lat: 50.037, lon: 8.562 }, LHR: { lat: 51.47, lon: -0.454 }, LAX: { lat: 33.942, lon: -118.408 }, JFK: { lat: 40.641, lon: -73.778 } }
-const osmZoom = 2
-const osmTileSize = 256
+const routeCoordinateScale = 1024
 const routeViewPadding = 160
 
 function projectAirport(code: string) {
   const { lat, lon } = airportLocations[code]
-  const scale = osmTileSize * 2 ** osmZoom
+  const scale = routeCoordinateScale
   const sinLat = Math.sin(lat * Math.PI / 180)
   return { x: (lon + 180) / 360 * scale, y: (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale }
 }
@@ -45,8 +44,6 @@ function RouteMap({ routes, onSelectPreventiveFlight, onSelectRecoveryCase }: { 
     alertAirports.set(code, airport)
   }))
   const airportEntries = [...alertAirports.entries()]
-  const tileCount = 2 ** osmZoom
-  const tiles = Array.from({ length: tileCount * tileCount }, (_, index) => ({ x: index % tileCount, y: Math.floor(index / tileCount) }))
   const plottedPoints = airportEntries.flatMap(([code]) => {
     const point = projectAirport(code), tooltipX = point.x > 512 ? point.x - 182 : point.x + 4
     return [point, { x: tooltipX, y: point.y - 42 }, { x: tooltipX + 178, y: point.y + 150 }]
@@ -63,10 +60,31 @@ function RouteMap({ routes, onSelectPreventiveFlight, onSelectRecoveryCase }: { 
   const viewHeight = fitHeight / zoom
   const viewX = Math.max(0, Math.min(1024 - viewWidth, fitX + (fitWidth - viewWidth) / 2))
   const viewY = Math.max(0, Math.min(1024 - viewHeight, fitY + (fitHeight - viewHeight) / 2))
+  const routeSegments = plotted.flatMap((route) => {
+    const from = projectAirport(route.origin)
+    const to = projectAirport(route.destination)
+    const deltaX = to.x - from.x
+    if (Math.abs(deltaX) > routeCoordinateScale / 2) {
+      const wrappedX = to.x + (deltaX > 0 ? -routeCoordinateScale : routeCoordinateScale)
+      const seamX = deltaX > 0 ? 0 : routeCoordinateScale
+      const oppositeSeamX = deltaX > 0 ? routeCoordinateScale : 0
+      const ratio = (seamX - from.x) / (wrappedX - from.x)
+      const seamY = from.y + (to.y - from.y) * ratio
+      return [
+        { id: `${route.flightId}-a`, kind: route.kind, d: `M ${from.x} ${from.y} L ${seamX} ${seamY}` },
+        { id: `${route.flightId}-b`, kind: route.kind, d: `M ${oppositeSeamX} ${seamY} L ${to.x} ${to.y}` },
+      ]
+    }
+    const controlX = (from.x + to.x) / 2
+    const controlY = (from.y + to.y) / 2 - Math.min(56, Math.abs(deltaX) * 0.08)
+    return [{ id: route.flightId, kind: route.kind, d: `M ${from.x} ${from.y} Q ${controlX} ${controlY} ${to.x} ${to.y}` }]
+  })
   return <section className="panel route-map-panel" aria-label="Map of affected flight routes">
-    <div className="panel-heading"><div><p className="eyebrow">NETWORK ALERT VIEW</p><h2>Airports needing attention</h2><p>{airportEntries.length} airports · hover or focus a point to see alert flights.</p></div><div className="route-map-tools"><div className="route-map-legend"><span><i className="preventive-dot" /> Preventive</span><span><i className="recovery-dot" /> Recovery</span></div><div className="map-zoom-controls" aria-label="Map zoom controls"><button type="button" onClick={() => setZoom((level) => Math.max(1, Number((level - 0.5).toFixed(1))))} disabled={zoom <= 1} aria-label="Zoom out">−</button><span>{zoom.toFixed(1)}×</span><button type="button" onClick={() => setZoom((level) => Math.min(2.5, Number((level + 0.5).toFixed(1))))} disabled={zoom >= 2.5} aria-label="Zoom in">+</button><button type="button" onClick={() => setZoom(1)}>Fit airports</button></div></div></div>
+    <div className="panel-heading"><div><p className="eyebrow">AIRLINE ROUTE NETWORK</p><h2>Airport connections</h2><p>{airportEntries.length} airports on affected routes. Focus a point to inspect its flights.</p></div><div className="route-map-tools"><div className="route-map-legend"><span><i className="preventive-dot" /> Predicted</span><span><i className="recovery-dot" /> Confirmed disruption</span></div><div className="map-zoom-controls" aria-label="Route network zoom controls"><button type="button" onClick={() => setZoom((level) => Math.max(1, Number((level - 0.5).toFixed(1))))} disabled={zoom <= 1} aria-label="Zoom out">−</button><span>{zoom.toFixed(1)}×</span><button type="button" onClick={() => setZoom((level) => Math.min(2.5, Number((level + 0.5).toFixed(1))))} disabled={zoom >= 2.5} aria-label="Zoom in">+</button><button type="button" onClick={() => setZoom(1)}>Fit airports</button></div></div></div>
     <div className="route-map-canvas"><svg viewBox={`${viewX} ${viewY} ${viewWidth} ${viewHeight}`} role="img" aria-label={`Affected routes: ${plotted.map((route) => `${route.flightId} ${route.origin} to ${route.destination}`).join(', ') || 'none'}`}>
-      {tiles.map((tile) => <image key={`${tile.x}-${tile.y}`} href={`https://tile.openstreetmap.org/${osmZoom}/${tile.x}/${tile.y}.png`} x={tile.x * osmTileSize} y={tile.y * osmTileSize} width={osmTileSize} height={osmTileSize} />)}
+      <rect x="0" y="0" width={routeCoordinateScale} height={routeCoordinateScale} className="route-network-field" />
+      {[1, 2, 3].map((step) => <g key={`grid-${step}`} aria-hidden="true"><line className="route-network-grid" x1={routeCoordinateScale * step / 4} x2={routeCoordinateScale * step / 4} y1="0" y2={routeCoordinateScale} /><line className="route-network-grid" x1="0" x2={routeCoordinateScale} y1={routeCoordinateScale * step / 4} y2={routeCoordinateScale * step / 4} /></g>)}
+      {routeSegments.map((segment) => <path key={segment.id} className={`route-network-line ${segment.kind}`} d={segment.d} />)}
       {airportEntries.map(([code, alerts]) => { const point = projectAirport(code), tooltipX = point.x > 512 ? point.x - 182 : point.x + 4, hasPreventive = alerts.preventive.length > 0, hasRecovery = alerts.recovery.length > 0; return <g key={code} className={`map-airport alert-airport ${hasPreventive && hasRecovery ? 'mixed' : hasPreventive ? 'preventive' : 'recovery'}`} tabIndex={0} role="group" aria-label={`${code}, airport with alert flights`}>
         <circle className="airport-halo" cx={point.x} cy={point.y} r="13" />
         {hasPreventive && hasRecovery ? <><circle className="airport-marker preventive" cx={point.x - 3.5} cy={point.y} r="5" /><circle className="airport-marker recovery" cx={point.x + 3.5} cy={point.y} r="5" /></> : <circle className={`airport-marker ${hasPreventive ? 'preventive' : 'recovery'}`} cx={point.x} cy={point.y} r="6" />}
@@ -75,7 +93,7 @@ function RouteMap({ routes, onSelectPreventiveFlight, onSelectRecoveryCase }: { 
       </g> })}
     </svg></div>
     <div className="map-hint">Each point marks an airport on an alert route. Flight numbers appear on hover or keyboard focus.</div>
-    <div className="map-attribution">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a></div>
+    <div className="map-attribution">Schematic route view · airport positions follow coordinates</div>
   </section>
 }
 
@@ -108,8 +126,9 @@ export function OverviewControlTower({ onNavigate, onSelectFlight, onSelectPreve
   }), [queues])
   const visiblePreventiveItems = showAllPreventive ? preventiveItems : preventiveItems.slice(0, 3)
   const visibleRecoveryItems = showAllRecovery ? recoveryItems : recoveryItems.slice(0, 3)
+  const getRouteAirports = (route: string | undefined) => route?.match(/[A-Z]{3}/g) ?? []
   const mapRoutes = [
-    ...preventiveItems.map((item) => ({ flightId: item.lifecycle.flightId, origin: item.forecast?.route.split(/[→-]/)[0]?.trim() ?? '', destination: item.forecast?.route.split(/[→-]/)[1]?.trim() ?? '', kind: 'preventive' as const, recoveryCaseId: undefined })),
+    ...preventiveItems.map((item) => { const [origin = '', destination = ''] = getRouteAirports(item.forecast?.route); return { flightId: item.lifecycle.flightId, origin, destination, kind: 'preventive' as const, recoveryCaseId: undefined } }),
     ...recoveryItems.map((item) => ({ flightId: item.lifecycle.flightId, origin: item.recoveryCase?.origin ?? '', destination: item.recoveryCase?.destination ?? '', kind: 'recovery' as const, recoveryCaseId: item.lifecycle.recoveryCaseId ?? undefined })),
   ]
   const uniqueMapRoutes = [...mapRoutes.reduce((byFlight, route) => {

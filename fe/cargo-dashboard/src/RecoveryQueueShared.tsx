@@ -29,8 +29,8 @@ export function RecoveryWorkflowPanel({ type, queueControl, itemControl }: { typ
   const messages = [...new Set([queueControl.message, itemControl?.message].filter((message): message is string => Boolean(message)))]
   const itemPermissions = itemControl ? 'for selected ULD' : 'for this queue'
   return <section className="recovery-workflow-panel" aria-label={`${recoveryQueueNames[type]} workflow permissions`}>
-    <div className="recovery-workflow-priority"><small>ACTIVE PRIORITY</small><strong>{queueControl.activePriority === null ? 'No active priority' : `Priority ${queueControl.activePriority}`}</strong></div>
-    <div className="recovery-workflow-actions"><small>PERMITTED ACTIONS {itemPermissions}</small><div>{actions.length ? actions.map((action) => <span className="recovery-action-chip" key={action}>{recoveryActionNames[action]}</span>) : <span className="recovery-action-none">No decisions currently permitted</span>}</div></div>
+    <div className="recovery-workflow-priority"><small>Active priority</small><strong>{queueControl.activePriority === null ? 'No active priority' : `Priority ${queueControl.activePriority}`}</strong></div>
+    <div className="recovery-workflow-actions"><small>Permitted actions {itemPermissions}</small><div>{actions.length ? actions.map((action) => <span className="recovery-action-chip" key={action}>{recoveryActionNames[action]}</span>) : <span className="recovery-action-none">No decisions currently permitted</span>}</div></div>
     {(blockers.length > 0 || messages.length > 0) && <div className="recovery-workflow-explanation"><strong>{blockers.length ? 'Workflow gate' : 'Workflow message'}</strong>{messages.map((message) => <span key={message}>{message}</span>)}{blockers.length > 0 && <span>Blocking work: {blockers.join(', ')}</span>}</div>}
   </section>
 }
@@ -70,7 +70,7 @@ export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelec
   const groupedItems = [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))
   const displayTime = (value: string | null | undefined) => value ? new Date(value).toLocaleString() : 'Unavailable'
   return <section className="recovery-work-item-table" aria-label={`${recoveryQueueNames[type]} API work items`}>
-    <div className="recovery-work-item-table-heading"><div><h3>Recovery work items</h3><p>Each row is one ULD. Rows are grouped under their MAWB.</p></div><span className="recovery-data-source">LIVE API DATA</span></div>
+    <div className="recovery-work-item-table-heading"><div><h3>Recovery work items</h3><p>Each row is one ULD. Rows are grouped under their MAWB.</p></div><span className="recovery-data-source">Live API data</span></div>
     <div className="table-wrap"><table><thead><tr><th scope="col">ROUTE / FLIGHT</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
       {groupedItems.map(([mawbNumber, group]) => <Fragment key={mawbNumber}>
         <tr className="recovery-mawb-group"><th colSpan={7} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
@@ -109,7 +109,7 @@ const unavailableExamples: Record<QueueType, { mawb: string; flightId: string; o
 export function RecoveryApiUnavailablePreview({ type }: { type: QueueType }) {
   const example = unavailableExamples[type]
   return <section className="recovery-api-unavailable-preview" aria-label={`${recoveryQueueNames[type]} demo data preview`}>
-    <div className="recovery-api-preview-heading"><div><p className="eyebrow">DEMO DATA · FICTIONAL RECORD</p><h3>{recoveryQueueNames[type]} layout</h3><p>Fictional values for design demonstration only. These records are not returned by the API.</p></div><span className="status-pill status-caution">PREVIEW ONLY</span></div>
+    <div className="recovery-api-preview-heading"><div><p className="eyebrow">Demo data · fictional record</p><h3>{recoveryQueueNames[type]} layout</h3><p>Fictional values for design demonstration only. These records are not returned by the API.</p></div><span className="status-pill status-caution">Preview only</span></div>
     <div className="recovery-work-item-table recovery-demo-work-item-table">
       <div className="table-wrap"><table><thead><tr><th scope="col">ROUTE / FLIGHT</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
         <tr className="recovery-mawb-group"><th colSpan={7} scope="rowgroup"><span>MAWB {example.mawb}</span><small>1 ULD record · demo</small></th></tr>
