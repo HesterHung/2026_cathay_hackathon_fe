@@ -1,4 +1,4 @@
-﻿import { Fragment, type ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 import type { QueueType, RecoveryReview, RecoveryWorkItem, WorkflowControl } from './recoveryApi'
 import { recoveryActionNames, recoveryQueueNames, recoveryStatusTone, type RecoveryQueueFilters } from './recoveryQueueUi'
 
@@ -37,7 +37,7 @@ export function RecoveryWorkflowPanel({ type, queueControl, itemControl }: { typ
 
 function reviewEvidence(review: RecoveryReview): ReactNode {
   const refs = [review.optionId ? `Option ${review.optionId}` : null, review.targetWorkItemId ? `Target ${review.targetWorkItemId}` : null, review.confirmedNoShowEventId ? `No-show event ${review.confirmedNoShowEventId}` : null].filter(Boolean)
-  return refs.length ? refs.join(' Â· ') : 'â€”'
+  return refs.length ? refs.join(' · ') : '—'
 }
 
 export function RecoveryReviewHistory({ reviews, title = 'Saved decision history' }: { reviews: RecoveryReview[]; title?: string }) {
