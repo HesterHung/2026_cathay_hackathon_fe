@@ -71,14 +71,15 @@ export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelec
   const displayTime = (value: string | null | undefined) => value ? new Date(value).toLocaleString() : 'Unavailable'
   return <section className="recovery-work-item-table" aria-label={`${recoveryQueueNames[type]} API work items`}>
     <div className="recovery-work-item-table-heading"><div><h3>Recovery work items</h3><p>Each row is one ULD. Rows are grouped under their MAWB.</p></div><span className="recovery-data-source">LIVE API DATA</span></div>
-    <div className="table-wrap"><table><thead><tr><th>FLIGHT / ROUTE</th><th>ULD</th><th>STATUS</th><th>CARGO</th><th>DELIVERY COMMITMENT</th><th>LAST UPDATED</th></tr></thead><tbody>
+    <div className="table-wrap"><table><thead><tr><th scope="col">ROUTE / FLIGHT</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
       {groupedItems.map(([mawbNumber, group]) => <Fragment key={mawbNumber}>
-        <tr className="recovery-mawb-group"><th colSpan={6} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
+        <tr className="recovery-mawb-group"><th colSpan={7} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
         {group.map((item) => <tr key={item.workItemId} className={selectedWorkItemId === item.workItemId ? 'selected' : ''}>
-          <td data-label="FLIGHT / ROUTE"><strong>{item.flight.flightId}</strong><span>{item.flight.origin} → {item.flight.destination}</span></td>
+          <td data-label="ROUTE / FLIGHT"><strong>{item.flight.flightId}</strong><span>{item.flight.origin} → {item.flight.destination}</span></td>
           <td data-label="ULD"><button type="button" className="recovery-work-item-select" aria-pressed={selectedWorkItemId === item.workItemId} onClick={() => onSelect(item)}><strong>{item.uld.uldId}</strong><span>{item.uld.uldType}</span></button></td>
           <td data-label="STATUS"><RecoveryStatusBadge type={type} status={item.pool?.disposition ?? item.status} /></td>
-          <td data-label="CARGO"><strong>{item.cargo.weightKg.toLocaleString()} kg</strong><span>{item.cargo.volumeM3.toLocaleString()} m³</span></td>
+          <td data-label="CARGO WEIGHT">{item.cargo.weightKg.toLocaleString()} kg</td>
+          <td data-label="VOLUME">{item.cargo.volumeM3.toLocaleString()} m³</td>
           <td data-label="DELIVERY COMMITMENT">{item.caseSummary?.deliveryCommitment ?? 'Unavailable'}</td>
           <td data-label="LAST UPDATED">{displayTime(item.document.updatedAt)}</td>
         </tr>)}
@@ -87,29 +88,42 @@ export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelec
   </section>
 }
 
-const unavailableExamples: Record<QueueType, { context: string; item: string; status: string; facts: [string, string][]; action: string }> = {
+const unavailableExamples: Record<QueueType, { mawb: string; flightId: string; origin: string; destination: string; uldId: string; uldType: string; statusCode: string; statusLabel: string; weightKg: number; volumeM3: number; commitment: string; updatedAt: string }> = {
   DISRUPTION: {
-    context: 'Confirmed offload · CX251', item: 'AKE12345CX · MAWB 160-12345675', status: 'RECOVERY REQUIRED',
-    facts: [['ROUTE / FLIGHT', 'HKG → LHR · CX251'], ['CARGO', '1,240 kg · 6.8 m³ · pharmaceuticals'], ['DELIVERY COMMITMENT', '10 Nov 2026, 18:00 GMT'], ['CONFIRMATION', '10:42 HKT · Ramp Control · EVT-88421'], ['DISRUPTION REASON', 'Aircraft weight restriction']], action: 'Review route',
+    mawb: '160-12345675', flightId: 'CX251', origin: 'HKG', destination: 'LHR', uldId: 'AKE12345CX', uldType: 'AKE',
+    statusCode: 'RECOVERY_REQUIRED', statusLabel: 'Disruption', weightKg: 1250, volumeM3: 4.2,
+    commitment: '10 Nov, 18:00', updatedAt: '10 Nov, 09:30',
   },
   PREDICTED_OFFLOAD: {
-    context: 'Forecast risk · CX880', item: 'PMC67890CX · MAWB 160-98765432', status: 'PREDICTED · UNCONFIRMED',
-    facts: [['ROUTE / FLIGHT', 'SFO → HKG · CX880'], ['OFFLOAD PROBABILITY', '72% · HIGH CONFIDENCE'], ['CAPACITY', 'Short by 1,850 kg · 18,400 / 20,250 kg'], ['AFFECTED CARGO', '980 kg · 4 shipments'], ['FORECAST REASONS', 'Payload restriction · late connection']], action: 'Review prediction',
+    mawb: '160-98765432', flightId: 'CX880', origin: 'SFO', destination: 'HKG', uldId: 'PMC67890CX', uldType: 'PMC',
+    statusCode: 'PREDICTED_OFFLOAD', statusLabel: 'Predicted · not confirmed', weightKg: 980, volumeM3: 5.1,
+    commitment: '11 Nov, 12:00', updatedAt: '10 Nov, 08:45',
   },
   PENDING_POOL: {
-    context: 'Pool candidate · available for review', item: 'AKE24680CX · MAWB 160-24681357', status: 'ON HOLD · ELIGIBILITY UNKNOWN',
-    facts: [['SOURCE FLIGHT', 'CX282 · HKG → LHR'], ['ULD / CARGO', 'AKE · 860 kg · 5.2 m³'], ['HANDLING', 'Temperature controlled'], ['PRIORITY TARGET', 'CX251 · AKE12345CX'], ['MISSING EVIDENCE', 'Confirmed no-show event not supplied']], action: 'Evaluate candidate',
+    mawb: '160-24681357', flightId: 'CX282', origin: 'HKG', destination: 'LHR', uldId: 'AKE24680CX', uldType: 'AKE',
+    statusCode: 'PRIORITY_HOLD', statusLabel: 'On hold · eligibility unknown', weightKg: 860, volumeM3: 5.2,
+    commitment: '10 Nov, 18:00', updatedAt: '10 Nov, 09:12',
   },
 }
+
 export function RecoveryApiUnavailablePreview({ type }: { type: QueueType }) {
   const example = unavailableExamples[type]
-  return <section className="recovery-api-unavailable-preview" aria-label={`${recoveryQueueNames[type]} visual preview`}>
-    <div className="recovery-api-preview-heading"><div><p className="eyebrow">DEMO DATA Â· FICTIONAL RECORD</p><h3>{recoveryQueueNames[type]} layout</h3><p>Fictional values for design demonstration only. These records are not returned by the API.</p></div><span className="status-pill status-caution">PREVIEW ONLY</span></div>
-    <div className="recovery-api-preview-record">
-      <div className="recovery-api-preview-record-head"><div><small>WORKFLOW CONTEXT</small><strong>{example.context}</strong><span>{example.item}</span></div><span className="recovery-api-preview-status">{example.status}</span></div>
-      <dl>{example.facts.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-      <button className="outline-button" type="button" disabled aria-disabled="true" title="Available after the recovery API responds">{example.action}</button>
+  return <section className="recovery-api-unavailable-preview" aria-label={`${recoveryQueueNames[type]} demo data preview`}>
+    <div className="recovery-api-preview-heading"><div><p className="eyebrow">DEMO DATA · FICTIONAL RECORD</p><h3>{recoveryQueueNames[type]} layout</h3><p>Fictional values for design demonstration only. These records are not returned by the API.</p></div><span className="status-pill status-caution">PREVIEW ONLY</span></div>
+    <div className="recovery-work-item-table recovery-demo-work-item-table">
+      <div className="table-wrap"><table><thead><tr><th scope="col">ROUTE / FLIGHT</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
+        <tr className="recovery-mawb-group"><th colSpan={7} scope="rowgroup"><span>MAWB {example.mawb}</span><small>1 ULD record · demo</small></th></tr>
+        <tr>
+          <td><strong>{example.flightId}</strong><span>{example.origin} → {example.destination}</span></td>
+          <td><strong>{example.uldId}</strong><span>{example.uldType}</span></td>
+          <td><RecoveryStatusBadge type={type} status={example.statusCode}>{example.statusLabel}</RecoveryStatusBadge></td>
+          <td>{example.weightKg.toLocaleString()} kg</td>
+          <td>{example.volumeM3.toLocaleString()} m³</td>
+          <td>{example.commitment}</td>
+          <td>{example.updatedAt}</td>
+        </tr>
+      </tbody></table></div>
     </div>
-    <p className="recovery-api-preview-boundary">Sample content is isolated from queue state. Review and decision controls remain disabled until the recovery API returns real records.</p>
+    <p className="recovery-api-preview-boundary">This fictional row is separate from queue state. Review and decision controls remain disabled until the recovery API returns real records.</p>
   </section>
 }
