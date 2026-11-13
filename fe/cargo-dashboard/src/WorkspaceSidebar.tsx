@@ -1,4 +1,4 @@
-export type WorkspaceNavItem = 'Overview' | 'Disruption Alerts' | 'Predicted Offload' | 'Pending Pool' | 'Predictive Analytics' | 'Recovery Solution' | 'Shipments' | 'Analytics' | 'Settings' | 'Unknown'
+export type WorkspaceNavItem = 'Overview' | 'Disruption Alerts' | 'Predicted Offload' | 'Pending Pool' | 'Predictive Analytics' | 'Recovery Solution' | 'Shipments' | 'Analytics' | 'Business Insights' | 'Settings' | 'Unknown'
 
 const navigation: { item: Exclude<WorkspaceNavItem, 'Unknown'>; label: string; icon?: string; priority?: number }[] = [
   { item: 'Overview', label: 'Overview', icon: 'grid' },
@@ -8,7 +8,7 @@ const navigation: { item: Exclude<WorkspaceNavItem, 'Unknown'>; label: string; i
   { item: 'Pending Pool', label: 'Pending Pool', priority: 3 },
   { item: 'Recovery Solution', label: 'Recovery Solution', icon: 'route' },
   { item: 'Shipments', label: 'Cargo Value & Profiles', icon: 'box' },
-  { item: 'Analytics', label: 'Analytics', icon: 'chart' },
+  { item: 'Business Insights', label: 'Business Insights', icon: 'chart' },
   { item: 'Settings', label: 'Settings', icon: 'settings' },
 ]
 
