@@ -1,0 +1,96 @@
+/* === Theme Variables === */
+:root {
+    --forest: #073c35;
+    --forest-2: #0b5147;
+    --ink: #182421;
+    --muted: #71807b;
+    --line: #e4eae7;
+    --paper: #f7f9f8;
+    --white: #fff;
+    --green: #138a67;
+    --amber: #b97b18;
+    --red: #c4534e;
+    --blue: #397493;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* === App Shell & Sidebar === */
+  .app-shell { display: flex; min-height: 100vh; background: var(--paper); }
+  .sidebar { position: sticky; top: 0; width: 244px; height: 100vh; overflow-y: auto; background: var(--forest); color: #d8e5df; display: flex; flex-direction: column; padding: 27px 16px 20px; flex-shrink: 0; border-right: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; color: #fff; letter-spacing: 1.3px; font-size: 12px; font-weight: 700; margin: 0 12px 58px; }
+  .brand b { color: #8ab7a7; }
+  .brand-mark { width: 29px; height: 29px; display: grid; place-items: center; background: #146457; color: #a9d4c1; border-radius: 8px; }
+  .nav-label { color: #7ba296; font-size: 10px; letter-spacing: 1.5px; font-weight: 700; padding: 0 12px 11px; }
+  .sidebar nav { display: grid; gap: 4px; }
+  .sidebar nav button { border: 0; border-radius: 7px; background: transparent; color: #a9c4bb; display: flex; align-items: center; gap: 12px; padding: 11px 12px; text-align: left; font-size: 13px; transition: .2s; }
+  .sidebar nav button:hover, .sidebar nav button.active { background: #15594e; color: #fff; }
+  .sidebar nav button.active { box-shadow: inset 3px 0 #94cbb5; }
+  .sidebar nav em { font-style: normal; margin-left: auto; font-size: 11px; background: #ce5b53; color: #fff; padding: 2px 6px; border-radius: 9px; }
+  .sidebar-footer { margin-top: auto; }
+  .demo-status { padding: 11px 12px 25px; color: #a8c8bd; font-size: 12px; }
+  .demo-status span, .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #71c39d; margin-right: 8px; vertical-align: middle; }
+  .profile { border-top: 1px solid #246356; padding: 17px 8px 0; display: flex; gap: 10px; align-items: center; }
+  .avatar, .top-avatar { display: grid; place-items: center; background: #d5e4dc; color: var(--forest); font-weight: 700; font-size: 11px; border-radius: 50%; width: 32px; height: 32px; }
+  .profile strong { display: block; color: #fff; font-size: 12px; }
+  .profile small { color: #8aaea3; font-size: 11px; }
+  
+  /* === Workspace Sidebar Extensions === */
+  .workspace-sidebar .queue-number { display: grid; place-items: center; flex: 0 0 18px; width: 18px; height: 18px; border: 1px solid currentColor; border-radius: 50%; font-size: 10px; font-weight: 700; line-height: 1; }
+  .workspace-sidebar > .sidebar-footer { display: block; }
+  .workspace-sidebar > .sidebar-footer > .profile { margin-top: 2px; }
+  .workspace-sidebar > .sidebar-footer:not(:has(.nav-label))::before { content: 'OPERATIONS CONTROL'; display: block; color: #7ba296; font-size: 10px; letter-spacing: 1.5px; font-weight: 700; padding: 0 12px 11px; }
+  .workspace-sidebar > .sidebar-footer:not(:has(.profile))::after { content: 'AL  Alex Lee\A    Network operator'; display: block; white-space: pre; border-top: 1px solid #246356; margin: 4px 8px 0; padding: 14px 0 0 8px; color: #d8e5df; font-size: 11px; line-height: 1.5; }
+  
+  /* === Main Content, Topbar, Page Heading & Footer === */
+  .main-content { min-width: 0; flex: 1; padding: 0 38px 24px; max-width: 1600px; margin: auto; }
+  .topbar { height: 72px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+  .crumb { color: #81908b; font-size: 10px; letter-spacing: 1.4px; font-weight: 700; }
+  .crumb span { color: #c1cbc7; margin: 0 8px; }
+  .top-actions { display: flex; align-items: center; gap: 18px; }
+  .global-search { width: 245px; height: 34px; display: flex; align-items: center; gap: 8px; color: #99a6a1; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 0 10px; }
+  .global-search input { min-width: 0; width: 100%; border: 0; outline: 0; color: var(--ink); font-size: 12px; background: transparent; }
+  .icon-button, .mobile-menu { border: 0; color: #62736d; background: transparent; position: relative; padding: 5px; }
+  .notification i { position: absolute; width: 6px; height: 6px; background: var(--red); border: 1px solid var(--paper); border-radius: 50%; right: 3px; top: 3px; }
+  .mobile-menu { display: none; }
+  .page-heading { display: flex; justify-content: space-between; align-items: center; padding: 36px 0 27px; }
+  .page-heading:has(> div > h1:first-child) { padding-top: 20px; }
+  .eyebrow { color: #7c8c86; font-size: 10px; letter-spacing: 1.4px; font-weight: 700; margin: 0 0 9px; }
+  .page-heading h1 { font: 800 30px 'Manrope', sans-serif; letter-spacing: -.5px; margin: 0 0 7px; }
+  .subtitle { color: var(--muted); margin: 0; font-size: 13px; }
+  .header-badges { display: flex; align-items: center; gap: 12px; }
+  footer { color: #9aa5a1; font-size: 10px; text-align: center; padding: 23px 0 0; }
+  
+  /* === Layout Responsive === */
+  @media (max-width: 1200px) {
+    .main-content { padding: 0 24px 20px; }
+  }
+  @media (max-width: 900px) {
+    .sidebar { position: fixed; z-index: 6; height: 100%; transform: translateX(-100%); transition: .2s; box-shadow: 4px 0 20px #073c3530; }
+    .sidebar.open { transform: none; }
+    .mobile-menu { display: flex; flex-direction: column; gap: 4px; border: 0; background: transparent; padding: 4px; margin-right: 14px; }
+    .mobile-menu span { width: 18px; height: 2px; background: var(--forest); }
+    .topbar { justify-content: flex-start; }
+    .top-actions { margin-left: auto; }
+    .workspace-sidebar { position: static; transform: none; width: 100%; min-height: auto; padding: 14px 14px 16px; }
+    .workspace-sidebar .brand { margin-bottom: 20px; }
+    .workspace-sidebar nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+    .workspace-sidebar nav button { min-height: 42px; }
+    .workspace-sidebar .sidebar-footer { display: none; }
+  }
+  @media (max-width: 600px) {
+    .main-content { padding: 0 13px 18px; }
+    .topbar { height: 61px; }
+    .crumb { font-size: 9px; }
+    .global-search { width: 34px; padding: 8px; border: 0; background: transparent; }
+    .global-search input { display: none; }
+    .top-actions { gap: 7px; }
+    .page-heading { padding: 28px 0 20px; align-items: flex-start; gap: 14px; flex-direction: column; }
+    .page-heading h1 { font-size: 25px; }
+    .header-badges { align-self: flex-start; flex-wrap: wrap; }
+    .top-avatar { display: none; }
+  }
