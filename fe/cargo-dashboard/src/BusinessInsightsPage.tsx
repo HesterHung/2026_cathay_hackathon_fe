@@ -35,6 +35,5 @@ export function BusinessInsightsPage({ onNavigate }: { onNavigate: (item: Worksp
       <Card><CardHeader><CardTitle>What to change</CardTitle><Badge className="border-emerald-200 bg-emerald-50 text-emerald-900">3 actions</Badge></CardHeader><div className="divide-y divide-slate-100 px-5">{insights.map((item) => <article className="grid gap-1 py-4 md:grid-cols-[1fr_auto] md:items-center" key={item.title}><div><h3 className="m-0 text-sm font-medium text-slate-900">{item.title}</h3><p className="mb-0 mt-1 text-sm text-slate-600">{item.action}</p></div><span className="text-sm text-slate-500">{item.signal}</span></article>)}</div></Card>
       <Card><CardHeader><CardTitle>Next review</CardTitle></CardHeader><CardContent className="grid gap-4"><p className="m-0 text-sm leading-6 text-slate-700">Check capacity fit and late ULD arrivals at FRA first. Confirm these patterns against live station records before changing allocation rules.</p><Button onClick={() => onNavigate('Pending Pool')} className="justify-self-start">Open ULD pool <ArrowRight size={16} /></Button></CardContent></Card>
     </section>
-    <footer>Illustrative data · replace with validated station and ULD history</footer>
   </main></div>
 }
