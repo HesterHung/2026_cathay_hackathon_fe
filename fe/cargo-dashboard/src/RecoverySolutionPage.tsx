@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getRecoveryOptions, getRecoverySolution, type RecoveryDetail, type RecoveryOption, type RecoveryOptionsResponse } from './recoveryApi'
 import { WorkspaceSidebar, type WorkspaceNavItem } from './WorkspaceSidebar'
+import { RecoveryAgentRun } from './RecoveryAgentRun'
 
 interface RecoverySolutionPageProps {
   onNavigate: (item: WorkspaceNavItem) => void
@@ -106,6 +107,7 @@ export function RecoverySolutionPage({ onNavigate, initialWorkItemId, initialFli
           <article><small>DOCUMENT VERSION</small><strong>{detail.document.version}</strong></article>
         </section>
         {detail.forecast && <section className="analytics-note"><strong>Forecast evidence</strong><span>{Math.round(detail.forecast.offloadProbability * 100)}% offload probability · {detail.forecast.capacityShortfallKg.toLocaleString()} kg capacity shortfall · {detail.forecast.confidence}% confidence</span></section>}
+        <RecoveryAgentRun detail={detail} options={data.options} currency={data.currency} />
         <section className="panel">
           <div className="panel-heading"><div><h2>Recovery options</h2><p>{data.options.length} option(s) · compare feasibility, capacity, delay, and modeled loss.</p></div></div>
           {data.options.length ? <div className="table-wrap"><table className="recovery-comparison-table"><thead><tr><th>OPTION</th><th>ROUTE</th><th>FEASIBILITY</th><th>USABLE CAPACITY</th><th>ARRIVAL / DELAY</th><th>RECOVERY COST</th><th>MODELED LOSS</th><th>NETWORK IMPACT</th></tr></thead><tbody>{data.options.map((option) => <tr key={option.optionId}><td><strong>{option.optionType.replaceAll('_', ' ')}</strong><small>{option.optionId}</small></td><td>{option.recoveryLegs.map((leg) => `${leg.from} → ${leg.to} · ${leg.operatingFlightId}`).join(' / ')}</td><td>{option.feasibilityStatus}<small>{option.feasibilityPercentage}%</small></td><td>{option.usableCapacityKg.toLocaleString()} kg<small>{option.capacityStatus}</small></td><td>{option.expectedArrival}<small>{option.expectedDelayMinutes} min</small></td><td>{option.recoveryHandlingCost.toLocaleString()} {data.currency}</td><td>{option.totalModeledExpectedLoss.toLocaleString()} {data.currency}</td><td>{option.networkImpact}</td></tr>)}</tbody></table></div> : <div className="empty-state"><strong>No recovery options available</strong><span>{detail.type === 'PENDING_POOL' ? 'Pool candidates are evaluated against an active disruption or predicted-offload target.' : 'The API returned no route options for this case.'}</span></div>}
