@@ -106,7 +106,7 @@
 .disruption-api-evidence, .disruption-api-options, .disruption-review-form, .disruption-review-history { padding: 14px 0; border-top: 1px solid #e8eeea; }
 .disruption-api-evidence h4, .disruption-api-options h4, .disruption-review-form h4, .disruption-review-history h4, .disruption-option-detail h4 { margin: 0 0 9px; color: #395746; font: 700 13px 'Manrope', sans-serif; }
 .disruption-api-evidence dl, .disruption-option-detail dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
-.disruption-api-evidence dl div, .disruption-option-detail dl div { padding: 10px; border: 1px solid #e8eeea; border-radius: 4px; }
+.disruption-api-evidence dl div, .disruption-option-detail dl div { padding: 10px; margin: 0 4px; border: 1px solid #e8eeea; border-radius: 4px; }
 .disruption-api-evidence dt, .disruption-option-detail dt { color: #84928b; font-size: 9px; font-weight: 700; text-transform: uppercase; }
 .disruption-api-evidence dd, .disruption-option-detail dd { margin: 5px 0 0; color: #405b4c; font-size: 11px; overflow-wrap: anywhere; }
 .disruption-api-options .panel-heading { padding: 0; }

@@ -10,7 +10,7 @@
 .prediction-analysis-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; margin-top: 20px; }
 .risk-analysis-list, .recommendation-list { padding: 0 20px 16px; }
 .risk-analysis-card { border-top: 1px solid var(--line); padding: 13px 0; }
-.risk-analysis-card > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.risk-analysis-card > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 6px; }
 .risk-analysis-card strong, .recommendation-list strong { display: block; font-size: 11px; }
 .risk-analysis-card small, .recommendation-list small { display: block; color: #87948f; font-size: 10px; margin-top: 4px; }
 .risk-analysis-card p, .recommendation-list p { color: #62756d; font-size: 10px; line-height: 1.45; margin: 8px 0 4px; }
