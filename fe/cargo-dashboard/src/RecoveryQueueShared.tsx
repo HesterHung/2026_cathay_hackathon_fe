@@ -102,7 +102,7 @@ const unavailableExamples: Record<QueueType, { mawb: string; flightId: string; o
     commitment: '10 Nov, 18:00', updatedAt: '10 Nov, 09:30',
   },
   PREDICTED_OFFLOAD: {
-    mawb: '160-98765432', flightId: 'CX880', origin: 'SFO', destination: 'HKG', uldId: 'PMC67890CX', uldType: 'PMC',
+    mawb: '160-98765432', flightId: 'CX880', origin: 'HKG', destination: 'LAX', uldId: 'PMC67890CX', uldType: 'PMC',
     statusCode: 'PREDICTED_OFFLOAD', statusLabel: 'Predicted · not confirmed', weightKg: 980, volumeM3: 5.1,
     commitment: '11 Nov, 12:00', updatedAt: '10 Nov, 08:45',
   },
