@@ -80,6 +80,7 @@ button, .scenario-tabs button, .report-controls button { transition: background-
 .recovery-work-item-table-heading { padding: 12px 16px; }
 .recovery-work-item-table thead th { padding: 12px; }
 .recovery-work-item-table tbody td { padding: 12px; }
+.recovery-work-item-table tbody .recovery-empty-row td { height: 112px; padding: 0 16px; border-bottom: 0; color: #65736b; text-align: center; }
 .disruption-api-facts, .pending-api-facts { gap: 12px; }
 .predicted-flight-summary { padding: 16px; }
 .predicted-flight-summary-grid { gap: 16px; }
@@ -198,8 +199,19 @@ button, .scenario-tabs button, .report-controls button { transition: background-
 .predicted-capacity-row strong { color: #202a25; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .predicted-capacity-track { height: 8px; overflow: hidden; border-radius: 4px; background: #e1e5e1; }
 .predicted-capacity-track i { display: block; height: 100%; border-radius: 4px; }
-.predicted-capacity-track .booked-load { background: #0b5147; }
+.predicted-capacity-track .booked-safe { background: #0b5147; border-radius: 4px 0 0 4px; }
+.predicted-capacity-track .booked-risk { background: #c77a32; border-radius: 0 4px 4px 0; }
 .predicted-capacity-track .forecast-capacity { background: #89958e; }
+.predicted-capacity-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; color: #536159; font-size: 11px; }
+.predicted-capacity-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.predicted-capacity-legend i { width: 9px; height: 9px; border-radius: 2px; }
+.predicted-capacity-legend .legend-safe { background: #0b5147; }
+.predicted-capacity-legend .legend-risk { background: #c77a32; }
+.prediction-model-output { margin: 0; color: #263b32; font-size: 12px; font-weight: 600; }
+.prediction-model-output span { padding: 0 4px; color: #8a9690; }
+.prediction-not-confirmation { color: #65736b; font-size: 11px; }
+.predicted-walkthrough-button { display: inline-flex; align-items: center; justify-self: start; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid #0b5147; border-radius: 5px; background: #0b5147; color: #fff; font-size: 13px; font-weight: 600; }
+.predicted-walkthrough-button:hover { background: #174d3e; }
 .pending-api-layout-detail { grid-template-columns: minmax(0, 1fr); }
 .recovery-work-item-table table { min-width: 1050px; }
 

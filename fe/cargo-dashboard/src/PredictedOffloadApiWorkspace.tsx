@@ -1,4 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, MotionConfig, motion } from 'motion/react'
+import { Play, RotateCcw, Check, LoaderCircle, X } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { Button } from './components/ui/button'
 import {
   getRecoveryOption,
   getRecoveryOptions,
@@ -14,7 +18,7 @@ import {
   type RecoveryOptionsResponse,
   type RecoveryWorkItem,
 } from './recoveryApi'
-import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkflowPanel, RecoveryWorkItemTable } from './RecoveryQueueShared'
+import { RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkflowPanel, RecoveryWorkItemTable } from './RecoveryQueueShared'
 import { emptyRecoveryQueueFilters, isQueueDecisionAllowed, recoveryFilterQuery, type RecoveryQueueFilters } from './recoveryQueueUi'
 
 function toApiError(error: unknown): RecoveryApiError {
@@ -46,20 +50,56 @@ function uldsForFlight(items: RecoveryWorkItem[], flightId: string): RecoveryWor
   return items.filter((item) => item.flight.flightId === flightId && item.type === 'PREDICTED_OFFLOAD')
 }
 
-function FlightCapacityEvidence({ summary }: { summary: FlightSummary }) {
+function FlightCapacityEvidence({ summary, sourceLabel = 'Forecast service' }: { summary: FlightSummary; sourceLabel?: string }) {
   const booked = Math.max(0, summary.bookedWeightKg)
   const forecastCapacity = Math.max(0, summary.forecastCargoCapacityKg)
   const scale = Math.max(booked, forecastCapacity, 1)
-  const bookedWidth = `${Math.min(100, booked / scale * 100)}%`
-  const capacityWidth = `${Math.min(100, forecastCapacity / scale * 100)}%`
   const shortfall = Math.max(0, summary.capacityShortfallKg)
+  const safeWidth = Math.min(booked, forecastCapacity) / scale * 100
+  const riskWidth = shortfall / scale * 100
   return <section className="predicted-capacity-evidence" aria-label={`Flight-level capacity evidence for ${summary.flightId}`}>
-    <div className="predicted-capacity-heading"><div><small>FLIGHT-LEVEL CAPACITY EVIDENCE</small><strong>{shortfall > 0 ? `${shortfall.toLocaleString()} kg shortfall` : 'No shortfall reported'}</strong></div><span>Forecast service</span></div>
+    <div className="predicted-capacity-heading"><div><small>{sourceLabel} · {summary.flightId} · {summary.origin} → {summary.destination}</small><strong>{shortfall > 0 ? `${shortfall.toLocaleString()} kg shortfall` : 'No shortfall reported'}</strong></div></div>
     <div className="predicted-capacity-bars">
-      <div className="predicted-capacity-row"><div><span>Booked load</span><strong>{booked.toLocaleString()} kg</strong></div><div className="predicted-capacity-track" aria-hidden="true"><i className="booked-load" style={{ width: bookedWidth }} /></div></div>
-      <div className="predicted-capacity-row"><div><span>Forecast cargo capacity</span><strong>{forecastCapacity.toLocaleString()} kg</strong></div><div className="predicted-capacity-track" aria-hidden="true"><i className="forecast-capacity" style={{ width: capacityWidth }} /></div></div>
+      <div className="predicted-capacity-row"><div><span>Booked load</span><strong>{booked.toLocaleString()} kg</strong></div><div className="predicted-capacity-track predicted-load-track" aria-label={`Booked load ${booked} kilograms`}><i className="booked-safe" style={{ width: `${safeWidth}%` }} /><i className="booked-risk" style={{ width: `${riskWidth}%` }} /></div></div>
+      <div className="predicted-capacity-row"><div><span>Forecast capacity</span><strong>{forecastCapacity.toLocaleString()} kg</strong></div><div className="predicted-capacity-track"><i className="forecast-capacity" style={{ width: `${forecastCapacity / scale * 100}%` }} /></div></div>
     </div>
+    <div className="predicted-capacity-legend"><span><i className="legend-safe" />Within forecast capacity</span>{shortfall > 0 && <span><i className="legend-risk" />Exposed portion · {shortfall.toLocaleString()} kg</span>}</div>
+    <p className="prediction-model-output">{Math.round(summary.offloadProbability * 100)}% flight offload probability <span>·</span> {summary.confidence}% model confidence <span>·</span> {summary.affectedUldCount} affected ULDs</p>
+    <small className="prediction-not-confirmation">Forecast exposure only; this does not confirm which cargo will be offloaded.</small>
   </section>
+}
+
+function DemoPredictionWalkthrough() {
+  const [open, setOpen] = useState(false)
+  const [step, setStep] = useState(0)
+  const steps = [
+    { title: 'Load flight and booking data', detail: 'CX880 · HKG → LAX · 15,750 kg booked cargo', source: 'Booking snapshot', value: '15,750 kg' },
+    { title: 'Apply forecast payload capacity', detail: 'Forecast capacity after fuel and route-weather inputs', source: 'Forecast model', value: '14,500 kg' },
+    { title: 'Calculate capacity exposure', detail: 'Booked load is above forecast capacity', source: 'Model calculation', value: '1,250 kg shortfall' },
+    { title: 'Estimate offload probability', detail: 'Flight-level model output; confidence is shown separately', source: 'Prediction model', value: '64% risk · 72% confidence' },
+    { title: 'Identify exposed cargo', detail: 'PMC-67890 · 980 kg · one ULD flagged for review', source: 'Affected cargo mapping', value: '1 ULD at risk' },
+  ]
+  useEffect(() => {
+    if (!open || step >= steps.length) return
+    const timer = window.setTimeout(() => setStep((current) => current + 1), 750)
+    return () => window.clearTimeout(timer)
+  }, [open, step, steps.length])
+  const start = () => { setStep(0); setOpen(true) }
+  return <>
+    <button type="button" className="predicted-walkthrough-button" onClick={start}><Play size={15} /> Start Prediction</button>
+    {createPortal(<MotionConfig reducedMotion="user"><AnimatePresence>{open && <motion.div className="fixed inset-0 z-[130] flex items-center justify-center bg-slate-950/60 p-3 sm:p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <motion.section role="dialog" aria-modal="true" aria-labelledby="prediction-walkthrough-title" initial={{ opacity: 0, y: 18, scale: .99 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12 }} transition={{ duration: .22, ease: 'easeOut' }} className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl">
+        <header className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6"><div><h2 id="prediction-walkthrough-title" className="m-0 text-lg font-semibold text-slate-950">How the model flags offload risk</h2><p className="m-0 mt-1 text-sm text-slate-500">CX880 · HKG → LAX · PMC-67890</p></div><button type="button" aria-label="Close prediction walkthrough" onClick={() => setOpen(false)} className="rounded-md p-2 text-slate-500 hover:bg-slate-100"><X size={18} /></button></header>
+        <div className="grid min-h-0 flex-1 overflow-y-auto md:grid-cols-[1.1fr_.9fr]">
+          <section className="border-b border-slate-200 p-5 sm:p-6 md:border-b-0 md:border-r"><div className="mb-3 flex items-center justify-between"><h3 className="m-0 text-sm font-semibold text-slate-900">Prediction steps</h3><span className="text-xs tabular-nums text-slate-500">{Math.min(step, steps.length)} / {steps.length}</span></div><div className="divide-y divide-slate-200 border-y border-slate-200">{steps.map((item, index) => { const done = step > index; const active = step === index && step < steps.length; return <motion.article key={item.title} initial={{ opacity: 0, x: -8 }} animate={{ opacity: step >= index ? 1 : .45, x: 0 }} transition={{ duration: .25, delay: index * .04 }} className="flex gap-3 py-3"><span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${done ? 'bg-emerald-800 text-white' : active ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-500'}`}>{done ? <Check size={14} /> : active ? <LoaderCircle className="animate-spin" size={14} /> : <span className="text-xs">{index + 1}</span>}</span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center justify-between gap-2"><p className="m-0 text-sm font-medium text-slate-800">{item.title}</p><small className="text-slate-400">{item.source}</small></div>{done && <p className="m-0 mt-1 text-xs leading-5 text-slate-600">{item.detail}</p>}</div>{done && <strong className="shrink-0 self-center text-xs text-emerald-900">{item.value}</strong>}</motion.article> })}</div></section>
+          <aside className="p-5 sm:p-6"><h3 className="m-0 text-sm font-semibold text-slate-900">Capacity picture</h3><p className="mt-1 text-xs text-slate-500">Booked cargo compared with forecast capacity</p><div className="mt-5 space-y-4"><div><div className="mb-1 flex justify-between text-xs"><span>Booked load</span><strong>15,750 kg</strong></div><div className="h-3 overflow-hidden rounded-sm bg-slate-100"><motion.div className="flex h-full" initial={false} animate={{ width: step >= 1 ? '100%' : '0%' }} transition={{ duration: .55 }}><span className="h-full bg-emerald-800" style={{ width: `${14500 / 15750 * 100}%` }} />{step >= 3 && <motion.span initial={{ width: 0 }} animate={{ width: `${1250 / 15750 * 100}%` }} transition={{ duration: .5 }} className="h-full bg-amber-600" />}</motion.div></div></div><div><div className="mb-1 flex justify-between text-xs"><span>Forecast capacity</span><strong>14,500 kg</strong></div><div className="h-3 overflow-hidden rounded-sm bg-slate-100"><motion.div className="h-full bg-slate-500" initial={false} animate={{ width: step >= 2 ? `${14500 / 15750 * 100}%` : '0%' }} transition={{ duration: .7 }} /></div></div></div>
+            <AnimatePresence>{step >= 3 && <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="mt-5 border-l-[3px] border-amber-600 bg-amber-50 px-3 py-3"><strong className="text-sm text-amber-950">1,250 kg above capacity</strong><p className="mb-0 mt-1 text-xs leading-5 text-amber-900">The flight is flagged at 64% offload probability. PMC-67890 is exposed for operational review; this is not an automatic offload decision.</p></motion.div>}</AnimatePresence>
+          </aside>
+        </div>
+        <footer className="flex items-center justify-end gap-3 border-t border-slate-200 bg-slate-50 px-5 py-4 sm:px-6"><div className="mr-1 mb-1 flex gap-3"><Button onClick={start}><RotateCcw size={14} /> Replay</Button><Button variant="primary" onClick={() => setOpen(false)}>Done</Button></div></footer>
+      </motion.section>
+    </motion.div>}</AnimatePresence></MotionConfig>, document.body)}
+  </>
 }
 
 export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }: { initialFlightId?: string; onOpenRecovery: (workItemId: string, flightId: string) => void }) {
@@ -222,10 +262,9 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
   }
 
   return <section className="panel predicted-api-workspace">
-    <div className="page-heading"><div><h1>Predicted Offload</h1></div><button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
-    {listLoading && !list && <div className="empty-state" role="status"><strong>Loading predicted-offload queue</strong><span>Fetching ULD work items and forecast service flight summaries.</span></div>}
-    {listError && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not load predicted-offload queue'}</strong><span>{apiErrorLabel(listError)}</span>{list && <small>Showing the last successful response from {timeLabel(fetchedAt)}.</small>}</div>}
-    {listError && !list && <RecoveryApiUnavailablePreview type="PREDICTED_OFFLOAD" />}
+    <div className="page-heading"><div><h1>Predicted Offload</h1></div><div className="flex items-center gap-3">{!list ? <DemoPredictionWalkthrough /> : <button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button>}</div></div>
+    {!list && <RecoveryWorkItemTable type="PREDICTED_OFFLOAD" items={[]} selectedWorkItemId="" sourceLabel="Awaiting prediction" />}
+    {listError && list && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not refresh predicted-offload queue'}</strong><span>{apiErrorLabel(listError)}</span><small>Showing the last successful response from {timeLabel(fetchedAt)}.</small></div>}
     {confirmationError && <div className="api-state error" role="alert"><strong>Offload confirmation failed</strong><span>{apiErrorLabel(confirmationError)}</span>{confirmationError.kind === 'conflict' && <button className="text-button" type="button" onClick={refreshQueue}>Refresh latest document version</button>}</div>}
     {stale && <div className="api-state stale" role="status"><strong>Forecast queue may be stale</strong><span>The last successful response is over five minutes old. Refresh before reviewing a ULD.</span></div>}
     {savedMessage && <div className="api-state success" role="status"><strong>{savedMessage}</strong><span>The latest forecast record and review history are being reloaded.</span></div>}
