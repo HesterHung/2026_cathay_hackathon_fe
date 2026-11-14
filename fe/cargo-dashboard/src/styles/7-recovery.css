@@ -112,6 +112,7 @@
   .recovery-table-hint { display: block; }
 }
 .recovery-recorded-inline { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; color: #176b50; font-size: 12px; font-weight: 600; }
+.recovery-rejected-inline { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; color: #b42318; font-size: 12px; font-weight: 600; }
 
 .recovery-explanation { margin-top: 20px; }
 .recovery-explanation .panel-heading { align-items: center; }

@@ -9,10 +9,10 @@ import { Card } from './components/ui/card'
 import { saveRecoveryDecision } from './recoveryApi'
 
 type Phase = 'idle' | 'running' | 'complete'
-interface RecoveryAgentRunProps { detail: RecoveryDetail; options: RecoveryOption[]; currency: string; onRecorded?: (optionId: string) => void }
+interface RecoveryAgentRunProps { detail: RecoveryDetail; options: RecoveryOption[]; currency: string; onReviewed?: (optionId: string) => void; onRejected?: (optionId: string) => void; openBestRouteRequest?: number }
 interface FeedItem { stage: string; title: string; body: string; tone?: 'warning' | 'success' }
 
-export function RecoveryAgentRun({ detail, options, currency, onRecorded }: RecoveryAgentRunProps) {
+export function RecoveryAgentRun({ detail, options, currency, onReviewed, onRejected, openBestRouteRequest = 0 }: RecoveryAgentRunProps) {
   const [phase, setPhase] = useState<Phase>('idle')
   const [visibleItems, setVisibleItems] = useState(0)
   const [showAlternatives, setShowAlternatives] = useState(false)
@@ -22,6 +22,7 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
   const [recording, setRecording] = useState(false)
   const [recordError, setRecordError] = useState('')
   const [recorded, setRecorded] = useState(false)
+  const [rejected, setRejected] = useState(false)
   const feedRef = useRef<HTMLDivElement>(null)
   const userScrolledRef = useRef(false)
 
@@ -68,6 +69,12 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
   }, [phase, feed.length])
 
   useEffect(() => {
+    if (!openBestRouteRequest) return
+    setVisibleItems(feed.length)
+    setPhase('complete')
+  }, [openBestRouteRequest, feed.length])
+
+  useEffect(() => {
     const node = feedRef.current
     if (!node || userScrolledRef.current) return
     node.scrollTo({ top: node.scrollHeight, behavior: 'smooth' })
@@ -81,12 +88,12 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
   }, [phase])
 
   useEffect(() => {
-    if (!recorded) return
-    const timeout = window.setTimeout(() => setRecorded(false), 3200)
+    if (!recorded && !rejected) return
+    const timeout = window.setTimeout(() => { setRecorded(false); setRejected(false) }, 3200)
     return () => window.clearTimeout(timeout)
-  }, [recorded])
+  }, [recorded, rejected])
 
-  const run = () => { setShowAlternatives(false); setShowDetails(false); setQuestion(''); setAnswer(''); setRecordError(''); setRecorded(false); setPhase('running') }
+  const run = () => { setShowAlternatives(false); setShowDetails(false); setQuestion(''); setAnswer(''); setRecordError(''); setRecorded(false); setRejected(false); setPhase('running') }
 
   const submitQuestion = () => {
     const submitted = question.trim()
@@ -95,8 +102,8 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
     setQuestion('')
   }
 
-  const recordRecommendation = async () => {
-    if (!best || recording || recorded) return
+  const saveRecommendationDecision = async (decisionType: 'APPROVE_FOR_REVIEW' | 'REJECT_OVERRIDE') => {
+    if (!best || recording || recorded || rejected) return
     setRecording(true)
     setRecordError('')
     try {
@@ -106,8 +113,8 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
         masterAirwayBillNumber: detail.masterAirwayBill.number,
         documentVersion: detail.document.version,
         optionId: best.optionId,
-        decision: 'APPROVE_FOR_REVIEW' as const,
-        reason: `Recorded recommended route ${best.recoveryLegs.map((leg) => leg.operatingFlightId).join(' / ')} (${best.expectedArrival}); modeled loss ${currency} ${best.totalModeledExpectedLoss.toLocaleString()}.`,
+        decision: decisionType,
+        reason: `${decisionType === 'APPROVE_FOR_REVIEW' ? 'Reviewed' : 'Rejected'} recommended route ${best.recoveryLegs.map((leg) => leg.operatingFlightId).join(' / ')} (${best.expectedArrival}); modeled loss ${currency} ${best.totalModeledExpectedLoss.toLocaleString()}.`,
         reviewerId: 'demo-operator',
         reviewedAt: new Date().toISOString(),
       }
@@ -118,15 +125,18 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
       } else {
         await saveRecoveryDecision(detail.workItemId, decision)
       }
-      onRecorded?.(best.optionId)
-      setRecorded(true)
+      if (decisionType === 'APPROVE_FOR_REVIEW') { onReviewed?.(best.optionId); setRecorded(true) }
+      else { onRejected?.(best.optionId); setRejected(true) }
       setPhase('idle')
     } catch (error) {
-      setRecordError(error instanceof Error ? error.message : 'Could not record this recommendation.')
+      setRecordError(error instanceof Error ? error.message : 'Could not save this route review.')
     } finally {
       setRecording(false)
     }
   }
+
+  const recordRecommendation = () => saveRecommendationDecision('APPROVE_FOR_REVIEW')
+  const rejectRecommendation = () => saveRecommendationDecision('REJECT_OVERRIDE')
 
   return <MotionConfig reducedMotion="user">
     <Card className="overflow-hidden border-slate-200 shadow-sm">
@@ -135,7 +145,9 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
         <Button variant="primary" onClick={run}><Route size={15} /> {phase === 'complete' ? 'Run route analysis again' : 'Find best recovery route'} <ArrowRight size={15} /></Button>
       </div>
     </Card>
-    {createPortal(<AnimatePresence>{recorded && <motion.div role="status" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.2, ease: 'easeOut' }} className="fixed bottom-6 right-6 z-[120] flex items-center gap-2 rounded-md border border-emerald-200 bg-white px-4 py-3 text-sm font-medium text-emerald-900 shadow-lg"><Check size={16} aria-hidden="true" /> Recommendation recorded</motion.div>}</AnimatePresence>, document.body)}
+    {createPortal(<AnimatePresence>{(recorded || rejected) && <motion.div role="status" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.2, ease: 'easeOut' }} className={`fixed bottom-6 right-6 z-[120] flex items-center gap-2 rounded-md border bg-white px-4 py-3 text-sm font-medium shadow-lg ${rejected ? 'border-red-200 text-red-900' : 'border-emerald-200 text-emerald-900'}`}>
+      {rejected ? <X size={16} aria-hidden="true" /> : <Check size={16} aria-hidden="true" />}{rejected ? 'Recommendation rejected' : 'Recommendation reviewed'}
+    </motion.div>}</AnimatePresence>, document.body)}
 
     {createPortal(<AnimatePresence>
       {phase !== 'idle' && <motion.div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/55 p-3 sm:p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={(event) => { if (event.target === event.currentTarget && phase === 'complete') setPhase('idle') }}>
@@ -166,7 +178,7 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
                     <div className="rounded-md border border-emerald-200 bg-[#f2f7f3] p-4"><div className="flex items-center gap-2 text-lg font-semibold text-slate-950"><span>{best.recoveryLegs.map((leg) => leg.from).join(' / ')}</span><span className="flex items-center text-emerald-800"><span className="h-px w-5 bg-emerald-700" /><Route size={14} /><span className="h-px w-5 bg-emerald-700" /></span><span>{best.recoveryLegs.at(-1)?.to}</span></div><p className="m-0 mt-2 text-sm text-slate-600">{best.recoveryLegs.map((leg) => leg.operatingFlightId).join(' · ')} · Arrival {best.expectedArrival}</p><Badge className="mt-3 border-emerald-200 bg-white text-emerald-800">{best.feasibilityStatus}</Badge>
                       <div className="mt-4 grid grid-cols-2 gap-4"><Metric label="Usable capacity" value={`${best.usableCapacityKg.toLocaleString()} kg`} /><Metric label="Expected delay" value={`${Math.round(best.expectedDelayMinutes / 60)}h`} /><Metric label="Modeled loss" value={`${currency} ${best.totalModeledExpectedLoss.toLocaleString()}`} /><Metric label="Feasibility" value={`${best.feasibilityPercentage}%`} /></div>
                     </div>
-                    <div className="mt-3 rounded-md border border-slate-200 p-3"><p className="m-0 text-sm font-semibold text-slate-800">Why it ranks first</p><p className="mb-0 mt-1.5 text-sm leading-5 text-slate-600">Lowest modeled loss among options not marked infeasible; delay breaks ties. Demo heuristic, not connected to the production agent.</p></div>
+                    <div className="mt-3 rounded-md border border-slate-200 p-3"><p className="m-0 text-sm font-semibold text-slate-800">Recommendation rationale</p><ul className="mb-0 mt-2 list-disc space-y-1 pl-5 text-sm leading-5 text-slate-600"><li>Lowest modeled loss among routes not marked infeasible.</li><li>Expected delay is used to break ties.</li><li>Demo ranking heuristic; production agent is not connected.</li></ul></div>
                     {hasUnknown && <div role="status" className="mt-3 flex gap-2 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm leading-5 text-amber-950"><AlertTriangle className="mt-0.5 shrink-0" size={16} /><span><strong>Provisional recommendation.</strong> {best.missingData.length ? `Unconfirmed: ${best.missingData.join(', ')}.` : 'Route feasibility is not confirmed.'}</span></div>}
                     {ranked.length > 1 && <div className="mt-4"><button type="button" className="text-sm font-medium text-emerald-900 underline decoration-emerald-300 underline-offset-4" onClick={() => setShowAlternatives((value) => !value)}>{showAlternatives ? 'Hide alternatives' : `Compare ${ranked.length - 1} alternative${ranked.length > 2 ? 's' : ''}`}</button><AnimatePresence initial={false}>{showAlternatives && <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} className="mt-3 space-y-2">{ranked.slice(1).map((option) => <div key={option.optionId} className="rounded-md border border-slate-200 p-3"><p className="m-0 text-sm font-medium text-slate-800">{option.recoveryLegs.map((leg) => `${leg.from} → ${leg.to} · ${leg.operatingFlightId}`).join(' / ')}</p><p className="m-0 mt-1 text-xs text-slate-500">ETA {option.expectedArrival} · {Math.round(option.expectedDelayMinutes / 60)}h delay · {currency} {option.totalModeledExpectedLoss.toLocaleString()}</p></div>)}</motion.div>}</AnimatePresence></div>}
                     <div className="mt-5 border-t border-slate-200 pt-4">
@@ -189,7 +201,7 @@ export function RecoveryAgentRun({ detail, options, currency, onRecorded }: Reco
               </AnimatePresence>
             </aside>
           </div>
-          <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-slate-50 px-6 py-4 sm:px-8">{recordError && <p role="alert" className="m-0 text-sm text-red-700">{recordError}</p>}<div className="ml-auto mr-2 mb-2 flex flex-wrap justify-end gap-3">{phase === 'complete' && <Button onClick={run}>Run again</Button>}<Button onClick={() => setPhase('idle')} disabled={recording} className="border-slate-300">Close</Button>{phase === 'complete' && best && <Button variant="primary" onClick={() => void recordRecommendation()} disabled={recording || recorded} className="min-h-10 px-4">{recording ? <><LoaderCircle size={15} className="animate-spin" /> Recording</> : recorded ? <><Check size={15} /> Recorded</> : 'Record recommendation & close'}</Button>}</div></footer>
+          <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-slate-50 px-6 py-4 sm:px-8">{recordError && <p role="alert" className="m-0 text-sm text-red-700">{recordError}</p>}<div className="ml-auto flex flex-wrap justify-end gap-3">{phase === 'complete' && <Button onClick={run}>Run again</Button>}{phase === 'complete' && best && <Button onClick={() => void rejectRecommendation()} disabled={recording || recorded || rejected} className="border-red-300 text-red-800">{recording && !recorded ? 'Saving decision…' : rejected ? 'Rejected' : 'Reject recommendation'}</Button>}<Button onClick={() => setPhase('idle')} disabled={recording} className="border-slate-300">Close</Button>{phase === 'complete' && best && <Button variant="primary" onClick={() => void recordRecommendation()} disabled={recording || recorded || rejected} className="min-h-10 px-4">{recording ? <><LoaderCircle size={15} className="animate-spin" /> Saving review</> : recorded ? <><Check size={15} /> Reviewed</> : 'Review recommendation & close'}</Button>}</div></footer>
         </motion.section>
       </motion.div>}
     </AnimatePresence>, document.body)}
