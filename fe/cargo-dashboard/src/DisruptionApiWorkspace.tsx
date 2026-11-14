@@ -89,7 +89,7 @@ export function DisruptionApiWorkspace({ onOpenRecovery }: { onOpenRecovery: (wo
       setList(result)
       setListFetchedAt(new Date().toISOString())
       clearSelectedRecord()
-      setSelectedWorkItemId((current) => result.items.some((item) => item.workItemId === current) ? current : result.items[0]?.workItemId ?? '')
+      setSelectedWorkItemId('')
     }).catch((error: unknown) => {
       if (error instanceof DOMException && error.name === 'AbortError') return
       setListError(asApiError(error))
@@ -104,14 +104,12 @@ export function DisruptionApiWorkspace({ onOpenRecovery }: { onOpenRecovery: (wo
     const controller = new AbortController()
     const workItemId = selectedWorkItemId
     const timer = window.setTimeout(() => {
-      setDetailLoading(true); setOptionsLoading(true)
+      setOptionsLoading(true)
       setDetailError(null); setOptionsError(null); setSaveError(null)
       setDetail(null); setOptions(null); setSelectedOptionId(''); setOptionDetail(null); setOptionDetailError(null)
-      void getRecoverySolution(workItemId, controller.signal).then((result) => setDetail(result)).catch((error: unknown) => {
-        if (!(error instanceof DOMException && error.name === 'AbortError')) setDetailError(asApiError(error))
-      }).finally(() => { if (!controller.signal.aborted) setDetailLoading(false) })
+      setDetail(null); setDetailLoading(false); setDetailError(null)
       void getRecoveryOptions(workItemId, controller.signal).then((result) => {
-        setOptions(result); setSelectedOptionId((current) => result.options.some((option) => option.optionId === current) ? current : result.bestOptions[0] ?? result.options[0]?.optionId ?? '')
+        setOptions(result); setSelectedOptionId('')
       }).catch((error: unknown) => {
         if (!(error instanceof DOMException && error.name === 'AbortError')) setOptionsError(asApiError(error))
       }).finally(() => { if (!controller.signal.aborted) setOptionsLoading(false) })

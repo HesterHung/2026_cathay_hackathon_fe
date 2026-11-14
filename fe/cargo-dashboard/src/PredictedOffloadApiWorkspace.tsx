@@ -115,7 +115,7 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
         selectedFlightIdRef.current = nextFlight
         setSelectedFlightId(nextFlight)
         const flightItems = uldsForFlight(result.items, nextFlight)
-        setSelectedWorkItemId((current) => result.items.some((item) => item.workItemId === current) ? current : flightItems[0]?.workItemId ?? result.items[0]?.workItemId ?? '')
+        setSelectedWorkItemId('')
       }).catch((error: unknown) => {
         if (!(error instanceof DOMException && error.name === 'AbortError')) setListError(toApiError(error))
       }).finally(() => { if (!controller.signal.aborted) setListLoading(false) })
@@ -128,21 +128,14 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
     const controller = new AbortController()
     const workItemId = selectedWorkItemId
     const timer = window.setTimeout(() => {
-      setDetailLoading(true); setOptionsLoading(true)
+      setOptionsLoading(true)
       setDetailError(null); setOptionsError(null); setSaveError(null)
       setDetail(null); setOptions(null); setSelectedOptionId(''); setOptionDetail(null); setOptionDetailError(null)
-      void getRecoverySolution(workItemId, controller.signal).then((result) => {
-        if (result.type !== 'PREDICTED_OFFLOAD' || result.confirmedOffload) {
-          throw new RecoveryApiError('The selected item is not an unconfirmed PREDICTED_OFFLOAD record.', 'invalid-response')
-        }
-        setDetail(result)
-      }).catch((error: unknown) => {
-        if (!(error instanceof DOMException && error.name === 'AbortError')) setDetailError(toApiError(error))
-      }).finally(() => { if (!controller.signal.aborted) setDetailLoading(false) })
+      setDetail(null); setDetailLoading(false); setDetailError(null)
       void getRecoveryOptions(workItemId, controller.signal).then((result) => {
         if (result.type !== 'PREDICTED_OFFLOAD') throw new RecoveryApiError('Route options are not for a PREDICTED_OFFLOAD record.', 'invalid-response')
         setOptions(result)
-        setSelectedOptionId(result.bestOptions[0] ?? result.options[0]?.optionId ?? '')
+        setSelectedOptionId('')
       }).catch((error: unknown) => {
         if (!(error instanceof DOMException && error.name === 'AbortError')) setOptionsError(toApiError(error))
       }).finally(() => { if (!controller.signal.aborted) setOptionsLoading(false) })

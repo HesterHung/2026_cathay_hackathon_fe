@@ -127,7 +127,7 @@ export function PendingPoolApiWorkspace({ initialFlightId, onOpenRecovery }: { i
           ? apiError(disruptionResponse.status === 'rejected' ? disruptionResponse.reason : predictionResponse.status === 'rejected' ? predictionResponse.reason : undefined)
           : null)
         setQueueCheckedAt(new Date().toISOString())
-        setSelectedId((current) => poolResult.items.some((item) => item.workItemId === current) ? current : poolResult.items[0]?.workItemId ?? '')
+        setSelectedId('')
       }).catch((error: unknown) => {
         if (!(error instanceof DOMException && error.name === 'AbortError')) setQueueError(apiError(error))
       }).finally(() => { if (!controller.signal.aborted) setQueueLoading(false) })
