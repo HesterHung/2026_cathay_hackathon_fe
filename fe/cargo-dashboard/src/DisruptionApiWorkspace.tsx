@@ -62,6 +62,7 @@ export function DisruptionApiWorkspace({ onOpenRecovery }: { onOpenRecovery: (wo
   const [optionsError, setOptionsError] = useState<RecoveryApiError | null>(null)
   const [optionsLoading, setOptionsLoading] = useState(false)
   const [selectedOptionId, setSelectedOptionId] = useState('')
+  const [optionDetailRequest, setOptionDetailRequest] = useState(0)
   const [optionDetail, setOptionDetail] = useState<RecoveryOptionDetail | null>(null)
   const [optionDetailError, setOptionDetailError] = useState<RecoveryApiError | null>(null)
   const [optionDetailLoading, setOptionDetailLoading] = useState(false)
@@ -129,7 +130,7 @@ export function DisruptionApiWorkspace({ onOpenRecovery }: { onOpenRecovery: (wo
       }).finally(() => { if (!controller.signal.aborted) setOptionDetailLoading(false) })
     }, 0)
     return () => { window.clearTimeout(timer); controller.abort() }
-  }, [selectedWorkItemId, selectedOptionId, refreshId])
+  }, [selectedWorkItemId, selectedOptionId, optionDetailRequest, refreshId])
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 30_000)
@@ -187,9 +188,9 @@ export function DisruptionApiWorkspace({ onOpenRecovery }: { onOpenRecovery: (wo
           <section className="disruption-api-options"><div className="panel-heading"><div><h4>Routing options</h4><p>Feasibility and expected loss are evidence for review; no route is booked here.</p></div></div>
             {optionsLoading && <p role="status">Loading routing options…</p>}{optionsError && <div className="api-state error" role="alert"><strong>Could not load route options</strong><span>{messageFor(optionsError)}</span></div>}
             {options && options.options.length === 0 && <div className="empty-state"><strong>No routing options returned</strong><span>The API has no route candidate for this disruption.</span></div>}
-            {options && options.options.length > 0 && <div className="table-wrap"><table><thead><tr><th>OPTION</th><th>ROUTE</th><th>FEASIBILITY</th><th>CAPACITY</th><th>ARRIVAL / DELAY</th><th>MODELED LOSS</th><th>EVIDENCE</th></tr></thead><tbody>{options.options.map((option) => <tr key={option.optionId} className={selectedOptionId === option.optionId ? 'recommended-row' : ''}>
+            {options && options.options.length > 0 && <div className="table-wrap"><table><thead><tr><th>OPTION</th><th>ROUTE</th><th>FEASIBILITY</th><th>CAPACITY</th><th>ARRIVAL / DELAY</th><th>MODELED LOSS</th><th>EVIDENCE</th></tr></thead><tbody>{options.options.map((option) => <tr key={option.optionId} className={selectedOptionId === option.optionId ? 'recommended-row' : ''} onClick={() => { setSelectedOptionId(option.optionId); setOptionDetail(null); setOptionDetailError(null); setOptionDetailRequest((value) => value + 1) }}>
               <td><strong>{option.optionType}</strong><small>{option.optionId}{options.bestOptions.includes(option.optionId) ? ' · best modeled option' : ''}</small></td>
-              <td>{option.recoveryLegs.map((leg) => `${leg.from} → ${leg.to} (${leg.operatingFlightId})`).join(' · ')}</td><td>{option.feasibilityStatus}<small>{option.feasibilityPercentage}% · unknown stays unconfirmed</small></td><td>{option.capacityStatus}<small>{option.usableCapacityKg.toLocaleString()} kg usable</small></td><td>{formatTimestamp(option.expectedArrival)}<small>{option.expectedDelayMinutes} min delay</small></td><td>{formatMoney(option.totalModeledExpectedLoss, options.currency)}</td><td><button className="text-button" type="button" onClick={() => { setOptionDetail(null); setOptionDetailError(null); setSelectedOptionId(option.optionId) }}>Review evidence</button><small>{option.missingData.length ? `${option.missingData.length} outstanding item(s)` : 'No missing items reported'}</small></td>
+              <td>{option.recoveryLegs.map((leg) => `${leg.from} → ${leg.to} (${leg.operatingFlightId})`).join(' · ')}</td><td>{option.feasibilityStatus}<small>{option.feasibilityPercentage}% · unknown stays unconfirmed</small></td><td>{option.capacityStatus}<small>{option.usableCapacityKg.toLocaleString()} kg usable</small></td><td>{formatTimestamp(option.expectedArrival)}<small>{option.expectedDelayMinutes} min delay</small></td><td>{formatMoney(option.totalModeledExpectedLoss, options.currency)}</td><td><button className="text-button" type="button" onClick={(event) => { event.stopPropagation(); setOptionDetail(null); setOptionDetailError(null); setSelectedOptionId(option.optionId); setOptionDetailRequest((value) => value + 1) }}>Review evidence</button><small>{option.missingData.length ? `${option.missingData.length} outstanding item(s)` : 'No missing items reported'}</small></td>
             </tr>)}</tbody></table></div>}
             {optionDetailLoading && <p role="status">Loading selected option details…</p>}{optionDetailError && <div className="api-state error" role="alert"><strong>Could not load option detail</strong><span>{messageFor(optionDetailError)}</span></div>}
             {optionDetail && <AdditionalOptionEvidence detail={optionDetail} />}

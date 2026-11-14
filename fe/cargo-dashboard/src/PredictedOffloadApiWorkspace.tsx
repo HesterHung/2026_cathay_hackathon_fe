@@ -80,6 +80,7 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
   const [optionsLoading, setOptionsLoading] = useState(false)
   const [optionsError, setOptionsError] = useState<RecoveryApiError | null>(null)
   const [selectedOptionId, setSelectedOptionId] = useState('')
+  const [optionDetailRequest, setOptionDetailRequest] = useState(0)
   const [optionDetail, setOptionDetail] = useState<RecoveryOptionDetail | null>(null)
   const [optionDetailLoading, setOptionDetailLoading] = useState(false)
   const [optionDetailError, setOptionDetailError] = useState<RecoveryApiError | null>(null)
@@ -155,7 +156,7 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
       }).finally(() => { if (!controller.signal.aborted) setOptionDetailLoading(false) })
     }, 0)
     return () => { window.clearTimeout(timer); controller.abort() }
-  }, [selectedWorkItemId, selectedOptionId, refreshKey])
+  }, [selectedWorkItemId, selectedOptionId, optionDetailRequest, refreshKey])
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 30_000)
