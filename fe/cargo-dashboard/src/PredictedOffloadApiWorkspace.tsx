@@ -204,7 +204,7 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
   }
 
   return <section className="panel predicted-api-workspace">
-    <div className="panel-heading"><div><h2>Predicted Offload · live recovery work</h2></div><button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
+    <div className="page-heading"><div><h1>Predicted Offload</h1></div><button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
     {listLoading && !list && <div className="empty-state" role="status"><strong>Loading predicted-offload queue</strong><span>Fetching ULD work items and forecast service flight summaries.</span></div>}
     {listError && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not load predicted-offload queue'}</strong><span>{apiErrorLabel(listError)}</span>{list && <small>Showing the last successful response from {timeLabel(fetchedAt)}.</small>}</div>}
     {listError && !list && <RecoveryApiUnavailablePreview type="PREDICTED_OFFLOAD" onOpenRecovery={onOpenRecovery} />}

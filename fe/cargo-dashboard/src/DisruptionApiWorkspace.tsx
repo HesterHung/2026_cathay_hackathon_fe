@@ -161,7 +161,7 @@ export function DisruptionApiWorkspace({ onOpenRecovery }: { onOpenRecovery: (wo
   }
 
   return <section className="panel disruption-api-workspace">
-    <div className="panel-heading"><div><h2>Disruption Alerts · live recovery work</h2></div><button className="outline-button" type="button" disabled={listLoading} onClick={refreshList}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
+    <div className="page-heading"><div><h1>Disruption Alerts</h1></div><button className="outline-button" type="button" disabled={listLoading} onClick={refreshList}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
     {listLoading && !list && <div className="empty-state" role="status"><strong>Loading confirmed disruptions</strong><span>Fetching the DISRUPTION queue from the recovery-solutions API.</span></div>}
     {listError && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not load disruption queue'}</strong><span>{messageFor(listError)}</span>{list && <small>Showing the last successful queue response from {formatTimestamp(listFetchedAt)}.</small>}</div>}
     {listError && !list && <RecoveryApiUnavailablePreview type="DISRUPTION" onOpenRecovery={onOpenRecovery} />}

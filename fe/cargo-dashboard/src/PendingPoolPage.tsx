@@ -13,10 +13,6 @@ export function PendingPoolPage({ onNavigate, initialFlightId, onOpenRecovery }:
     <main className="main-content shipment-page pending-pool-page">
       <header className="topbar"><div className="crumb">Cathay Router <span>/</span> Pending Pool</div></header>
 
-      <div className="page-heading">
-        <div><h1>Pending Pool</h1></div>
-      </div>
-
       {initialFlightId && <section className="pool-target-context"><strong>Opened from {initialFlightId}</strong><span>Compare pool candidates with this higher-priority flight, then return to its recovery review.</span></section>}
       <section className="lifecycle-banner"><strong>Review and compatibility only</strong><span>A priority hold does not reserve capacity. Candidate evaluation and no-show review do not assign cargo.</span></section>
       <PendingPoolApiWorkspace initialFlightId={initialFlightId} onOpenRecovery={onOpenRecovery} />

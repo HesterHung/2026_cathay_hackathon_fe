@@ -73,12 +73,13 @@ export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelec
   const displayTime = (value: string | null | undefined) => value ? new Date(value).toLocaleString() : 'Unavailable'
   return <section className="recovery-work-item-table" aria-label={`${recoveryQueueNames[type]} API work items`}>
     <div className="recovery-work-item-table-heading"><div><h3>Recovery work items</h3></div><span className="recovery-data-source">{sourceLabel}</span></div>
-    <div className="table-wrap"><table><thead><tr><th scope="col">ROUTE / FLIGHT</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
+    <div className="table-wrap"><table><thead><tr><th scope="col">FLIGHT</th><th scope="col">FLIGHT DATE</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
       {groupedItems.map(([mawbNumber, group]) => <Fragment key={mawbNumber}>
-        <tr className="recovery-mawb-group"><th colSpan={7} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
+        <tr className="recovery-mawb-group"><th colSpan={8} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
         {group.map((item) => <tr key={item.workItemId} tabIndex={onOpenRecovery ? 0 : undefined} aria-label={onOpenRecovery ? `Open recovery for ${item.flight.flightId}, ULD ${item.uld.uldId}` : undefined} className={`${selectedWorkItemId === item.workItemId ? 'selected ' : ''}${onOpenRecovery ? 'recovery-work-item-clickable' : ''}`} onClick={() => { onSelect?.(item); onOpenRecovery?.(item.workItemId, item.flight.flightId) }} onKeyDown={(event) => { if (onOpenRecovery && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); onSelect?.(item); onOpenRecovery(item.workItemId, item.flight.flightId) } }}>
-          <td data-label="ROUTE / FLIGHT"><strong>{item.flight.flightId}</strong><span>{item.flight.origin} → {item.flight.destination}</span></td>
-          <td data-label="ULD"><strong>{item.uld.uldId}</strong><span>{item.uld.uldType}</span></td>
+          <td data-label="FLIGHT"><strong>{item.flight.flightId.split('-')[0]}</strong></td>
+          <td data-label="FLIGHT DATE">{item.flight.flightId.split('-')[1] ?? 'Unavailable'}</td>
+          <td data-label="ULD"><strong>{item.uld.uldId.slice(0, 3)}-{item.uld.uldId.slice(3, 8)}</strong></td>
           <td data-label="STATUS"><RecoveryStatusBadge type={type} status={item.pool?.disposition ?? item.status} /></td>
           <td data-label="CARGO WEIGHT">{item.cargo.weightKg.toLocaleString()} kg</td>
           <td data-label="VOLUME">{item.cargo.volumeM3.toLocaleString()} m³</td>

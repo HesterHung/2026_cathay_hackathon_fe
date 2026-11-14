@@ -237,7 +237,7 @@ export function PendingPoolApiWorkspace({ initialFlightId, onOpenRecovery }: { i
   const noShowActionRequired = useMemo(() => action === 'CONSIDER_FOR_NO_SHOW' && !noShowReady, [action, noShowReady])
 
   return <section className="panel pending-api-workspace">
-    <div className="panel-heading"><div><h2>Pending Pool · live recovery work</h2></div><button className="outline-button" type="button" disabled={queueLoading} onClick={() => { setSavedMessage(null); refresh() }}>{queueLoading ? 'Loading…' : 'Refresh queue'}</button></div>
+    <div className="page-heading"><div><h1>Pending Pool</h1></div><button className="outline-button" type="button" disabled={queueLoading} onClick={() => { setSavedMessage(null); refresh() }}>{queueLoading ? 'Loading…' : 'Refresh queue'}</button></div>
     {queueLoading && !pool && <div className="empty-state" role="status"><strong>Loading pending-pool candidates</strong><span>Fetching pool inventory and active priority targets from the recovery API.</span></div>}
     {queueError && <div className="api-state error" role="alert"><strong>{errorHeading(queueError)}</strong><span>{queueError.message}</span>{pool && <small>Showing the last successful pool response from {formattedTime(queueCheckedAt)}.</small>}</div>}
     {queueError && !pool && <RecoveryApiUnavailablePreview type="PENDING_POOL" onOpenRecovery={onOpenRecovery} />}
