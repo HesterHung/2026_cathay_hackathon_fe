@@ -190,6 +190,23 @@ export function getRecoverySolution(workItemId: string, signal?: AbortSignal): P
   return request<RecoveryDetail>(`/${encodeURIComponent(workItemId)}`, { signal })
 }
 
+export interface ConfirmOffloadRequest {
+  source: 'OPERATIONAL_EVENT' | 'AUTHORIZED_DECISION'
+  sourceEventId: string
+  confirmedAt: string
+  reason: string
+  reviewerId?: string
+  documentVersion: number
+}
+
+export function confirmPredictedOffload(workItemId: string, confirmation: ConfirmOffloadRequest, signal?: AbortSignal): Promise<RecoveryWorkItem> {
+  if (!confirmation.sourceEventId.trim() || !confirmation.reason.trim()) throw new RecoveryApiError('A confirmation event ID and reason are required.', 'validation')
+  if (confirmation.source === 'AUTHORIZED_DECISION' && !confirmation.reviewerId?.trim()) throw new RecoveryApiError('A reviewer ID is required for an authorized decision.', 'validation')
+  if (!Number.isInteger(confirmation.documentVersion) || confirmation.documentVersion < 1) throw new RecoveryApiError('A valid document version is required.', 'validation')
+  if (!Number.isFinite(Date.parse(confirmation.confirmedAt))) throw new RecoveryApiError('confirmedAt must be a valid ISO timestamp.', 'validation')
+  return request<RecoveryWorkItem>(`/${encodeURIComponent(workItemId)}/offload-confirmations`, { method: 'POST', body: JSON.stringify(confirmation), signal })
+}
+
 export function getRecoveryOptions(workItemId: string, signal?: AbortSignal): Promise<RecoveryOptionsResponse> {
   return request<RecoveryOptionsResponse>(`/${encodeURIComponent(workItemId)}/options`, { signal })
 }

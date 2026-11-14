@@ -55,12 +55,14 @@ export function RecoveryDeadlineNotice({ commitment }: { commitment?: string | n
   </aside>
 }
 
-export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelect, onOpenRecovery, sourceLabel = 'Live API data' }: {
+export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelect, onOpenRecovery, onConfirm, confirmingWorkItemId, sourceLabel = 'Live API data' }: {
   type: QueueType
   items: RecoveryWorkItem[]
   selectedWorkItemId: string
   onSelect?: (item: RecoveryWorkItem) => void
   onOpenRecovery?: (workItemId: string, flightId: string) => void
+  onConfirm?: (item: RecoveryWorkItem) => void
+  confirmingWorkItemId?: string | null
   sourceLabel?: string
 }) {
   const groups = new Map<string, RecoveryWorkItem[]>()
@@ -73,10 +75,10 @@ export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelec
   const displayTime = (value: string | null | undefined) => value ? new Date(value).toLocaleString() : 'Unavailable'
   return <section className="recovery-work-item-table" aria-label={`${recoveryQueueNames[type]} API work items`}>
     <div className="recovery-work-item-table-heading"><div><h3>Recovery work items</h3></div><span className="recovery-data-source">{sourceLabel}</span></div>
-    <div className="table-wrap"><table><thead><tr><th scope="col">FLIGHT</th><th scope="col">FLIGHT DATE</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
+    <div className="table-wrap"><table><thead><tr><th scope="col">FLIGHT</th><th scope="col">FLIGHT DATE</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th>{onConfirm && <th scope="col">ACTION</th>}</tr></thead><tbody>
       {groupedItems.map(([mawbNumber, group]) => <Fragment key={mawbNumber}>
-        <tr className="recovery-mawb-group"><th colSpan={8} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
-        {group.map((item) => <tr key={item.workItemId} tabIndex={onOpenRecovery ? 0 : undefined} aria-label={onOpenRecovery ? `Open recovery for ${item.flight.flightId}, ULD ${item.uld.uldId}` : undefined} className={`${selectedWorkItemId === item.workItemId ? 'selected ' : ''}${onOpenRecovery ? 'recovery-work-item-clickable' : ''}`} onClick={() => { onSelect?.(item); onOpenRecovery?.(item.workItemId, item.flight.flightId) }} onKeyDown={(event) => { if (onOpenRecovery && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); onSelect?.(item); onOpenRecovery(item.workItemId, item.flight.flightId) } }}>
+        <tr className="recovery-mawb-group"><th colSpan={onConfirm ? 9 : 8} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
+        {group.map((item) => <tr key={item.workItemId} tabIndex={onOpenRecovery && type !== 'PREDICTED_OFFLOAD' ? 0 : undefined} aria-label={onOpenRecovery && type !== 'PREDICTED_OFFLOAD' ? `Open recovery for ${item.flight.flightId}, ULD ${item.uld.uldId}` : undefined} className={`${selectedWorkItemId === item.workItemId ? 'selected ' : ''}${onOpenRecovery && type !== 'PREDICTED_OFFLOAD' ? 'recovery-work-item-clickable' : ''}`} onClick={() => { if (type !== 'PREDICTED_OFFLOAD') { onSelect?.(item); onOpenRecovery?.(item.workItemId, item.flight.flightId) } }} onKeyDown={(event) => { if (type !== 'PREDICTED_OFFLOAD' && onOpenRecovery && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); onSelect?.(item); onOpenRecovery(item.workItemId, item.flight.flightId) } }}>
           <td data-label="FLIGHT"><strong>{item.flight.flightId.split('-')[0]}</strong></td>
           <td data-label="FLIGHT DATE">{item.flight.flightId.split('-')[1] ?? 'Unavailable'}</td>
           <td data-label="ULD"><strong>{item.uld.uldId.slice(0, 3)}-{item.uld.uldId.slice(3, 8)}</strong></td>
@@ -85,6 +87,7 @@ export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelec
           <td data-label="VOLUME">{item.cargo.volumeM3.toLocaleString()} m³</td>
           <td data-label="DELIVERY COMMITMENT">{item.caseSummary?.deliveryCommitment ?? 'Unavailable'}</td>
           <td data-label="LAST UPDATED">{displayTime(item.document.updatedAt)}</td>
+          {onConfirm && <td data-label="ACTION"><button className="primary-button" type="button" disabled={Boolean(confirmingWorkItemId)} onClick={() => onConfirm(item)}>{confirmingWorkItemId === item.workItemId ? 'Confirming…' : 'Confirm'}</button></td>}
         </tr>)}
       </Fragment>)}
     </tbody></table></div>
