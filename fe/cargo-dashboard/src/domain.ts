@@ -63,10 +63,35 @@ export interface PendingPoolUnit {
 
 export type PendingPoolDisposition = 'Available' | 'Priority hold' | 'No-show review'
 
-export const pendingPoolUnits: PendingPoolUnit[] = [
+const pendingPoolSeedUnits: PendingPoolUnit[] = [
   { id: 'D-ULD-257-01', origin: 'HKG', destination: 'LHR', sourceFlightId: 'CX257', weightKg: 920, volumeM3: 4.6, commodity: 'General cargo', source: 'Domino offload', eligibleForNoShowReplacement: true, simulated: true },
   { id: 'D-ULD-289-02', origin: 'SIN', destination: 'FRA', sourceFlightId: 'CX289', weightKg: 760, volumeM3: 3.9, commodity: 'General cargo', source: 'Domino offload', eligibleForNoShowReplacement: true, simulated: true },
   { id: 'D-ULD-880-01', origin: 'HKG', destination: 'LAX', sourceFlightId: 'CX880', weightKg: 680, volumeM3: 3.2, commodity: 'Temperature-sensitive', source: 'Domino offload', eligibleForNoShowReplacement: false, simulated: true },
+]
+
+const pendingPoolRouteSeeds = [
+  { origin: 'HKG', destination: 'LHR', sourceFlightId: 'CX257', commodity: 'General cargo' },
+  { origin: 'SIN', destination: 'FRA', sourceFlightId: 'CX289', commodity: 'General cargo' },
+  { origin: 'HKG', destination: 'LAX', sourceFlightId: 'CX880', commodity: 'Temperature-sensitive' },
+  { origin: 'HKG', destination: 'JFK', sourceFlightId: 'CX840', commodity: 'High-value cargo' },
+  { origin: 'TPE', destination: 'LHR', sourceFlightId: 'CX251', commodity: 'Pharmaceuticals' },
+  { origin: 'SIN', destination: 'LAX', sourceFlightId: 'CX881', commodity: 'Electronics' },
+]
+
+export const pendingPoolUnits: PendingPoolUnit[] = [
+  ...pendingPoolSeedUnits,
+  ...Array.from({ length: 24 }, (_, index) => {
+    const route = pendingPoolRouteSeeds[index % pendingPoolRouteSeeds.length]
+    return {
+      id: `D-ULD-POOL-${String(index + 4).padStart(3, '0')}`,
+      ...route,
+      weightKg: 438 + ((index * 173) % 687),
+      volumeM3: Number((2.1 + ((index * 29) % 37) / 10).toFixed(1)),
+      source: 'Domino offload' as const,
+      eligibleForNoShowReplacement: index % 3 === 0,
+      simulated: true as const,
+    }
+  }),
 ]
 
 export interface OverviewQueueItem {
@@ -584,7 +609,7 @@ export function calculateOffloadMetrics(input: { actualOffloadedShipments: numbe
   return { actualOffloadRate: rate(input.actualOffloadedShipments, input.eligibleShipments), actualOffloadedShipments: input.actualOffloadedShipments, eligibleShipments: input.eligibleShipments, predictedOffloadRate: rate(input.predictedOffloadedShipments, input.forecastShipmentsConsidered), predictedOffloadedShipments: input.predictedOffloadedShipments, forecastShipmentsConsidered: input.forecastShipmentsConsidered, flightOffloadProbability: rate(input.flightsWithOffload, input.eligibleFlights), reportingPeriod: input.reportingPeriod ?? demoReportingPeriod }
 }
 
-export const demoOffloadMetrics = calculateOffloadMetrics({ actualOffloadedShipments: 42, eligibleShipments: 1000, predictedOffloadedShipments: 87, forecastShipmentsConsidered: 1000, flightsWithOffload: 2, eligibleFlights: 4 })
+export const demoOffloadMetrics = calculateOffloadMetrics({ actualOffloadedShipments: 37, eligibleShipments: 846, predictedOffloadedShipments: 64, forecastShipmentsConsidered: 928, flightsWithOffload: 2, eligibleFlights: 4 })
 
 export const demoOutcomes: OffloadOutcome[] = [
   { flightId: 'CX257', route: 'HKG-LHR', category: 'Pharmaceuticals', predictedOffload: true, actualOffload: true, predictedRate: 0.33, actualRate: 0.28, valueAtRisk: 36120, realisedLoss: 8200, interventionApplied: false },

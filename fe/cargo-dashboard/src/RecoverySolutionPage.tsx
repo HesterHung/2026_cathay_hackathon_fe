@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getRecoveryOptions, getRecoverySolution, type RecoveryDetail, type RecoveryOption, type RecoveryOptionsResponse } from './recoveryApi'
 import { WorkspaceSidebar, type WorkspaceNavItem } from './WorkspaceSidebar'
 import { RecoveryAgentRun } from './RecoveryAgentRun'
+import { Check } from 'lucide-react'
 
 interface RecoverySolutionPageProps {
   onNavigate: (item: WorkspaceNavItem) => void
@@ -65,7 +66,9 @@ export function RecoverySolutionPage({ onNavigate, initialWorkItemId, initialFli
   const [data, setData] = useState<RecoverySolutionData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [recordedOptionId, setRecordedOptionId] = useState<string | null>(null)
   useEffect(() => {
+    setRecordedOptionId(null)
     if (!initialWorkItemId) { setData(null); setLoading(false); setError(null); return }
     if (initialWorkItemId.startsWith('demo-')) {
       setData(buildDemoData(initialWorkItemId, initialFlightId ?? 'Unknown flight'))
@@ -98,19 +101,13 @@ export function RecoverySolutionPage({ onNavigate, initialWorkItemId, initialFli
       {error && <div className="api-state error" role="alert"><strong>Could not load offload case</strong><span>{error}</span></div>}
       {detail && data && <>
         <section className="workspace-intro recovery-case-intro selected-flight-card">
-          <div><h2>Flight {detail.flight.flightId} · {detail.flight.origin} → {detail.flight.destination} · {detail.uld.uldId}</h2><p>{detail.caseSummary?.disruption ?? 'Offload case details returned by the API.'}</p><small>MAWB {detail.masterAirwayBill.displayLabel} · {detail.uld.weightKg.toLocaleString()} kg · {detail.uld.volumeM3.toLocaleString()} m³</small></div>
-        </section>
-        <section className="disruption-response-grid">
-          <article><small>CASE STATUS</small><strong>{detail.status.replaceAll('_', ' ')}</strong></article>
-          <article><small>DELIVERY COMMITMENT</small><strong>{detail.caseSummary?.deliveryCommitment ?? 'Not provided'}</strong></article>
-          <article><small>BASELINE EXPECTED LOSS</small><strong>{detail.caseSummary ? `${detail.caseSummary.baselineExpectedLoss.toLocaleString()} ${detail.caseSummary.currency}` : 'Not provided'}</strong></article>
-          <article><small>DOCUMENT VERSION</small><strong>{detail.document.version}</strong></article>
+          <div><h2>Flight {detail.flight.flightId} · {detail.flight.origin} → {detail.flight.destination} · {detail.uld.uldId}</h2><small>MAWB {detail.masterAirwayBill.displayLabel} · {detail.uld.weightKg.toLocaleString()} kg · {detail.uld.volumeM3.toLocaleString()} m³</small></div>
         </section>
         {detail.forecast && <section className="analytics-note"><strong>Forecast evidence</strong><span>{Math.round(detail.forecast.offloadProbability * 100)}% offload probability · {detail.forecast.capacityShortfallKg.toLocaleString()} kg capacity shortfall · {detail.forecast.confidence}% confidence</span></section>}
-        <RecoveryAgentRun detail={detail} options={data.options} currency={data.currency} />
+        <RecoveryAgentRun detail={detail} options={data.options} currency={data.currency} onRecorded={setRecordedOptionId} />
         <section className="panel">
-          <div className="panel-heading"><div><h2>Recovery options</h2><p>{data.options.length} option(s) · compare feasibility, capacity, delay, and modeled loss.</p></div></div>
-          {data.options.length ? <div className="table-wrap"><table className="recovery-comparison-table"><thead><tr><th>OPTION</th><th>ROUTE</th><th>FEASIBILITY</th><th>USABLE CAPACITY</th><th>ARRIVAL / DELAY</th><th>RECOVERY COST</th><th>MODELED LOSS</th><th>NETWORK IMPACT</th></tr></thead><tbody>{data.options.map((option) => <tr key={option.optionId}><td><strong>{option.optionType.replaceAll('_', ' ')}</strong><small>{option.optionId}</small></td><td>{option.recoveryLegs.map((leg) => `${leg.from} → ${leg.to} · ${leg.operatingFlightId}`).join(' / ')}</td><td>{option.feasibilityStatus}<small>{option.feasibilityPercentage}%</small></td><td>{option.usableCapacityKg.toLocaleString()} kg<small>{option.capacityStatus}</small></td><td>{option.expectedArrival}<small>{option.expectedDelayMinutes} min</small></td><td>{option.recoveryHandlingCost.toLocaleString()} {data.currency}</td><td>{option.totalModeledExpectedLoss.toLocaleString()} {data.currency}</td><td>{option.networkImpact}</td></tr>)}</tbody></table></div> : <div className="empty-state"><strong>No recovery options available</strong><span>{detail.type === 'PENDING_POOL' ? 'Pool candidates are evaluated against an active disruption or predicted-offload target.' : 'The API returned no route options for this case.'}</span></div>}
+          <div className="panel-heading"><div><h2>Recovery options</h2><p>Total {data.options.length} {data.options.length === 1 ? 'option' : 'options'}</p></div></div>
+          {data.options.length ? <div className="table-wrap recovery-options-table-wrap" tabIndex={0} aria-label="Recovery route options, scroll horizontally for more columns"><table className="recovery-comparison-table"><caption className="sr-only">Recovery route options compared by feasibility, capacity, arrival, cost, modeled loss, and network impact</caption><thead><tr><th scope="col">Route option</th><th scope="col">Feasibility</th><th scope="col">Usable capacity</th><th scope="col">Arrival</th><th scope="col">Recovery cost</th><th scope="col">Modeled loss</th><th scope="col">Network impact</th></tr></thead><tbody>{data.options.map((option) => { const recorded = recordedOptionId === option.optionId; return <tr key={option.optionId} className={recorded ? 'recommended-row' : ''} aria-selected={recorded}><td><strong>{option.recoveryLegs.map((leg) => `${leg.from} → ${leg.to}`).join(' / ')}</strong><small>{option.optionType.replaceAll('_', ' ')} · {option.recoveryLegs.map((leg) => leg.operatingFlightId).join(' / ')} · {option.optionId}</small>{recorded && <span className="recovery-recorded-inline"><Check size={14} aria-hidden="true" /> Recommendation recorded for review</span>}</td><td><strong>{option.feasibilityStatus}</strong><small>{option.feasibilityPercentage}% estimate</small></td><td><strong>{option.usableCapacityKg.toLocaleString()} kg</strong><small>{option.capacityStatus}</small></td><td><strong>{option.expectedArrival}</strong><small>{option.expectedDelayMinutes.toLocaleString()} min delay</small></td><td>{option.recoveryHandlingCost.toLocaleString()} {data.currency}</td><td><strong>{option.totalModeledExpectedLoss.toLocaleString()} {data.currency}</strong></td><td>{option.networkImpact}</td></tr>})}</tbody></table><p className="recovery-table-hint">Scroll horizontally to compare every field</p></div> : <div className="empty-state"><strong>No recovery options available</strong><span>{detail.type === 'PENDING_POOL' ? 'Pool candidates are evaluated against an active disruption or predicted-offload target.' : 'The API returned no route options for this case.'}</span></div>}
         </section>
         {detail.reviewHistory.length > 0 && <section className="panel"><div className="panel-heading"><div><h2>Review history</h2></div></div><div className="table-wrap"><table><thead><tr><th>DECISION</th><th>REVIEWER</th><th>REASON</th><th>REVIEWED</th></tr></thead><tbody>{detail.reviewHistory.map((review) => <tr key={review.decisionId}><td>{review.decision.replaceAll('_', ' ')}</td><td>{review.reviewerId}</td><td>{review.reason}</td><td>{new Date(review.reviewedAt).toLocaleString()}</td></tr>)}</tbody></table></div></section>}
       </>}
