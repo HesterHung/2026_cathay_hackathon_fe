@@ -96,6 +96,9 @@
 .recovery-comparison-table td strong { display: block; color: #263b32; font-weight: 600; }
 .recovery-comparison-table td small { display: block; margin-top: 5px; color: #748179; font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; }
 .recovery-comparison-table tbody tr { cursor: default; transition: background-color .16s ease; }
+.recovery-comparison-table tbody tr.recovery-option-selectable { cursor: pointer; }
+.recovery-comparison-table tbody tr.recovery-option-selectable:hover { background: #eef5f0; }
+.recovery-comparison-table tbody tr.recovery-option-selectable:focus-visible { outline: 2px solid #174d3e; outline-offset: -2px; }
 .recovery-comparison-table tbody tr:hover { background: #f8faf8; }
 .recovery-comparison-table tbody tr:last-child td { border-bottom: 0; }
 .recovery-table-hint { display: none; margin: 0; padding: 10px 16px; border-top: 1px solid #e7ece9; color: #718078; font-size: 11px; }
