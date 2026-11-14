@@ -55,11 +55,13 @@ export function RecoveryDeadlineNotice({ commitment }: { commitment?: string | n
   </aside>
 }
 
-export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelect }: {
+export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelect, onOpenRecovery, sourceLabel = 'Live API data' }: {
   type: QueueType
   items: RecoveryWorkItem[]
   selectedWorkItemId: string
-  onSelect: (item: RecoveryWorkItem) => void
+  onSelect?: (item: RecoveryWorkItem) => void
+  onOpenRecovery?: (workItemId: string, flightId: string) => void
+  sourceLabel?: string
 }) {
   const groups = new Map<string, RecoveryWorkItem[]>()
   for (const item of items) {
@@ -70,13 +72,13 @@ export function RecoveryWorkItemTable({ type, items, selectedWorkItemId, onSelec
   const groupedItems = [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))
   const displayTime = (value: string | null | undefined) => value ? new Date(value).toLocaleString() : 'Unavailable'
   return <section className="recovery-work-item-table" aria-label={`${recoveryQueueNames[type]} API work items`}>
-    <div className="recovery-work-item-table-heading"><div><h3>Recovery work items</h3><p>Each row is one ULD. Rows are grouped under their MAWB.</p></div><span className="recovery-data-source">Live API data</span></div>
+    <div className="recovery-work-item-table-heading"><div><h3>Recovery work items</h3></div><span className="recovery-data-source">{sourceLabel}</span></div>
     <div className="table-wrap"><table><thead><tr><th scope="col">ROUTE / FLIGHT</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
       {groupedItems.map(([mawbNumber, group]) => <Fragment key={mawbNumber}>
         <tr className="recovery-mawb-group"><th colSpan={7} scope="rowgroup"><span>MAWB {group[0].masterAirwayBill.displayLabel}</span><small>{group.length} ULD {group.length === 1 ? 'record' : 'records'}</small></th></tr>
-        {group.map((item) => <tr key={item.workItemId} className={selectedWorkItemId === item.workItemId ? 'selected' : ''}>
+        {group.map((item) => <tr key={item.workItemId} tabIndex={onOpenRecovery ? 0 : undefined} aria-label={onOpenRecovery ? `Open recovery for ${item.flight.flightId}, ULD ${item.uld.uldId}` : undefined} className={`${selectedWorkItemId === item.workItemId ? 'selected ' : ''}${onOpenRecovery ? 'recovery-work-item-clickable' : ''}`} onClick={() => { onSelect?.(item); onOpenRecovery?.(item.workItemId, item.flight.flightId) }} onKeyDown={(event) => { if (onOpenRecovery && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); onSelect?.(item); onOpenRecovery(item.workItemId, item.flight.flightId) } }}>
           <td data-label="ROUTE / FLIGHT"><strong>{item.flight.flightId}</strong><span>{item.flight.origin} → {item.flight.destination}</span></td>
-          <td data-label="ULD"><button type="button" className="recovery-work-item-select" aria-pressed={selectedWorkItemId === item.workItemId} onClick={() => onSelect(item)}><strong>{item.uld.uldId}</strong><span>{item.uld.uldType}</span></button></td>
+          <td data-label="ULD"><strong>{item.uld.uldId}</strong><span>{item.uld.uldType}</span></td>
           <td data-label="STATUS"><RecoveryStatusBadge type={type} status={item.pool?.disposition ?? item.status} /></td>
           <td data-label="CARGO WEIGHT">{item.cargo.weightKg.toLocaleString()} kg</td>
           <td data-label="VOLUME">{item.cargo.volumeM3.toLocaleString()} m³</td>
@@ -106,24 +108,17 @@ const unavailableExamples: Record<QueueType, { mawb: string; flightId: string; o
   },
 }
 
-export function RecoveryApiUnavailablePreview({ type }: { type: QueueType }) {
+export function RecoveryApiUnavailablePreview({ type, onOpenRecovery }: { type: QueueType; onOpenRecovery?: (workItemId: string, flightId: string) => void }) {
   const example = unavailableExamples[type]
-  return <section className="recovery-api-unavailable-preview" aria-label={`${recoveryQueueNames[type]} demo data preview`}>
-    <div className="recovery-api-preview-heading"><div><p className="eyebrow">Demo data · fictional record</p><h3>{recoveryQueueNames[type]} layout</h3><p>Fictional values for design demonstration only. These records are not returned by the API.</p></div><span className="status-pill status-caution">Preview only</span></div>
-    <div className="recovery-work-item-table recovery-demo-work-item-table">
-      <div className="table-wrap"><table><thead><tr><th scope="col">ROUTE / FLIGHT</th><th scope="col">ULD</th><th scope="col">STATUS</th><th scope="col">CARGO WEIGHT</th><th scope="col">VOLUME</th><th scope="col">DELIVERY COMMITMENT</th><th scope="col">LAST UPDATED</th></tr></thead><tbody>
-        <tr className="recovery-mawb-group"><th colSpan={7} scope="rowgroup"><span>MAWB {example.mawb}</span><small>1 ULD record · demo</small></th></tr>
-        <tr>
-          <td><strong>{example.flightId}</strong><span>{example.origin} → {example.destination}</span></td>
-          <td><strong>{example.uldId}</strong><span>{example.uldType}</span></td>
-          <td><RecoveryStatusBadge type={type} status={example.statusCode}>{example.statusLabel}</RecoveryStatusBadge></td>
-          <td>{example.weightKg.toLocaleString()} kg</td>
-          <td>{example.volumeM3.toLocaleString()} m³</td>
-          <td>{example.commitment}</td>
-          <td>{example.updatedAt}</td>
-        </tr>
-      </tbody></table></div>
-    </div>
-    <p className="recovery-api-preview-boundary">This fictional row is separate from queue state. Review and decision controls remain disabled until the recovery API returns real records.</p>
-  </section>
+  const item: RecoveryWorkItem = {
+    workItemId: `demo-${type.toLowerCase()}`, type, status: example.statusCode, predictionUnit: 'ULD',
+    uld: { uldId: example.uldId, uldType: example.uldType, weightKg: example.weightKg, volumeM3: example.volumeM3, origin: example.origin, destination: example.destination },
+    masterAirwayBill: { number: example.mawb, documentId: `demo-mawb-${type.toLowerCase()}`, displayLabel: example.mawb },
+    flight: { flightId: example.flightId, origin: example.origin, destination: example.destination, scheduledDeparture: null, aircraftType: null },
+    cargo: { shipmentIds: [], weightKg: example.weightKg, volumeM3: example.volumeM3, handlingRequirements: [], commodity: null, valueAtRisk: null, currency: null },
+    document: { documentId: `demo-document-${type.toLowerCase()}`, version: 1, updatedAt: new Date().toISOString() },
+    updatedAt: new Date().toISOString(), caseSummary: { disruption: 'Demo disruption', capacityConstraint: 'Demo constraint', deliveryCommitment: example.commitment, baselineExpectedLoss: 0, currency: 'USD' },
+    ...(type === 'PENDING_POOL' ? { pool: { source: 'DOMINO_OFFLOAD' as const, sourceFlightId: example.flightId, eligibleForNoShowReplacement: false, priorityHold: true, disposition: 'PRIORITY_HOLD' as const } } : {}),
+  }
+  return <RecoveryWorkItemTable type={type} items={[item]} selectedWorkItemId="" sourceLabel="Demo data · API unavailable" onOpenRecovery={onOpenRecovery} />
 }

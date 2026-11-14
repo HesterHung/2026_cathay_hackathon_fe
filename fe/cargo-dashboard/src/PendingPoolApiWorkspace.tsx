@@ -68,7 +68,7 @@ async function listActiveTargetItems(type: 'DISRUPTION' | 'PREDICTED_OFFLOAD', s
   return items.filter(isActiveTarget)
 }
 
-export function PendingPoolApiWorkspace({ initialFlightId }: { initialFlightId?: string }) {
+export function PendingPoolApiWorkspace({ initialFlightId, onOpenRecovery }: { initialFlightId?: string; onOpenRecovery: (workItemId: string, flightId: string) => void }) {
   const [pool, setPool] = useState<RecoveryListResponse | null>(null)
   const [targets, setTargets] = useState<RecoveryWorkItem[]>([])
   const [targetError, setTargetError] = useState<RecoveryApiError | null>(null)
@@ -237,23 +237,23 @@ export function PendingPoolApiWorkspace({ initialFlightId }: { initialFlightId?:
   const noShowActionRequired = useMemo(() => action === 'CONSIDER_FOR_NO_SHOW' && !noShowReady, [action, noShowReady])
 
   return <section className="panel pending-api-workspace">
-    <div className="panel-heading"><div><h2>Pending Pool · live recovery work</h2><p>Inspect API pool inventory, protect it for active priority work, and evaluate candidates against a live target.</p></div><button className="outline-button" type="button" disabled={queueLoading} onClick={() => { setSavedMessage(null); refresh() }}>{queueLoading ? 'Loading…' : 'Refresh queue'}</button></div>
+    <div className="panel-heading"><div><h2>Pending Pool · live recovery work</h2></div><button className="outline-button" type="button" disabled={queueLoading} onClick={() => { setSavedMessage(null); refresh() }}>{queueLoading ? 'Loading…' : 'Refresh queue'}</button></div>
     {queueLoading && !pool && <div className="empty-state" role="status"><strong>Loading pending-pool candidates</strong><span>Fetching pool inventory and active priority targets from the recovery API.</span></div>}
     {queueError && <div className="api-state error" role="alert"><strong>{errorHeading(queueError)}</strong><span>{queueError.message}</span>{pool && <small>Showing the last successful pool response from {formattedTime(queueCheckedAt)}.</small>}</div>}
-    {queueError && !pool && <RecoveryApiUnavailablePreview type="PENDING_POOL" />}
+    {queueError && !pool && <RecoveryApiUnavailablePreview type="PENDING_POOL" onOpenRecovery={onOpenRecovery} />}
     {stale && <div className="api-state stale" role="status"><strong>Pool data may be stale</strong><span>Refresh the queue before recording a decision.</span></div>}
     {savedMessage && <div className="api-state success" role="status"><strong>{savedMessage}</strong><span>Refreshing candidate detail and saved review history.</span></div>}
     {pool && <>
       {!queueError && <div className="api-state success" role="status"><strong>{pool.totalItems} matching pending-pool record(s)</strong><span>Loaded {formattedTime(queueCheckedAt)} · page {pool.pagination.page} of {pool.pagination.totalPages}</span></div>}
       {queueWorkflow && <RecoveryWorkflowPanel type="PENDING_POOL" queueControl={queueWorkflow} itemControl={current?.workflowControl} />}
       <RecoveryQueueFilterBar value={filterDraft} disabled={queueLoading} onChange={setFilterDraft} onApply={() => { setPage(1); setFilters({ flightId: filterDraft.flightId.trim(), masterAirwayBillNumber: filterDraft.masterAirwayBillNumber.trim(), status: filterDraft.status.trim() }) }} onClear={() => { setFilterDraft(emptyRecoveryQueueFilters); setFilters(emptyRecoveryQueueFilters); setPage(1) }} />
-      {items.length === 0 ? <div className="empty-state"><strong>No pending-pool candidates</strong><span>The API returned an empty page. No demo candidates are substituted.</span></div> : <><RecoveryWorkItemTable type="PENDING_POOL" items={items} selectedWorkItemId={selectedId} onSelect={(item) => { setSelectedId(item.workItemId); setSavedMessage(null); setSaveError(null); setEvaluatedFor(null); setCandidateResult(null) }} /><div className="pending-api-layout pending-api-layout-detail">
+      {items.length === 0 ? <div className="empty-state"><strong>No pending-pool candidates</strong><span>The API returned an empty page. No demo candidates are substituted.</span></div> : <><RecoveryWorkItemTable type="PENDING_POOL" items={items} selectedWorkItemId={selectedId} onOpenRecovery={onOpenRecovery} onSelect={(item) => { setSelectedId(item.workItemId); setSavedMessage(null); setSaveError(null); setEvaluatedFor(null); setCandidateResult(null) }} /><div className="pending-api-layout pending-api-layout-detail">
         
         <div className="pending-api-detail">
           {detailLoading && <div className="empty-state" role="status"><strong>Loading candidate detail</strong><span>Reading the current disposition and ULD review history.</span></div>}
           {detailError && <div className="api-state error" role="alert"><strong>Could not load pool candidate detail</strong><span>{errorHeading(detailError)}: {detailError.message}</span></div>}
           {current && <>
-            <header className="pending-api-detail-head"><div><p className="eyebrow">PENDING POOL · {current.status}</p><h3>{current.uld.uldId} · {current.masterAirwayBill.displayLabel}</h3><p>{current.flight.flightId} · {current.flight.origin} → {current.flight.destination} · source {current.pool?.sourceFlightId ?? current.flight.flightId}</p></div><RecoveryStatusBadge type="PENDING_POOL" status={current.pool?.disposition ?? current.status} /></header>
+            <header className="pending-api-detail-head"><div><p className="eyebrow">PENDING POOL · {current.status}</p><h3>{current.uld.uldId} · {current.masterAirwayBill.displayLabel}</h3><p><button className="text-button" type="button" onClick={() => onOpenRecovery(current.workItemId, current.flight.flightId)}>{current.flight.flightId} · {current.flight.origin} → {current.flight.destination} · Open recovery</button> · source {current.pool?.sourceFlightId ?? current.flight.flightId}</p></div><RecoveryStatusBadge type="PENDING_POOL" status={current.pool?.disposition ?? current.status} /></header>
             <div className="pending-api-facts"><article><small>ULD / WEIGHT</small><strong>{current.uld.uldType} · {current.uld.weightKg.toLocaleString()} kg</strong><span>Volume {current.uld.volumeM3.toLocaleString()} m³</span></article><article><small>CARGO</small><strong>{current.cargo.commodity ?? 'Commodity unavailable'}</strong><span>{current.cargo.weightKg.toLocaleString()} kg · {current.cargo.volumeM3.toLocaleString()} m³</span></article><article><small>NO-SHOW CAPABILITY</small><strong>{current.pool?.eligibleForNoShowReplacement ? 'Potentially eligible' : 'Not eligible'}</strong><span>This flag is not proof of a confirmed no-show or compatibility.</span></article><article><small>CURRENT DISPOSITION</small><strong>{current.pool?.disposition ?? 'Unavailable'}</strong><span>{current.pool?.lastDispositionAt ? `Last changed ${formattedTime(current.pool.lastDispositionAt)}` : `Priority hold: ${current.pool?.priorityHold ? 'yes' : 'no'}`}</span></article><article><small>SHIPMENTS / HANDLING</small><strong>{current.cargo.shipmentIds.length ? current.cargo.shipmentIds.join(', ') : 'Shipment IDs unavailable'}</strong><span>{current.cargo.handlingRequirements.join(', ') || 'No handling requirements supplied'}</span></article><article><small>DOCUMENT</small><strong>Version {current.document.version}</strong><span>Updated {formattedTime(current.document.updatedAt)}</span></article></div>
             <RecoveryDeadlineNotice commitment={selectedTarget?.caseSummary?.deliveryCommitment ?? current.caseSummary?.deliveryCommitment} />
             <section className="pending-api-evaluation"><h4>Evaluate against an active priority target</h4><p>Candidate checks report compatibility only. They do not assign or reserve this ULD.</p>
@@ -272,6 +272,5 @@ export function PendingPoolApiWorkspace({ initialFlightId }: { initialFlightId?:
       </div></>}
       <div className="recovery-api-pagination"><span>Page {pool.pagination.page} of {pool.pagination.totalPages} · {pool.totalItems} pool candidates</span><div><button className="outline-button" type="button" disabled={queueLoading || page <= 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</button><button className="outline-button" type="button" disabled={queueLoading || !pool.pagination.hasNextPage} onClick={() => setPage((value) => value + 1)}>Next</button></div></div>
     </>}
-    <small className="api-contract-note">This workflow evaluates and records reviews only. Actual substitution requires a separate authorized allocation and confirmation flow.</small>
   </section>
 }

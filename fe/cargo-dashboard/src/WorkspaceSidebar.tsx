@@ -5,7 +5,6 @@ const navigation: { item: Exclude<WorkspaceNavItem, 'Unknown'>; label: string; i
   { item: 'Disruption Alerts', label: 'Disruption Alerts', icon: 'alert' },
   { item: 'Predicted Offload', label: 'Predicted Offload', icon: 'chart' },
   { item: 'Pending Pool', label: 'Pending Pool', icon: 'box' },
-  { item: 'Recovery Solution', label: 'Recovery Solution', icon: 'route' },
   { item: 'Shipments', label: 'Cargo Value & Profiles', icon: 'box' },
   { item: 'Business Insights', label: 'Business Insights', icon: 'chart' },
   { item: 'Settings', label: 'Settings', icon: 'settings' },

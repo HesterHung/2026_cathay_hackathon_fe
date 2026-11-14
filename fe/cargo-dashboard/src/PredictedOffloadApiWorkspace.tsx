@@ -61,7 +61,7 @@ function FlightCapacityEvidence({ summary }: { summary: FlightSummary }) {
   </section>
 }
 
-export function PredictedOffloadApiWorkspace({ initialFlightId }: { initialFlightId?: string }) {
+export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }: { initialFlightId?: string; onOpenRecovery: (workItemId: string, flightId: string) => void }) {
   const [list, setList] = useState<RecoveryListResponse | null>(null)
   const [listError, setListError] = useState<RecoveryApiError | null>(null)
   const [listLoading, setListLoading] = useState(true)
@@ -210,10 +210,10 @@ export function PredictedOffloadApiWorkspace({ initialFlightId }: { initialFligh
   }
 
   return <section className="panel predicted-api-workspace">
-    <div className="panel-heading"><div><h2>Predicted Offload · live recovery work</h2><p>Flight-level forecasts support triage; each ULD keeps its own prediction evidence, review, and document version.</p></div><button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
+    <div className="panel-heading"><div><h2>Predicted Offload · live recovery work</h2></div><button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
     {listLoading && !list && <div className="empty-state" role="status"><strong>Loading predicted-offload queue</strong><span>Fetching ULD work items and forecast service flight summaries.</span></div>}
     {listError && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not load predicted-offload queue'}</strong><span>{apiErrorLabel(listError)}</span>{list && <small>Showing the last successful response from {timeLabel(fetchedAt)}.</small>}</div>}
-    {listError && !list && <RecoveryApiUnavailablePreview type="PREDICTED_OFFLOAD" />}
+    {listError && !list && <RecoveryApiUnavailablePreview type="PREDICTED_OFFLOAD" onOpenRecovery={onOpenRecovery} />}
     {stale && <div className="api-state stale" role="status"><strong>Forecast queue may be stale</strong><span>The last successful response is over five minutes old. Refresh before reviewing a ULD.</span></div>}
     {savedMessage && <div className="api-state success" role="status"><strong>{savedMessage}</strong><span>The latest forecast record and review history are being reloaded.</span></div>}
     {list && <>
@@ -221,7 +221,7 @@ export function PredictedOffloadApiWorkspace({ initialFlightId }: { initialFligh
       <RecoveryWorkflowPanel type="PREDICTED_OFFLOAD" queueControl={list.workflowControl} itemControl={activeDetail?.workflowControl} />
       <RecoveryQueueFilterBar value={filterDraft} disabled={listLoading} onChange={setFilterDraft} onApply={() => { setPage(1); setFilters({ flightId: filterDraft.flightId.trim(), masterAirwayBillNumber: filterDraft.masterAirwayBillNumber.trim(), status: filterDraft.status.trim() }) }} onClear={() => { setFilterDraft(emptyRecoveryQueueFilters); setFilters(emptyRecoveryQueueFilters); setPage(1) }} />
       {list.items.length === 0 && <div className="empty-state"><strong>No predicted-offload ULD work items</strong><span>The API returned an empty queue. No fixture records are substituted here.</span></div>}
-      {list.items.length > 0 && <RecoveryWorkItemTable type="PREDICTED_OFFLOAD" items={items} selectedWorkItemId={selectedWorkItemId} onSelect={(item) => { setSavedMessage(null); selectedFlightIdRef.current = item.flight.flightId; setSelectedFlightId(summaryFlightIds.has(item.flight.flightId) ? item.flight.flightId : ''); resetSelectedWork(); setSelectedWorkItemId(item.workItemId) }} />}
+      {list.items.length > 0 && <RecoveryWorkItemTable type="PREDICTED_OFFLOAD" items={items} selectedWorkItemId={selectedWorkItemId} onOpenRecovery={onOpenRecovery} onSelect={(item) => { setSavedMessage(null); selectedFlightIdRef.current = item.flight.flightId; setSelectedFlightId(summaryFlightIds.has(item.flight.flightId) ? item.flight.flightId : ''); resetSelectedWork(); setSelectedWorkItemId(item.workItemId) }} />}
       {list.items.length > 0 && summaries.length === 0 && <div className="api-state error" role="alert"><strong>Flight summaries missing</strong><span>The predicted-offload contract requires forecast-service flight summaries. ULD records are available, but flight-level triage is not inferred from ULD probabilities.</span></div>}
       {summaries.length > 0 && <section className="predicted-flight-summary-grid" aria-label="Flight forecast summaries">{summaries.map((summary: FlightSummary) => {
         const summaryUlds = uldsForFlight(items, summary.flightId)

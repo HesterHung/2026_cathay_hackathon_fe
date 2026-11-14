@@ -14,7 +14,7 @@ const insights = [
 
 export function BusinessInsightsPage({ onNavigate }: { onNavigate: (item: WorkspaceNavItem) => void }) {
   return <div className="app-shell"><WorkspaceSidebar active="Business Insights" onNavigate={onNavigate} /><main className="main-content shipment-page business-insights-page">
-    <header className="topbar"><div className="crumb">CATHAY ROUTER <span>/</span> BUSINESS INSIGHTS</div><Badge className="border-amber-200 bg-amber-50 text-amber-900">Illustrative</Badge></header>
+    <header className="topbar"><div className="crumb">CATHAY ROUTER <span>/</span> BUSINESS INSIGHTS</div></header>
     <section className="insight-context"><div><h1>ULD business insights</h1></div><div className="insight-context-meta"><span>Last 6 weeks</span></div></section>
     <section className="kpi-grid insight-kpis uld-kpis" aria-label="Insight summary">
       <article className="kpi-card neutral"><div className="kpi-top"><span>Avg. offload rate</span></div><strong>4.8%</strong><small>Across 6 weeks</small></article>

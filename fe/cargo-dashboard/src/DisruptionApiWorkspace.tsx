@@ -45,7 +45,7 @@ function AdditionalOptionEvidence({ detail }: { detail: RecoveryOptionDetail }) 
   </section>
 }
 
-export function DisruptionApiWorkspace() {
+export function DisruptionApiWorkspace({ onOpenRecovery }: { onOpenRecovery: (workItemId: string, flightId: string) => void }) {
   const [list, setList] = useState<RecoveryListResponse | null>(null)
   const [listError, setListError] = useState<RecoveryApiError | null>(null)
   const [listLoading, setListLoading] = useState(true)
@@ -162,10 +162,10 @@ export function DisruptionApiWorkspace() {
   }
 
   return <section className="panel disruption-api-workspace">
-    <div className="panel-heading"><div><h2>Disruption Alerts · live recovery work</h2><p>Authoritative API work items grouped by MAWB. ULD evidence and decisions remain independent inside each group.</p></div><button className="outline-button" type="button" disabled={listLoading} onClick={refreshList}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
+    <div className="panel-heading"><div><h2>Disruption Alerts · live recovery work</h2></div><button className="outline-button" type="button" disabled={listLoading} onClick={refreshList}>{listLoading ? 'Loading…' : 'Refresh queue'}</button></div>
     {listLoading && !list && <div className="empty-state" role="status"><strong>Loading confirmed disruptions</strong><span>Fetching the DISRUPTION queue from the recovery-solutions API.</span></div>}
     {listError && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not load disruption queue'}</strong><span>{messageFor(listError)}</span>{list && <small>Showing the last successful queue response from {formatTimestamp(listFetchedAt)}.</small>}</div>}
-    {listError && !list && <RecoveryApiUnavailablePreview type="DISRUPTION" />}
+    {listError && !list && <RecoveryApiUnavailablePreview type="DISRUPTION" onOpenRecovery={onOpenRecovery} />}
     {isStale && <div className="api-state stale" role="status"><strong>Queue data may be stale</strong><span>Last successful response was over five minutes ago. Refresh before recording a review.</span></div>}
     {savedMessage && <div className="api-state success" role="status"><strong>{savedMessage}</strong><span>The latest ULD document version and review history are being reloaded.</span></div>}
     {list && <>
@@ -173,11 +173,11 @@ export function DisruptionApiWorkspace() {
       <RecoveryWorkflowPanel type="DISRUPTION" queueControl={list.workflowControl} itemControl={detail?.workItemId === selectedWorkItemId ? detail.workflowControl : undefined} />
       <RecoveryQueueFilterBar value={filterDraft} disabled={listLoading} onChange={setFilterDraft} onApply={() => { setPage(1); setFilters({ flightId: filterDraft.flightId.trim(), masterAirwayBillNumber: filterDraft.masterAirwayBillNumber.trim(), status: filterDraft.status.trim() }) }} onClear={() => { setFilterDraft(emptyRecoveryQueueFilters); setFilters(emptyRecoveryQueueFilters); setPage(1) }} />
       {list.items.length === 0 ? <div className="empty-state"><strong>No confirmed disruption work on this page</strong><span>The live API returned an empty DISRUPTION page. No fixture records are substituted into this queue.</span></div> : <>
-        <RecoveryWorkItemTable type="DISRUPTION" items={list.items} selectedWorkItemId={selectedWorkItemId} onSelect={(item) => { setSavedMessage(null); clearSelectedRecord(); setSelectedWorkItemId(item.workItemId) }} />
+        <RecoveryWorkItemTable type="DISRUPTION" items={list.items} selectedWorkItemId={selectedWorkItemId} onOpenRecovery={onOpenRecovery} onSelect={(item) => { setSavedMessage(null); clearSelectedRecord(); setSelectedWorkItemId(item.workItemId) }} />
         {detailLoading && <div className="empty-state" role="status"><strong>Loading ULD evidence</strong><span>Reading confirmation and document version for the selected work item.</span></div>}
         {detailError && <div className="api-state error" role="alert"><strong>Could not load disruption details</strong><span>{messageFor(detailError)}</span></div>}
         {detail && <>
-          <div className="disruption-api-detail-head"><div><p className="eyebrow">{detail.status} · ULD-LEVEL CASE</p><h3>{detail.uld.uldId} <span>· {detail.masterAirwayBill.displayLabel}</span></h3><p>{detail.flight.flightId} · {detail.flight.origin} → {detail.flight.destination} · {detail.flight.aircraftType ?? 'Aircraft unavailable'}</p></div><RecoveryStatusBadge type="DISRUPTION" status={detail.status}>{detail.confirmedOffload ? 'CONFIRMED DISRUPTION' : 'CONFIRMATION EVIDENCE MISSING'}</RecoveryStatusBadge></div>
+          <div className="disruption-api-detail-head"><div><p className="eyebrow">{detail.status} · ULD-LEVEL CASE</p><h3>{detail.uld.uldId} <span>· {detail.masterAirwayBill.displayLabel}</span></h3><p><button className="text-button" type="button" onClick={() => onOpenRecovery(detail.workItemId, detail.flight.flightId)}>{detail.flight.flightId} · {detail.flight.origin} → {detail.flight.destination} · {detail.flight.aircraftType ?? 'Aircraft unavailable'} · Open recovery</button></p></div><RecoveryStatusBadge type="DISRUPTION" status={detail.status}>{detail.confirmedOffload ? 'CONFIRMED DISRUPTION' : 'CONFIRMATION EVIDENCE MISSING'}</RecoveryStatusBadge></div>
           <div className="disruption-api-facts">
             <article><small>FLIGHT / DEPARTURE</small><strong>{detail.flight.flightId}</strong><span>{formatTimestamp(detail.flight.scheduledDeparture)}</span></article>
             <article><small>ULD / CARGO</small><strong>{detail.uld.uldType} · {detail.cargo.weightKg.toLocaleString()} kg</strong><span>{detail.cargo.volumeM3.toLocaleString()} m³ · {detail.cargo.handlingRequirements.join(', ') || 'Handling requirements unavailable'}</span></article>
@@ -209,6 +209,5 @@ export function DisruptionApiWorkspace() {
       </>}
       <div className="recovery-api-pagination"><span>Page {list.pagination.page} of {list.pagination.totalPages} · {list.totalItems} disruption records</span><div><button className="outline-button" type="button" disabled={listLoading || page <= 1} onClick={() => { setListLoading(true); setListError(null); setPage((value) => Math.max(1, value - 1)) }}>Previous</button><button className="outline-button" type="button" disabled={listLoading || !list.pagination.hasNextPage} onClick={() => { setListLoading(true); setListError(null); setPage((value) => value + 1) }}>Next</button></div></div>
     </>}
-    <small className="api-contract-note">A review records operator intent only. Booking, allocation, capacity reservation, and offload confirmation require separate authorized operations.</small>
   </section>
 }

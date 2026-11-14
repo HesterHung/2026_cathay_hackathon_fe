@@ -36,7 +36,7 @@ export function UldExposureMap({ units }: UldExposureMapProps) {
   const maxWeight = Math.max(1, ...exposureByCountry.map((country) => country.weight))
   const totalCountries = exposureByCountry.reduce((sum, country) => sum + country.units, 0)
 
-  return <section className="panel overview-uld-map"><div className="panel-heading"><div><h2>ULD offload exposure by destination</h2><p>Destination countries shaded by affected ULD weight</p></div><span className="demo-label">SIMULATED</span></div>
+  return <section className="panel overview-uld-map"><div className="panel-heading"><div><h2>ULD offload exposure by destination</h2><p>Destination countries shaded by affected ULD weight</p></div></div>
     <div className="uld-map-layout"><div className="uld-world-map"><ComposableMap projection="geoEqualEarth" width={800} height={400} projectionConfig={{ scale: 145 }} aria-label="World map of ULD offload exposure by destination country"><Geographies geography="/world-countries-110m.json">{({ geographies }) => geographies.map((geography) => {
       const feature = geography as unknown as MapGeography
       const id = String(feature.id ?? '')

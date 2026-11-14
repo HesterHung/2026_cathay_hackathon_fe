@@ -1,87 +1,118 @@
-import { useMemo, useState } from 'react'
-import { evaluateRecoveryScenario, formatCurrency, formatKg, getOverviewQueues, recoveryCases, recoveryOptions, type RecoveryOption, type RecoveryScenario } from './domain'
+import { useEffect, useState } from 'react'
+import { getRecoveryOptions, getRecoverySolution, type RecoveryDetail, type RecoveryOption, type RecoveryOptionsResponse } from './recoveryApi'
 import { WorkspaceSidebar, type WorkspaceNavItem } from './WorkspaceSidebar'
-import { ShipmentLinks } from './ShipmentLinks'
 
 interface RecoverySolutionPageProps {
   onNavigate: (item: WorkspaceNavItem) => void
-  onReview: (option: RecoveryOption, scenario: RecoveryScenario) => void
-  onSelectShipment: (shipmentId: string) => void
-  initialCaseId?: string
+  initialWorkItemId?: string
   initialFlightId?: string
 }
 
-export function RecoverySolutionPage({ onNavigate, onReview, onSelectShipment, initialCaseId, initialFlightId }: RecoverySolutionPageProps) {
-  const solutionCases = useMemo(() => {
-    const queues = getOverviewQueues()
-    return [
-      ...queues.recovery.flatMap((item) => {
-        const recoveryCase = recoveryCases.find((candidate) => candidate.id === item.lifecycle.recoveryCaseId)
-        return recoveryCase ? [{ id: recoveryCase.id, flightId: item.lifecycle.flightId, shipmentIds: item.lifecycle.shipmentIds, lifecycle: item.lifecycle, forecast: item.forecast, recoveryCase, stage: 'confirmed' as const }] : []
-      }),
-      ...queues.preventive.flatMap((item) => {
-        const recoveryCase = recoveryCases.find((candidate) => candidate.originalFlight === item.lifecycle.flightId)
-        return recoveryCase ? [{ id: recoveryCase.id, flightId: item.lifecycle.flightId, shipmentIds: item.lifecycle.shipmentIds, lifecycle: item.lifecycle, forecast: item.forecast, recoveryCase, stage: 'predicted' as const }] : []
-      }),
-    ]
-  }, [])
-  const initialId = initialCaseId ?? solutionCases.find((item) => item.flightId === initialFlightId)?.id ?? ''
-  const [caseId, setCaseId] = useState(initialId)
-  const selectedCase = solutionCases.find((item) => item.id === caseId)
-  const scenario: RecoveryScenario = selectedCase?.stage === 'predicted' ? 'preventive' : 'recover'
-  const options = useMemo(() => selectedCase ? recoveryOptions.filter((option) => option.caseId === selectedCase.id && selectedCase.shipmentIds.includes(option.shipmentId)) : [], [selectedCase])
-  const evaluations = useMemo(() => evaluateRecoveryScenario(scenario, options), [options, scenario])
-  const recommended = evaluations.filter((item) => item.isFeasible).sort((a, b) => a.costBreakdown.totalExpectedLoss - b.costBreakdown.totalExpectedLoss)[0]
-  const confirmedCount = solutionCases.filter((item) => item.stage === 'confirmed').length
-  const predictedCount = solutionCases.filter((item) => item.stage === 'predicted').length
+interface RecoverySolutionData {
+  detail: RecoveryDetail
+  options: RecoveryOption[]
+  currency: string
+}
 
+const demoWorkflowControl: RecoveryDetail['workflowControl'] = {
+  activePriority: null,
+  canWorkDisruptions: true,
+  canWorkPredictions: true,
+  canReviewPool: true,
+  allowedActionsByType: { DISRUPTION: [], PREDICTED_OFFLOAD: [], PENDING_POOL: [] },
+  blockingWorkItemIds: [],
+  message: 'Demo record. No decision will be sent to the API.',
+}
+
+function makeDemoOption(input: {
+  id: string; route: string; flightId: string; capacity: number; arrival: string; delay: number; feasibility: string; percent: number; loss: number; currency: string; network: string
+}): RecoveryOption {
+  const [from, to] = input.route.split(' → ')
+  const breakdown = { cargoCustomerImpact: input.loss * .55, cathayContributionImpact: input.loss * .15, recoveryAndHandlingCost: input.loss * .1, delayAndServiceImpact: input.loss * .15, downstreamNetworkImpact: input.loss * .05, totalModeledExpectedLoss: input.loss, currency: input.currency }
+  return { optionId: input.id, optionType: 'reroute', recoveryLegs: [{ from, to, operatingFlightId: input.flightId }], feasibilityStatus: input.feasibility as RecoveryOption['feasibilityStatus'], feasibilityPercentage: input.percent, usableCapacityKg: input.capacity, capacityStatus: 'Capacity Confirmation Pending', fuelConstraint: 'Fuel plan requires carrier confirmation', weatherExposure: 'Arrival weather may affect handling', expectedArrival: input.arrival, expectedDelayMinutes: input.delay * 60, recoveryHandlingCost: breakdown.recoveryAndHandlingCost, totalModeledExpectedLoss: input.loss, costBreakdown: breakdown, missingData: ['Live capacity confirmation', 'Station handling confirmation'], networkImpact: input.network }
+}
+
+function buildDemoData(workItemId: string, flightId: string): RecoverySolutionData {
+  const isPool = workItemId.includes('PENDING_POOL')
+  const isPredicted = workItemId.includes('PREDICTED_OFFLOAD')
+  const type = isPool ? 'PENDING_POOL' : isPredicted ? 'PREDICTED_OFFLOAD' : 'DISRUPTION'
+  const uldId = isPredicted ? 'PMC67890CX' : isPool ? 'AKE24680CX' : 'AKE12345CX'
+  const origin = isPredicted ? 'HKG' : 'HKG'
+  const destination = 'LHR'
+  const mawb = isPredicted ? '160-98765432' : isPool ? '160-24681357' : '160-12345675'
+  const now = new Date().toISOString()
+  const detail: RecoveryDetail = {
+    workItemId, type, status: isPool ? 'PRIORITY_HOLD' : isPredicted ? 'PREDICTED_OFFLOAD' : 'RECOVERY_REQUIRED', predictionUnit: 'ULD',
+    uld: { uldId, uldType: isPredicted ? 'PMC' : 'AKE', weightKg: isPredicted ? 980 : isPool ? 860 : 1250, volumeM3: isPredicted ? 5.1 : isPool ? 5.2 : 4.2, origin, destination },
+    masterAirwayBill: { number: mawb, documentId: `demo-mawb-${mawb}`, displayLabel: mawb },
+    flight: { flightId, origin, destination, scheduledDeparture: null, aircraftType: null },
+    cargo: { shipmentIds: [], weightKg: isPredicted ? 980 : isPool ? 860 : 1250, volumeM3: isPredicted ? 5.1 : isPool ? 5.2 : 4.2, handlingRequirements: [], commodity: null, valueAtRisk: null, currency: 'USD' },
+    document: { documentId: `demo-document-${workItemId}`, version: 1, updatedAt: now }, updatedAt: now,
+    caseSummary: { disruption: isPool ? 'Pending-pool candidate available for review.' : isPredicted ? 'Forecast indicates an offload risk.' : 'Confirmed disruption requires a recovery route.', capacityConstraint: 'Candidate capacity requires confirmation.', deliveryCommitment: isPool ? '10 Nov, 18:00' : isPredicted ? '11 Nov, 12:00' : '10 Nov, 18:00', baselineExpectedLoss: 0, currency: 'USD' },
+    workflowControl: demoWorkflowControl, reviewHistory: [],
+    ...(isPool ? { pool: { source: 'DOMINO_OFFLOAD' as const, sourceFlightId: flightId, eligibleForNoShowReplacement: false, priorityHold: true, disposition: 'PRIORITY_HOLD' as const } } : {}),
+    ...(isPredicted ? { forecast: { offloadProbability: .64, capacityShortfallKg: 1250, confidence: 72, forecastedAt: now, reasons: ['Payload risk', 'Weather exposure'], forecastCargoCapacityKg: 14500, bookedWeightKg: 15750, valueAtRisk: 12000, currency: 'USD' } } : {}),
+    ...(!isPool && !isPredicted ? { confirmedOffload: { confirmedAt: now, source: 'AUTHORIZED_DECISION' as const, sourceEventId: `demo-event-${workItemId}`, reason: 'Demo confirmed offload' } } : {}),
+  }
+  const options = isPool ? [makeDemoOption({ id: 'DEMO-AKE24680CX-01', route: 'HKG → LHR', flightId: 'CX251', capacity: 1100, arrival: '11 Nov, 02:15', delay: 8, feasibility: 'Feasibility Unknown', percent: 64, loss: 5900, currency: 'USD', network: 'May consume buffer on CX251 for other priority cargo.' })]
+    : isPredicted ? [makeDemoOption({ id: 'DEMO-PMC67890CX-01', route: 'HKG → LAX', flightId: 'CX881', capacity: 1200, arrival: '17 Oct, 20:00', delay: 5, feasibility: 'Feasible', percent: 86, loss: 8200, currency: 'USD', network: 'No downstream impact identified in demo data.' })]
+      : [makeDemoOption({ id: 'DEMO-AKE12345CX-01', route: 'HKG → LHR', flightId: 'CX253', capacity: 1500, arrival: '11 Nov, 06:30', delay: 12, feasibility: 'Feasibility Unknown', percent: 72, loss: 7800, currency: 'USD', network: 'Uses direct HKG-LHR capacity; onward network impact unknown.' })]
+  return { detail, options, currency: 'USD' }
+}
+
+export function RecoverySolutionPage({ onNavigate, initialWorkItemId, initialFlightId }: RecoverySolutionPageProps) {
+  const [data, setData] = useState<RecoverySolutionData | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+    if (!initialWorkItemId) { setData(null); setLoading(false); setError(null); return }
+    if (initialWorkItemId.startsWith('demo-')) {
+      setData(buildDemoData(initialWorkItemId, initialFlightId ?? 'Unknown flight'))
+      setLoading(false); setError(null)
+      return
+    }
+    const controller = new AbortController()
+    setLoading(true); setError(null); setData(null)
+    void getRecoverySolution(initialWorkItemId, controller.signal)
+      .then(async (detail) => {
+        let options: RecoveryOption[] = []
+        if (detail.type !== 'PENDING_POOL') {
+          const response: RecoveryOptionsResponse = await getRecoveryOptions(initialWorkItemId, controller.signal)
+          options = response.options
+        }
+        if (!controller.signal.aborted) setData({ detail, options, currency: detail.cargo.currency ?? 'USD' })
+      })
+      .catch((cause: unknown) => { if (!controller.signal.aborted) setError(cause instanceof Error ? cause.message : 'Could not load this offload case.') })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false) })
+    return () => controller.abort()
+  }, [initialWorkItemId, initialFlightId])
+
+  const detail = data?.detail
   return <div className="app-shell">
     <WorkspaceSidebar active="Recovery Solution" onNavigate={onNavigate} />
     <main className="main-content shipment-page">
-      <header className="topbar"><div className="crumb">CATHAY ROUTER <span>/</span> RECOVERY SOLUTION</div><span className="demo-label">WORKSPACE</span></header>
-      <div className="page-heading"><div><h1>Recovery Solution</h1><p className="subtitle">One loss-focused routing workflow for predicted and confirmed offloads.</p></div><span className="demo-label">SIMULATED</span></div>
-      <section className="lifecycle-banner"><strong>Shared routing solution</strong><span>Review alternative routes before an offload is confirmed or after a disruption is confirmed. The case stage stays visible; the routing and loss comparison are shared.</span><small>A review decision does not book, allocate, or reassign cargo.</small></section>
-      <section className="plan-entry-summary">
-        <div><small>PREDICTED CASES</small><strong>{predictedCount}</strong></div>
-        <div><small>CONFIRMED DISRUPTIONS</small><strong>{confirmedCount}</strong></div>
-        <div><small>OBJECTIVE</small><strong>Reduce modeled loss</strong></div>
-      </section>
-      <section className="workspace-intro plan-case-picker">
-        <div><p className="eyebrow">SELECT AN OFFLOAD CASE</p><h2>Build or review a routing solution</h2><p>The same comparison supports forecast-risk and confirmed-disruption cases.</p></div>
-        <label>Offload case<select value={caseId} onChange={(event) => setCaseId(event.target.value)}><option value="">Choose a case</option>{solutionCases.map((item) => <option key={`${item.stage}-${item.id}`} value={item.id}>{item.stage === 'confirmed' ? 'Confirmed' : 'Predicted'} · Flight {item.flightId} · {item.recoveryCase.origin} → {item.recoveryCase.destination}</option>)}</select></label>
-      </section>
-      {selectedCase ? <>
+      <header className="topbar"><div className="crumb">CATHAY ROUTER <span>/</span> RECOVERY SOLUTION</div></header>
+      <div className="page-heading"><div><h1>Recovery Solution</h1></div></div>
+      {loading && <div className="api-state" role="status">Loading offload case…</div>}
+      {error && <div className="api-state error" role="alert"><strong>Could not load offload case</strong><span>{error}</span></div>}
+      {detail && data && <>
         <section className="workspace-intro recovery-case-intro selected-flight-card">
-          <div><p className="eyebrow">{selectedCase.stage === 'confirmed' ? 'CONFIRMED DISRUPTION' : 'PREDICTED OFFLOAD'} · {selectedCase.id}</p><h2>Flight {selectedCase.flightId} · {selectedCase.recoveryCase.origin} → {selectedCase.recoveryCase.destination}</h2><p>{selectedCase.recoveryCase.disruption}</p><small>Affected cargo: <ShipmentLinks ids={selectedCase.shipmentIds} onSelect={onSelectShipment} /></small></div>
+          <div><h2>Flight {detail.flight.flightId} · {detail.flight.origin} → {detail.flight.destination} · {detail.uld.uldId}</h2><p>{detail.caseSummary?.disruption ?? 'Offload case details returned by the API.'}</p><small>MAWB {detail.masterAirwayBill.displayLabel} · {detail.uld.weightKg.toLocaleString()} kg · {detail.uld.volumeM3.toLocaleString()} m³</small></div>
         </section>
         <section className="disruption-response-grid">
-          <article><small>CASE STATUS</small><strong>{selectedCase.lifecycle.statusLabel}</strong></article>
-          <article><small>OFFLOAD REASON</small><strong>{selectedCase.recoveryCase.reason}</strong></article>
-          <article><small>DELIVERY COMMITMENT</small><strong>{selectedCase.recoveryCase.deliveryCommitment}</strong></article>
-          <article><small>BASELINE EXPECTED LOSS</small><strong>{formatCurrency(selectedCase.recoveryCase.baselineExpectedLoss)}</strong></article>
+          <article><small>CASE STATUS</small><strong>{detail.status.replaceAll('_', ' ')}</strong></article>
+          <article><small>DELIVERY COMMITMENT</small><strong>{detail.caseSummary?.deliveryCommitment ?? 'Not provided'}</strong></article>
+          <article><small>BASELINE EXPECTED LOSS</small><strong>{detail.caseSummary ? `${detail.caseSummary.baselineExpectedLoss.toLocaleString()} ${detail.caseSummary.currency}` : 'Not provided'}</strong></article>
+          <article><small>DOCUMENT VERSION</small><strong>{detail.document.version}</strong></article>
         </section>
-        {selectedCase.stage === 'predicted' && <section className="analytics-note"><strong>Forecast stage · not a confirmed offload</strong><span>Compare candidate routes now to reduce potential loss. This review does not change the predicted status.</span><small>{selectedCase.forecast ? `${Math.round(selectedCase.forecast.forecastOffloadProbability * 100)}% demo flight risk · ${formatKg(selectedCase.forecast.forecastCapacityShortfall)} forecast shortfall · ${selectedCase.forecast.forecastConfidence}% confidence` : 'Forecast evidence unavailable.'}</small></section>}
+        {detail.forecast && <section className="analytics-note"><strong>Forecast evidence</strong><span>{Math.round(detail.forecast.offloadProbability * 100)}% offload probability · {detail.forecast.capacityShortfallKg.toLocaleString()} kg capacity shortfall · {detail.forecast.confidence}% confidence</span></section>}
         <section className="panel">
-          <div className="panel-heading"><div><p className="eyebrow">LOSS-FOCUSED ROUTING · {selectedCase.stage === 'confirmed' ? 'RECOVERY' : 'PRE-OFFLOAD REVIEW'}</p><h2>Compare routing solutions</h2><p>{evaluations.length} alternatives ranked by feasibility and modeled total expected loss. Confirm capacity, handling, and service constraints before action.</p></div><span className="demo-label">SIMULATED</span></div>
-          {evaluations.length ? <div className="table-wrap"><table className="recovery-comparison-table"><thead><tr><th>OPTION</th><th>ALTERNATIVE ROUTE</th><th>USABLE CAPACITY</th><th>ARRIVAL / DELAY</th><th>RECOVERY COST</th><th>TOTAL MODELED LOSS</th><th>STATUS</th><th /></tr></thead><tbody>
-            {evaluations.map((evaluation) => {
-              const isRecommended = recommended?.option.id === evaluation.option.id
-              return <tr key={evaluation.option.id} className={isRecommended ? 'recommended-row' : ''}>
-                <td><strong>{evaluation.option.id}</strong>{isRecommended && <small className="recommendation-label">LOWEST-LOSS FEASIBLE</small>}</td>
-                <td><strong>{evaluation.option.alternative}</strong><small>{evaluation.option.alternativeFlight}</small></td>
-                <td>{formatKg(evaluation.option.usableCapacityKg)}<small>{evaluation.option.capacityStatus}</small></td>
-                <td>{evaluation.option.expectedArrival}<small>{evaluation.option.delayHours}h delay · {evaluation.deliveryCommitmentFeasible ? 'On time' : 'Deadline risk'}</small></td>
-                <td>{formatCurrency(evaluation.costBreakdown.recoveryAndHandlingCost)}</td>
-                <td><strong>{formatCurrency(evaluation.costBreakdown.totalExpectedLoss)}</strong><small>Includes cargo, service, and network impacts</small></td>
-                <td><span className={`status-pill ${evaluation.isFeasible ? 'status-good' : evaluation.missingData.length ? 'status-pending' : 'status-bad'}`}>{evaluation.isFeasible ? 'Feasible' : evaluation.missingData.length ? 'Check data' : 'Infeasible'}</span></td>
-                <td><button className="text-button" onClick={() => onReview(evaluation.option, scenario)}>Record review →</button></td>
-              </tr>
-            })}
-          </tbody></table></div> : <div className="empty-state"><strong>No routing candidates available</strong><span>There are no options linked to this case in the demo data.</span></div>}
+          <div className="panel-heading"><div><h2>Recovery options</h2><p>{data.options.length} option(s) · compare feasibility, capacity, delay, and modeled loss.</p></div></div>
+          {data.options.length ? <div className="table-wrap"><table className="recovery-comparison-table"><thead><tr><th>OPTION</th><th>ROUTE</th><th>FEASIBILITY</th><th>USABLE CAPACITY</th><th>ARRIVAL / DELAY</th><th>RECOVERY COST</th><th>MODELED LOSS</th><th>NETWORK IMPACT</th></tr></thead><tbody>{data.options.map((option) => <tr key={option.optionId}><td><strong>{option.optionType.replaceAll('_', ' ')}</strong><small>{option.optionId}</small></td><td>{option.recoveryLegs.map((leg) => `${leg.from} → ${leg.to} · ${leg.operatingFlightId}`).join(' / ')}</td><td>{option.feasibilityStatus}<small>{option.feasibilityPercentage}%</small></td><td>{option.usableCapacityKg.toLocaleString()} kg<small>{option.capacityStatus}</small></td><td>{option.expectedArrival}<small>{option.expectedDelayMinutes} min</small></td><td>{option.recoveryHandlingCost.toLocaleString()} {data.currency}</td><td>{option.totalModeledExpectedLoss.toLocaleString()} {data.currency}</td><td>{option.networkImpact}</td></tr>)}</tbody></table></div> : <div className="empty-state"><strong>No recovery options available</strong><span>{detail.type === 'PENDING_POOL' ? 'Pool candidates are evaluated against an active disruption or predicted-offload target.' : 'The API returned no route options for this case.'}</span></div>}
         </section>
-        <section className="analytics-note"><strong>How to use this solution</strong><span>Compare feasible alternatives and modeled loss. A review records operator intent only; operational systems must confirm any route or ULD movement.</span><small>Recommendation is a lowest-loss feasible candidate in this demo, not a proven global optimum.</small></section>
-      </> : <div className="plan-selection-prompt">{solutionCases.length ? 'Select a predicted or confirmed case above to compare routing solutions.' : 'No cases are currently available.'}</div>}
-      <footer>All cases, routing options, cost estimates, and feasibility results are synthetic. No live booking or cargo reassignment is executed.</footer>
+        {detail.reviewHistory.length > 0 && <section className="panel"><div className="panel-heading"><div><h2>Review history</h2></div></div><div className="table-wrap"><table><thead><tr><th>DECISION</th><th>REVIEWER</th><th>REASON</th><th>REVIEWED</th></tr></thead><tbody>{detail.reviewHistory.map((review) => <tr key={review.decisionId}><td>{review.decision.replaceAll('_', ' ')}</td><td>{review.reviewerId}</td><td>{review.reason}</td><td>{new Date(review.reviewedAt).toLocaleString()}</td></tr>)}</tbody></table></div></section>}
+      </>}
+      {!detail && !loading && !error && <div className="empty-state"><strong>Select a flight record to open its recovery case</strong></div>}
     </main>
   </div>
 }
