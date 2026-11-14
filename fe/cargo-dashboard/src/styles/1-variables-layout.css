@@ -60,7 +60,7 @@
   .page-heading { display: flex; justify-content: space-between; align-items: center; padding: 36px 0 27px; margin-left: 12px;}
   .page-heading:has(> div > h1:first-child) { padding-top: 20px; }
   .empty-state {padding-inline: 12px;}
-  .empty-state > span {display: inline-block; padding: 12px 0;}
+  .empty-state span {display: block; padding: 12px 0;}
   .eyebrow { color: #7c8c86; font-size: 10px; letter-spacing: 1.4px; font-weight: 700; margin: 0 0 9px; }
   .page-heading h1 { font: 800 30px 'Manrope', sans-serif; letter-spacing: -.5px; margin: 0 0 7px; }
   .subtitle { color: var(--muted); margin: 0; font-size: 13px; }
