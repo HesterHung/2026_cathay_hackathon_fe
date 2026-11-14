@@ -9,10 +9,10 @@ import { Card } from './components/ui/card'
 import { saveRecoveryDecision } from './recoveryApi'
 
 type Phase = 'idle' | 'running' | 'complete'
-interface RecoveryAgentRunProps { detail: RecoveryDetail; options: RecoveryOption[]; currency: string; onReviewed?: (optionId: string) => void; onRejected?: (optionId: string) => void; openBestRouteRequest?: number }
+interface RecoveryAgentRunProps { detail: RecoveryDetail; options: RecoveryOption[]; currency: string; onReviewed?: (optionId: string) => void; onRejected?: (optionId: string) => void }
 interface FeedItem { stage: string; title: string; body: string; tone?: 'warning' | 'success' }
 
-export function RecoveryAgentRun({ detail, options, currency, onReviewed, onRejected, openBestRouteRequest = 0 }: RecoveryAgentRunProps) {
+export function RecoveryAgentRun({ detail, options, currency, onReviewed, onRejected }: RecoveryAgentRunProps) {
   const [phase, setPhase] = useState<Phase>('idle')
   const [visibleItems, setVisibleItems] = useState(0)
   const [showAlternatives, setShowAlternatives] = useState(false)
@@ -67,12 +67,6 @@ export function RecoveryAgentRun({ detail, options, currency, onReviewed, onReje
     }, 520)
     return () => window.clearInterval(timer)
   }, [phase, feed.length])
-
-  useEffect(() => {
-    if (!openBestRouteRequest) return
-    setVisibleItems(feed.length)
-    setPhase('complete')
-  }, [openBestRouteRequest, feed.length])
 
   useEffect(() => {
     const node = feedRef.current
