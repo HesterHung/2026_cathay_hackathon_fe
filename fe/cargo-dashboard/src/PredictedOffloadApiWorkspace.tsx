@@ -6,7 +6,6 @@ import { Button } from './components/ui/button'
 import {
   getRecoveryOption,
   getRecoveryOptions,
-  getRecoverySolution,
   listRecoverySolutions,
   confirmPredictedOffload,
   RecoveryApiError,
@@ -18,7 +17,7 @@ import {
   type RecoveryOptionsResponse,
   type RecoveryWorkItem,
 } from './recoveryApi'
-import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkflowPanel, RecoveryWorkItemTable } from './RecoveryQueueShared'
+import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkItemTable } from './RecoveryQueueShared'
 import { emptyRecoveryQueueFilters, isQueueDecisionAllowed, recoveryFilterQuery, type RecoveryQueueFilters } from './recoveryQueueUi'
 
 function toApiError(error: unknown): RecoveryApiError {
@@ -159,7 +158,6 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
           : result.flightSummaries[0]?.flightId ?? ''
         selectedFlightIdRef.current = nextFlight
         setSelectedFlightId(nextFlight)
-        const flightItems = uldsForFlight(result.items, nextFlight)
         setSelectedWorkItemId('')
       }).catch((error: unknown) => {
         if (!(error instanceof DOMException && error.name === 'AbortError')) setListError(toApiError(error))
@@ -209,7 +207,6 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
 
   const summaries = list?.flightSummaries ?? []
   const items = list?.items ?? []
-  const summaryFlightIds = new Set(summaries.map((summary) => summary.flightId))
   const listWorkflow = list?.workflowControl
   const selectedListItem = items.find((item) => item.workItemId === selectedWorkItemId)
   const activeDetail = detail?.workItemId === selectedWorkItemId ? detail : null

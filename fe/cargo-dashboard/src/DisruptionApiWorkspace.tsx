@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import {
   getRecoveryOption,
   getRecoveryOptions,
-  getRecoverySolution,
   listRecoverySolutions,
   RecoveryApiError,
   saveRecoveryDecision,
@@ -11,7 +10,7 @@ import {
   type RecoveryOptionDetail,
   type RecoveryOptionsResponse,
 } from './recoveryApi'
-import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkflowPanel, RecoveryWorkItemTable } from './RecoveryQueueShared'
+import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkItemTable } from './RecoveryQueueShared'
 import { emptyRecoveryQueueFilters, isQueueDecisionAllowed, recoveryFilterQuery, type RecoveryQueueFilters } from './recoveryQueueUi'
 
 function messageFor(error: RecoveryApiError): string {

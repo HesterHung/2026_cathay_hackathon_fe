@@ -12,7 +12,7 @@ import {
   type ReplacementCandidatesResponse,
   type RecoveryDecision,
 } from './recoveryApi'
-import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkflowPanel, RecoveryWorkItemTable } from './RecoveryQueueShared'
+import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkItemTable } from './RecoveryQueueShared'
 import { emptyRecoveryQueueFilters, isQueueDecisionAllowed, recoveryFilterQuery, type RecoveryQueueFilters } from './recoveryQueueUi'
 
 type PoolAction = Extract<RecoveryDecision, 'HOLD_FOR_PRIORITY' | 'RELEASE_HOLD' | 'CONSIDER_FOR_NO_SHOW' | 'CLEAR_NO_SHOW_REVIEW'>

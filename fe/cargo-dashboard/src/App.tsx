@@ -1,6 +1,6 @@
 import { Component, useMemo, useState, type ReactNode } from 'react'
 import './App.css'
-import { aggregateForecastOffloadRate, assessShipmentValue, buildForecasts, calculatePotentialLossAvoidable, customerProfiles, demoOffloadMetrics, demoOutcomes, evaluateRecoveryScenario, evaluateRecoverySensitivity, explainRecoveryEvaluation, formatCurrency, formatKg, getShipmentScenarioLoss, getWeather, recordRecoveryDecision, recoveryOptions, shipments, weatherAssessments, type CustomerValueProfile, type FlightCapacityForecast, type RecoveryDecision, type RecoveryOption, type Shipment } from './domain'
+import { aggregateForecastOffloadRate, assessShipmentValue, buildForecasts, calculatePotentialLossAvoidable, customerProfiles, demoOffloadMetrics, demoOutcomes, evaluateRecoveryScenario, explainRecoveryEvaluation, formatCurrency, formatKg, getShipmentScenarioLoss, getWeather, recoveryOptions, shipments, weatherAssessments, type CustomerValueProfile, type FlightCapacityForecast, type RecoveryOption, type Shipment } from './domain'
 import { OffloadTrendChart } from './OffloadTrendChart'
 import { DisruptionAlertsPage } from './DisruptionAlertsPage'
 import { PredictedOffloadPage } from './PredictedOffloadPage'
@@ -11,30 +11,6 @@ import { WorkspaceSidebar as SharedWorkspaceSidebar, type WorkspaceNavItem } fro
 import { ApiIntegrationPanel } from './ApiIntegrationPanel'
 import { BusinessInsightsPage } from './BusinessInsightsPage'
 export { RecoveryDrawer }
-
-function RecoveryDecisionDrawer({ option, scenario, onClose }: { option: RecoveryOption; scenario: 'no-intervention' | 'preventive' | 'recover'; onClose: () => void }) {
-  const evaluation = evaluateRecoveryScenario(scenario).find((item) => item.option.id === option.id)
-  const sensitivity = evaluateRecoverySensitivity(option.id)
-  const [decision, setDecision] = useState<'Pending review' | 'Approved for operational review' | 'Rejected / override recorded'>('Pending review')
-  const [reason, setReason] = useState('')
-  const [recorded, setRecorded] = useState(false)
-  const [saveError, setSaveError] = useState(false)
-  if (!evaluation) return null
-  const explanation = explainRecoveryEvaluation(evaluation)
-  const saveDecision = (nextDecision: RecoveryDecision['decision']) => {
-    if (!reason.trim()) return
-    try {
-      recordRecoveryDecision({ optionId: option.id, decision: nextDecision, reason: reason.trim(), recordedAt: new Date().toISOString(), simulated: true })
-      setDecision(nextDecision === 'approved-for-review' ? 'Approved for operational review' : 'Rejected / override recorded')
-      setRecorded(true)
-      setSaveError(false)
-    } catch {
-      setRecorded(false)
-      setSaveError(true)
-    }
-  }
-  return <Drawer onClose={onClose} eyebrow={`RECOVERY SOLUTION · ${scenario === 'preventive' ? 'PREDICTED' : 'CONFIRMED'} CASE · HUMAN REVIEW · SIMULATED`} title={option.shipmentId}><div className={`optimization-status ${evaluation.isFeasible ? 'feasible' : 'rejected'}`}><strong>{evaluation.optimizationStatus}</strong><small>{evaluation.optimizationStatus === 'OPTIMAL' ? 'Solver proof available' : 'No solver proof; do not treat as optimal'}</small></div><div className="impact-card"><span>TOTAL MODELED EXPECTED LOSS</span><strong>{formatCurrency(evaluation.costBreakdown.totalExpectedLoss)}</strong><small>{evaluation.option.feasibility}% feasible · {evaluation.option.capacityStatus} · {formatKg(evaluation.networkShortfallKg)} downstream shortfall sensitivity</small></div><h3>Cost breakdown</h3><dl className="cost-breakdown-list"><div><dt>Cargo and customer impact</dt><dd>{formatCurrency(evaluation.costBreakdown.cargoCustomerImpact)}</dd></div><div><dt>Cathay contribution impact</dt><dd>{formatCurrency(evaluation.costBreakdown.cathayContributionImpact)}</dd></div><div><dt>Recovery and handling</dt><dd>{formatCurrency(evaluation.costBreakdown.recoveryAndHandlingCost)}</dd></div><div><dt>Delay and service impact</dt><dd>{formatCurrency(evaluation.costBreakdown.delayAndServiceImpact)}</dd></div><div><dt>Network impact</dt><dd>{formatCurrency(evaluation.costBreakdown.downstreamNetworkImpact)}</dd></div></dl><h3>Why this option?</h3><ul className="explanation-list">{explanation.map((reasonText) => <li key={reasonText}>{reasonText}</li>)}</ul><h3>Network domino effect</h3><p className="drawer-subtitle">{evaluation.networkShortfallKg ? `${formatKg(evaluation.networkShortfallKg)} of alternative-flight capacity may be consumed; ${evaluation.additionalAffectedShipments.length ? evaluation.additionalAffectedShipments.join(', ') : 'no additional shipment is identified'} is exposed.` : 'No downstream capacity shortfall is inferred from current forecast inputs.'}</p><h3>Scenario sensitivity</h3><div className="table-wrap"><table><thead><tr><th>INPUT CHANGE</th><th>STATUS</th><th>EXPECTED LOSS</th></tr></thead><tbody>{sensitivity.map((item) => <tr key={item.label}><td>{item.label}</td><td>{item.evaluation.optimizationStatus}</td><td>{formatCurrency(item.evaluation.costBreakdown.totalExpectedLoss)}</td></tr>)}</tbody></table></div><h3>Human decision record</h3><div className="decision-controls"><strong>{decision}</strong><input value={reason} onChange={(event) => { setRecorded(false); setSaveError(false); setReason(event.target.value) }} placeholder="Reason for approval or override" aria-label="Decision reason" /><div><button disabled={!reason.trim()} onClick={() => saveDecision('approved-for-review')}>Approve review</button><button disabled={!reason.trim()} onClick={() => saveDecision('rejected-override')}>Reject / override</button></div><small>{saveError ? 'Could not save this review in browser storage. Check local storage and try again.' : recorded ? 'Decision recorded for this simulated workspace.' : 'A reason is required. No cargo is reassigned until an operational system confirms it.'}</small></div></Drawer>
-}
 
 type NavItem = WorkspaceNavItem
 
@@ -211,7 +187,6 @@ function App() {
   const [selectedRecoverySolutionWorkItemId, setSelectedRecoverySolutionWorkItemId] = useState<string | undefined>(undefined)
   const [selectedPredictedFlightId, setSelectedPredictedFlightId] = useState<string | undefined>(undefined)
   const [selectedPoolFlightId, setSelectedPoolFlightId] = useState<string | undefined>(undefined)
-  const [selectedRecoveryScenario, setSelectedRecoveryScenario] = useState<'no-intervention' | 'preventive' | 'recover'>('recover')
   const clearDrawers = () => {
     setSelectedFlight(null)
     setSelectedShipment(null)
@@ -234,11 +209,6 @@ function App() {
   const openCustomer = (profile: CustomerValueProfile) => {
     clearDrawers()
     setSelectedCustomer(profile)
-  }
-  const openRecovery = (option: RecoveryOption, scenario: 'no-intervention' | 'preventive' | 'recover' = 'recover') => {
-    clearDrawers()
-    setSelectedRecovery(option)
-    setSelectedRecoveryScenario(scenario)
   }
   const openRecoverySolutionForFlight = (workItemId: string, flightId: string) => {
     clearDrawers()
@@ -266,3 +236,4 @@ function App() {
 }
 
 export default App
+
