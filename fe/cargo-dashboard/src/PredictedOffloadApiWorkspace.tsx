@@ -17,7 +17,7 @@ import {
   type RecoveryOptionsResponse,
   type RecoveryWorkItem,
 } from './recoveryApi'
-import { RecoveryApiUnavailablePreview, RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkItemTable } from './RecoveryQueueShared'
+import { RecoveryDeadlineNotice, RecoveryQueueFilterBar, RecoveryReviewHistory, RecoveryStatusBadge, RecoveryWorkItemTable } from './RecoveryQueueShared'
 import { emptyRecoveryQueueFilters, isQueueDecisionAllowed, recoveryFilterQuery, type RecoveryQueueFilters } from './recoveryQueueUi'
 
 function toApiError(error: unknown): RecoveryApiError {
@@ -104,8 +104,8 @@ function DemoPredictionWalkthrough({ onDone }: { onDone: () => void }) {
 export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }: { initialFlightId?: string; onOpenRecovery: (workItemId: string, flightId: string) => void }) {
   const [list, setList] = useState<RecoveryListResponse | null>(null)
   const [listError, setListError] = useState<RecoveryApiError | null>(null)
-  const [listLoading, setListLoading] = useState(true)
-  const [demoPredictionStarted, setDemoPredictionStarted] = useState(false)
+  const [listLoading, setListLoading] = useState(false)
+  const [predictionRequested, setPredictionRequested] = useState(false)
   const [fetchedAt, setFetchedAt] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [filterDraft, setFilterDraft] = useState<RecoveryQueueFilters>(emptyRecoveryQueueFilters)
@@ -141,12 +141,13 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
   }, [])
 
   const refreshQueue = useCallback(() => {
-    setListLoading(true); setListError(null)
+    setListLoading(true); setListError(null); setPredictionRequested(true)
     setRefreshKey((current) => current + 1)
   }, [])
   const manualRefresh = () => { setSavedMessage(null); refreshQueue() }
 
   useEffect(() => {
+    if (!predictionRequested) return
     const controller = new AbortController()
     const timer = window.setTimeout(() => {
       void listRecoverySolutions({ type: 'PREDICTED_OFFLOAD', page, limit: 100, ...recoveryFilterQuery(filters) }, controller.signal).then((result) => {
@@ -164,7 +165,7 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
       }).finally(() => { if (!controller.signal.aborted) setListLoading(false) })
     }, 0)
     return () => { window.clearTimeout(timer); controller.abort() }
-  }, [page, refreshKey, resetSelectedWork, filters])
+  }, [page, refreshKey, resetSelectedWork, filters, predictionRequested])
 
   useEffect(() => {
     if (!selectedWorkItemId) return
@@ -260,10 +261,10 @@ export function PredictedOffloadApiWorkspace({ initialFlightId, onOpenRecovery }
   }
 
   return <section className="panel predicted-api-workspace">
-    <div className="page-heading"><div><h1>Predicted Offload</h1></div><div className="flex items-center gap-3"><DemoPredictionWalkthrough onDone={() => setDemoPredictionStarted(true)} />{list && <button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button>}</div></div>
-    {!list && (demoPredictionStarted
-      ? <RecoveryApiUnavailablePreview type="PREDICTED_OFFLOAD" />
-      : <RecoveryWorkItemTable type="PREDICTED_OFFLOAD" items={[]} selectedWorkItemId="" sourceLabel="Awaiting prediction" />)}
+    <div className="page-heading"><div><h1>Predicted Offload</h1></div><div className="flex items-center gap-3"><DemoPredictionWalkthrough onDone={() => { setListError(null); setListLoading(true); setPredictionRequested(true) }} />{list && <button className="outline-button" type="button" disabled={listLoading} onClick={manualRefresh}>{listLoading ? 'Loading…' : 'Refresh queue'}</button>}</div></div>
+    {!list && !predictionRequested && <RecoveryWorkItemTable type="PREDICTED_OFFLOAD" items={[]} selectedWorkItemId="" sourceLabel="Awaiting prediction" />}
+    {!list && predictionRequested && listLoading && <div className="api-state" role="status"><strong>Loading predicted-offload results…</strong><span>Waiting for the recovery API response.</span></div>}
+    {!list && predictionRequested && listError && <div className="api-state error" role="alert"><strong>Could not load predicted-offload results</strong><span>{apiErrorLabel(listError)}</span></div>}
     {listError && list && <div className="api-state error" role="alert"><strong>{listError.kind === 'authorization' ? 'Authorization required' : listError.kind === 'not-found' ? 'Recovery API endpoint is unavailable' : 'Could not refresh predicted-offload queue'}</strong><span>{apiErrorLabel(listError)}</span><small>Showing the last successful response from {timeLabel(fetchedAt)}.</small></div>}
     {confirmationError && <div className="api-state error" role="alert"><strong>Offload confirmation failed</strong><span>{apiErrorLabel(confirmationError)}</span>{confirmationError.kind === 'conflict' && <button className="text-button" type="button" onClick={refreshQueue}>Refresh latest document version</button>}</div>}
     {stale && <div className="api-state stale" role="status"><strong>Forecast queue may be stale</strong><span>The last successful response is over five minutes old. Refresh before reviewing a ULD.</span></div>}
